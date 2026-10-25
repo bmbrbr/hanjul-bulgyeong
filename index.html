@@ -473,12 +473,6 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
 
       <div class="done" id="done" hidden>
-        <div class="next-card" id="next-card" hidden>
-          <div class="nc-dots" id="nc-dots" aria-hidden="true"></div>
-          <p class="nc-t" id="nc-t"></p>
-          <p class="nc-s" id="nc-s"></p>
-          <button class="btn solid nc-go" id="nc-go"></button>
-        </div>
         <button class="share" id="story-open"><span class="share-seal" aria-hidden="true">寫</span><span class="share-tx"><b>오늘의 사경, 스토리로 공유하기</b><span>먹이 번지는 짧은 영상으로 만들어 드려요</span></span><span class="share-go" aria-hidden="true">›</span></button>
         <div>
           <p class="meaning clamp" id="meaning"></p>
@@ -496,6 +490,12 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <div class="row">
           <button class="btn solid" id="save">남기기</button>
           <span class="saved" id="saved" hidden>남겼어요</span>
+        </div>
+        <div class="next-card" id="next-card" hidden>
+          <div class="nc-dots" id="nc-dots" aria-hidden="true"></div>
+          <p class="nc-t" id="nc-t"></p>
+          <p class="nc-s" id="nc-s"></p>
+          <button class="btn solid nc-go" id="nc-go"></button>
         </div>
         <div class="row sub"><button class="link" id="again">다시 쓰기</button></div>
       </div>
@@ -979,7 +979,7 @@ $("paper").addEventListener("click",e=>{if(finished)return;const sp=e.target.clo
   const len=typer.value.length;let a=len,b=len;
   if(sp){const i=+sp.dataset.i,A=align(typer.value),u=A.inv[i];if(u!=null){a=u;b=A.st[i]==="w"?u+1:u}}
   typer.focus({preventScroll:true});try{typer.setSelectionRange(a,b)}catch(_){}paint()});
-$("save").addEventListener("click",()=>{const e=mem.entries[EK()];if(!e)return;e.r=$("reflect").value.trim();persist();$("saved").hidden=false;renderRecord()});
+$("save").addEventListener("click",()=>{const e=mem.entries[EK()];if(!e)return;e.r=$("reflect").value.trim();persist();$("saved").hidden=false;renderRecord();const c=$("next-card");if(!c.hidden){c.classList.remove("in");void c.offsetWidth;c.classList.add("in");setTimeout(()=>c.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"}),350)}});
 $("reflect").addEventListener("input",()=>{$("saved").hidden=true});
 $("again").addEventListener("click",reset);
 
