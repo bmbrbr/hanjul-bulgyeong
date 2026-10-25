@@ -262,6 +262,16 @@ body.kb .app{padding-bottom:40vh}
 .btn:focus-visible,.tab:focus-visible,.chip:focus-visible,textarea:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
 .btn.solid{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .done{display:flex;flex-direction:column;gap:18px;margin-top:28px}
+.next-card{background:var(--paper-2);border-radius:14px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px}
+.next-card.in{animation:capin .7s ease both}
+.next-card.all{background:var(--seal-bg);border:1.5px solid var(--seal)}
+.nc-dots{display:flex;gap:6px;margin-bottom:4px}
+.nc-dots i{width:9px;height:9px;border-radius:50%;background:var(--ghost)}
+.nc-dots i.on{background:var(--seal)}
+.nc-t{margin:0;font-family:var(--f-verse);font-size:18px;font-weight:700}
+.nc-s{margin:0;color:var(--ink-2);font-size:14px;line-height:1.65}
+.nc-go{margin-top:8px;width:100%;padding:12px 16px}
+.today-prog{margin-left:6px;font:inherit;font-size:12px;color:var(--seal);background:var(--seal-bg);border:0;border-radius:999px;padding:3px 9px;cursor:pointer;white-space:nowrap}
 .lbl{font-size:12px;letter-spacing:1.5px;color:var(--ink-2);margin:0 0 6px}
 .meaning{margin:0;font-size:15px;line-height:1.8}
 .question{font-family:var(--f-verse);font-size:18px;margin:0}
@@ -451,7 +461,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         </div>
         <p class="monk-done" id="monk-done" hidden role="status">오늘의 사경을 마쳤어요</p>
       </div>
-      <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><span id="meta-right">오늘의 한 줄</span></div>
+      <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><button class="today-prog" id="today-prog" hidden></button><span id="meta-right">오늘의 한 줄</span></div>
       <div class="paper" id="paper">
         <p class="verse" id="verse" aria-live="off"></p>
         <textarea id="typer" aria-label="구절 따라 쓰기" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
@@ -463,6 +473,12 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
 
       <div class="done" id="done" hidden>
+        <div class="next-card" id="next-card" hidden>
+          <div class="nc-dots" id="nc-dots" aria-hidden="true"></div>
+          <p class="nc-t" id="nc-t"></p>
+          <p class="nc-s" id="nc-s"></p>
+          <button class="btn solid nc-go" id="nc-go"></button>
+        </div>
         <button class="share" id="story-open"><span class="share-seal" aria-hidden="true">寫</span><span class="share-tx"><b>오늘의 사경, 스토리로 공유하기</b><span>먹이 번지는 짧은 영상으로 만들어 드려요</span></span><span class="share-go" aria-hidden="true">›</span></button>
         <div>
           <p class="meaning clamp" id="meaning"></p>
@@ -938,10 +954,10 @@ function complete(){finished=true;typer.blur();typer.disabled=true;
   const e=mem.entries[EK()]||{},same=e.i===VI;
   let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,to:(mem.ded[mem.cur]||"").trim(),d:TODAY});newLan=true}}
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
-  showDone(true);sealSound();renderRecord();renderPond(newLan);setTimeout(()=>{if(!$("view-today").hidden)maybeAskLogin()},RM?600:6200)}
+  showDone(true);sealSound();renderRecord();renderPond(newLan);setTimeout(()=>{if(!$("view-today").hidden&&!todayTargets().some(id=>!mem.entries[TODAY+"#"+id]))maybeAskLogin()},RM?600:6200)}
 function showDone(animate){paint();$("monk").classList.add("gassho");if(animate)playShine();else{$("monk-done").hidden=false;$("monk-done").classList.remove("show")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
   $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
-  $("reflect").value=(mem.entries[EK()]||{}).r||"";
+  $("reflect").value=(mem.entries[EK()]||{}).r||"";renderNext(animate);renderTodayProg();
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
@@ -1303,13 +1319,30 @@ function openSheet(){const h=mem.active.filter(id=>JOURNEYS[id]).map(id=>{const 
 function closeSheet(){$("sheet").hidden=true}
 function switchTo(id){closeSheet();mem.cur=id;persist();goToday();setupToday();renderJourney();renderRecord()}
 $("verse-no").addEventListener("click",openSheet);
+$("today-prog").addEventListener("click",openSheet);
+$("nc-go").addEventListener("click",()=>{const id=$("nc-go").dataset.id;if(id){switchTo(id);window.scrollTo({top:0,behavior:"smooth"})}});
 $("sheet-close").addEventListener("click",closeSheet);
 $("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))closeSheet()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheet").hidden)closeSheet()});
 $("add-j").addEventListener("click",()=>{closeSheet();showStart()});
 $("more").addEventListener("click",()=>{const m=$("meaning"),c=m.classList.toggle("clamp");$("more").textContent=c?"풀이 더 보기":"접기"});
 
-function setupToday(){const j=JOURNEYS[mem.cur];if(!j)return;
+function todayTargets(){return mem.active.filter(id=>JOURNEYS[id]&&(((mem.prog[id]||0)<JOURNEYS[id].items.length)||mem.entries[TODAY+"#"+id]))}
+function renderTodayProg(){const t=todayTargets(),b=$("today-prog");if(t.length<2){b.hidden=true;return}
+  const d=t.filter(id=>mem.entries[TODAY+"#"+id]).length;b.hidden=false;b.textContent=d>=t.length?"오늘 모두 완료 ✓":"오늘 "+d+"/"+t.length;b.setAttribute("aria-label","오늘의 사경 "+t.length+"개 중 "+d+"개 완료, 눌러서 여정 보기")}
+const NC={one:["거의 다 왔어요!","대단해요, 한 걸음 남았어요","오늘의 사경, 하나만 더"],more:["좋은 흐름이에요","마음이 한결 고요해졌죠?","한 줄씩, 잘하고 있어요"],all:["오늘의 사경을 모두 마쳤어요","대단해요, 오늘 몫을 다 채웠어요","오늘도 마음에 새겼어요"]};
+function renderNext(animate){const c=$("next-card"),t=todayTargets();if(t.length<2){c.hidden=true;return 0}
+  const doneIds=t.filter(id=>mem.entries[TODAY+"#"+id]),d=doneIds.length,n=t.length,rest=t.filter(id=>!mem.entries[TODAY+"#"+id]);
+  const ci=t.indexOf(mem.cur),nx=rest.find(id=>t.indexOf(id)>ci)||rest[0],seed=now.getDate()+d;
+  $("nc-dots").innerHTML=t.map(id=>'<i class="'+(mem.entries[TODAY+"#"+id]?"on":"")+'"></i>').join("");
+  c.classList.toggle("all",!nx);
+  if(!nx){const a=NC.all;$("nc-t").textContent=a[seed%a.length];$("nc-s").textContent="오늘 "+n+"개의 경전을 모두 새겼어요. 내일 또 만나요.";$("nc-go").hidden=true}
+  else{const name=JOURNEYS[nx].name.split(" · ")[0],a=rest.length===1?NC.one:NC.more;$("nc-t").textContent=a[seed%a.length];
+    $("nc-s").textContent=rest.length===1?d+"개를 마쳤어요. "+name+"까지 쓰면 오늘의 사경이 모두 채워져요.":"오늘 "+n+"개 중 "+d+"개를 마쳤어요. 다음은 "+name+(((name.charCodeAt(name.length-1)-0xAC00)%28)?"이에요.":"예요.");
+    $("nc-go").hidden=false;$("nc-go").textContent="다음 사경 · "+name+" →";$("nc-go").dataset.id=nx}
+  c.hidden=false;c.classList.remove("in");if(animate){void c.offsetWidth;c.classList.add("in")}
+  return rest.length}
+function setupToday(){const j=JOURNEYS[mem.cur];if(!j)return;renderTodayProg();
   const e=mem.entries[EK()];let i,done=false;
   if(e){i=e.i;done=true}else{i=Math.min(mem.prog[mem.cur]||0,j.items.length-1);done=(mem.prog[mem.cur]||0)>=j.items.length}
   VI=i;V=j.items[i];verseEl.classList.toggle("long",V.t.length>80);
