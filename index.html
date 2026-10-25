@@ -41,7 +41,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-block:20px 96px}
 header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-right:76px}
-.monk{display:flex;justify-content:center;padding-block:0 14px}
+.monk{display:flex;flex-direction:column;align-items:center;gap:6px;padding-block:0 14px}
+.monk-done{margin:0;font-family:var(--f-verse);font-size:15px;color:var(--seal);letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.monk-done::before{content:"寫";display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border:1.5px solid var(--seal);border-radius:3px;font-size:11px;font-weight:700;transform:rotate(-6deg)}
+.monk-done.show{animation:donein 1.6s ease .9s both}
+@keyframes donein{0%{opacity:0;filter:blur(6px);transform:translateY(6px)}100%{opacity:1;filter:blur(0);transform:none}}
 .art{position:relative;width:min(230px,60vw);aspect-ratio:560/613;max-width:100%;background:var(--art-bg);border-radius:16px;box-shadow:0 0 0 8px var(--art-bg)}
 .art img{position:absolute;inset:0;width:100%;height:100%;display:block}
 .pond{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:16px;overflow:hidden;background:linear-gradient(#10162A 0%,#1A2240 50%,#202B4C 52%,#141B30 78%,#0E1424 100%)}
@@ -72,7 +76,13 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .wedit .field{flex:1 1 180px;min-width:0}
 .item .d .link{font-size:12px;padding:0}
 .pond-empty{top:66%!important;pointer-events:none}
-.pond-cap{text-align:center;font-size:13px;color:var(--ink-2);margin:10px 0 22px;min-height:1.6em}
+.pond{margin-bottom:22px}
+.pond-cap{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;top:36%;max-width:86%;box-sizing:border-box;display:flex;align-items:center;gap:10px;background:rgba(10,14,28,.6);color:#F3E9CF;font-size:13px;padding:7px 14px;border-radius:999px;border:1px solid rgba(243,225,174,.25);animation:capin .5s ease both}
+.pond-cap .link{color:#F3E1AE;font-size:12px;white-space:nowrap}
+@keyframes capin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.item.hl{animation:hl 2.2s ease}
+@keyframes hl{0%,40%{background:var(--seal-bg)}100%{background:transparent}}
+.pond-cap-old{text-align:center;font-size:13px;color:var(--ink-2);margin:10px 0 22px;min-height:1.6em}
 .wish-form{display:flex;flex-direction:column;gap:10px}
 .wish-form h2,.wish-form p{margin:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -322,7 +332,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     </section>
 
     <section id="view-today">
-      <div class="monk" id="monk" aria-hidden="true">
+      <div class="monk" id="monk">
         <div class="art">
           <div class="halo" aria-hidden="true"></div>
           <img class="lt tree" alt="" src="img/tree.webp">
@@ -332,6 +342,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
           <img class="dk tree" alt="" src="img/dtree.webp">
           <img class="dk monkimg" alt="" src="img/dmonk.webp">
         </div>
+        <p class="monk-done" id="monk-done" hidden role="status">오늘의 사경을 마쳤어요</p>
       </div>
       <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><span id="meta-right">오늘의 한 줄</span></div>
       <div class="paper" id="paper">
@@ -392,9 +403,10 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="pond" id="pond">
         <div class="pond-sky"></div><div class="moon"></div><div class="water"></div>
         <div class="lotuses" id="lotuses"></div>
+        <div class="pond-cap" id="pond-cap" hidden></div>
         <p class="pond-empty" id="pond-empty">가운데 ＋를 눌러 첫 바람을 띄워 보세요</p>
       </div>
-      <p class="pond-cap" id="pond-cap">등을 누르면 담긴 바람이 보여요</p>
+      
       <div class="group wish-form">
         <h2>발원하기</h2>
         <p>마음에 품은 바람을 적고 연꽃 등을 띄워요. 여정을 마칠 때도 회향 등이 하나씩 떠올라요.</p>
@@ -771,14 +783,14 @@ function complete(){finished=true;typer.blur();typer.disabled=true;
   let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,to:(mem.ded[mem.cur]||"").trim(),d:TODAY});newLan=true}}
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
   showDone(true);sealSound();renderRecord();renderPond(newLan)}
-function showDone(animate){paint();$("monk").classList.add("gassho");if(animate){const ar=document.querySelector(".art");ar.classList.remove("shine");void ar.offsetWidth;ar.classList.add("shine")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
+function showDone(animate){paint();$("monk").classList.add("gassho");if(animate)playShine();else{$("monk-done").hidden=false;$("monk-done").classList.remove("show")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
   $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
     $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 쌓여, 발원 연못에 회향 연꽃 등 하나가 떠올랐어요."}}
-function reset(){typeTimes=[];finished=false;document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
+function reset(){typeTimes=[];finished=false;$("monk-done").hidden=true;clearTimeout(shineT1);clearTimeout(shineT2);document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
   $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint();typer.focus()}
 
 typer.addEventListener("compositionstart",()=>{composing=true});
@@ -973,6 +985,13 @@ $("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("
 
 
 
+/* ---------- 완료 순간 ---------- */
+let shineT1=0,shineT2=0;
+function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");ar.classList.remove("shine");md.hidden=true;md.classList.remove("show");
+  window.scrollTo({top:0,behavior:RM?"auto":"smooth"});
+  clearTimeout(shineT1);clearTimeout(shineT2);
+  shineT1=setTimeout(()=>{void ar.offsetWidth;ar.classList.add("shine");md.hidden=false;void md.offsetWidth;md.classList.add("show")},RM?0:650);
+  shineT2=setTimeout(()=>{if($("view-today").hidden)return;const y=$("done").getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:Math.max(0,y),behavior:RM?"auto":"smooth"})},RM?400:4600)}
 /* ---------- 발원 연못 ---------- */
 const LOTUS="img/lotus.webp";
 const PAID=false,ADD_SVG="<svg viewBox=\"-8 -8 336 249\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M40,50 L38,85 L44,113 L5,117 L25,143 L26,153 L0,162 L0,166 L44,184 L46,193 L58,201 L58,209 L50,224 L52,232 L61,232 L65,226 L98,225 L116,215 L125,215 L145,227 L146,232 L167,232 L168,227 L189,213 L198,213 L208,222 L225,227 L226,232 L257,232 L253,200 L281,184 L282,175 L319,151 L319,145 L292,142 L292,133 L309,104 L271,106 L277,70 L274,42 L271,40 L251,50 L243,50 L229,12 L215,18 L199,33 L191,33 L165,0 L154,0 L129,32 L120,32 L112,24 L89,13 L74,58Z\" fill=\"rgba(243,225,174,.07)\" stroke=\"rgba(243,225,174,.8)\" stroke-width=\"5\" stroke-dasharray=\"14 11\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"160.0\" cy=\"130.48000000000002\" r=\"36\" fill=\"rgba(16,22,42,.6)\" stroke=\"rgba(243,225,174,.9)\" stroke-width=\"4.5\"/><path d=\"M145.0,130.48000000000002h30M160.0,115.48000000000002v30\" stroke=\"#F3E1AE\" stroke-width=\"5.5\" stroke-linecap=\"round\"/></svg>";
@@ -988,16 +1007,20 @@ function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)
     if(o.add)return '<button class="lotus add" style="'+st+'" aria-label="새 바람 띄우기"><span class="lo">'+ADD_SVG+'</span></button>';
     const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
   $("lotuses").querySelectorAll(".lotus:not(.add)").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
-    const lb=lanLabel(L[+b.dataset.k]);$("pond-cap").textContent=lb.t+"  ·  "+lb.d}));
+    const lb=lanLabel(L[+b.dataset.k]);const k=+b.dataset.k,x=L[k],gi=mem.lan.indexOf(x),c=$("pond-cap");
+    c.innerHTML='<span>'+esc(lb.t)+" · "+esc(lb.d)+"</span>"+(canEdit(x)?'<button class="link" id="cap-edit">고치기</button>':"");c.hidden=false;
+    c.style.animation="none";void c.offsetWidth;c.style.animation="";
+    const it=$("wish-list").querySelector('[data-gi="'+gi+'"]');if(it){it.classList.remove("hl");void it.offsetWidth;it.classList.add("hl")}
+    const ce=$("cap-edit");if(ce)ce.addEventListener("click",ev=>{ev.stopPropagation();editIdx=gi;renderWishList();const f=$("wedit-in");if(f){f.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>{f.focus({preventScroll:true});f.setSelectionRange(f.value.length,f.value.length)},350)}})}));
   const ad=$("lotuses").querySelector(".lotus.add");if(ad)ad.addEventListener("click",()=>{$("wish-in").focus({preventScroll:true});document.querySelector(".wish-form").scrollIntoView({behavior:"smooth",block:"center"})});
-  $("pond-cap").textContent=n?(fresh?"새 연꽃 등이 떠올랐어요":"등을 누르면 담긴 바람이 보여요"):"";
+  {const c=$("pond-cap");if(n){c.innerHTML="<span>"+(fresh?"새 연꽃 등이 떠올랐어요":"등을 누르면 담긴 바람이 보여요")+"</span>";c.hidden=false}else c.hidden=true}
   renderWishList()}
 let editIdx=-1;
 function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
   $("wish-list").innerHTML=all.map(({x,i})=>{const lb=lanLabel(x),ed=canEdit(x);
     if(i===editIdx&&ed)return '<article class="item"><div class="d"><span>'+esc(lb.d)+'</span><span>발원 고치기</span></div><div class="wedit"><input class="field" id="wedit-in" maxlength="40" value="'+esc(x.w)+'" aria-label="바람 고치기"><button class="btn solid" data-save="'+i+'">저장</button><button class="btn" data-cancel="1">취소</button></div></article>';
     const left=ed&&x.at?Math.max(1,Math.ceil((EDIT_MS-(Date.now()-x.at))/36e5)):0;
-    return '<article class="item"><div class="d"><span>'+esc(lb.d)+(ed?' · '+(left?left+"시간 동안 고칠 수 있어요":"오늘까지 고칠 수 있어요"):"")+'</span><span>'+(ed?'<button class="link" data-edit="'+i+'">고치기</button>':(x.w?"발원":"회향"))+'</span></div><p class="v">'+esc(x.w||lb.t)+"</p></article>"}).join("");
+    return '<article class="item" data-gi="'+i+'"><div class="d"><span>'+esc(lb.d)+(ed?' · '+(left?left+"시간 동안 고칠 수 있어요":"오늘까지 고칠 수 있어요"):"")+'</span><span>'+(ed?'<button class="link" data-edit="'+i+'">고치기</button>':(x.w?"발원":"회향"))+'</span></div><p class="v">'+esc(x.w||lb.t)+"</p></article>"}).join("");
   $("wish-list").querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>{editIdx=+b.dataset.edit;renderWishList();const f=$("wedit-in");if(f){f.focus();f.setSelectionRange(f.value.length,f.value.length)}}));
   $("wish-list").querySelectorAll("[data-cancel]").forEach(b=>b.addEventListener("click",()=>{editIdx=-1;renderWishList()}));
   $("wish-list").querySelectorAll("[data-save]").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.save,v=$("wedit-in").value.trim(),x=mem.lan[i];
