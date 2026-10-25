@@ -1102,6 +1102,7 @@ const PY=y=>34+(y-51)*66/49;
 function inkCap(x){const c=$("pond-cap"),t=x.w||((JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"),ch=t.split(/\s+/).filter(Boolean),sd=Math.min(1.3+ch.length*.18,3);
   const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
   const sz=t.length>20?" s":t.length>12?" m":"";c.innerHTML='<div class="ink'+sz+'" aria-label="'+esc(t)+'">'+ch.map((q,i)=>'<span style="animation-delay:'+(i*.18).toFixed(2)+'s">'+esc(q)+"</span>").join(" ")+'</div><div class="sub" style="--sd:'+sd.toFixed(1)+'s"><span>'+(x.w?"발원":"회향")+(md?" · "+md:"")+"</span>"+(canEdit(x)?'<button class="link" id="cap-edit">고치기</button>':"")+"</div>";c.hidden=false}
+function showPondTop(){const p=$("pond"),r=p.getBoundingClientRect();if(r.top<8||r.top>innerHeight*.4)scrollTo({top:Math.max(0,scrollY+r.top-12),behavior:"smooth"})}
 function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)),n=L.length;
   $("pond-empty").hidden=n>0;{const m=mem.lan.length-n,e=$("pond-more");e.hidden=m<=0;e.textContent="지난 연꽃 "+m+"송이는 아래 목록에 있어요"}
   const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]}));if(ph){const q=PSLOT[n];items.push({add:true,slot:[q[0],q[1]+(q[2]<16?3:0),Math.max(q[2],16)]})}items.sort((a,b)=>a.slot[1]-b.slot[1]);
@@ -1109,7 +1110,7 @@ function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)
     if(o.add)return '<button class="lotus add" style="'+st+'" aria-label="새 바람 띄우기"><span class="lo">'+ADD_SVG+'</span></button>';
     const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><i class="rip" style="--rd:-'+(o.k*1.7%8).toFixed(1)+'s"></i><i class="rip"></i><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
   $("lotuses").querySelectorAll(".lotus:not(.add)").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
-    const k=+b.dataset.k,x=L[k],gi=mem.lan.indexOf(x);inkCap(x);
+    const k=+b.dataset.k,x=L[k],gi=mem.lan.indexOf(x);inkCap(x);showPondTop();
     const it=$("wish-list").querySelector('[data-gi="'+gi+'"]');if(it){it.classList.remove("hl");void it.offsetWidth;it.classList.add("hl")}
     bindCapEdit(gi)}));
   function bindCapEdit(gi){const ce=$("cap-edit");if(ce)ce.addEventListener("click",ev=>{ev.stopPropagation();editIdx=gi;renderWishList();const f=$("wedit-in");if(f){f.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>{f.focus({preventScroll:true});f.setSelectionRange(f.value.length,f.value.length)},350)}})}
