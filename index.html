@@ -51,9 +51,19 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .pond{position:relative;aspect-ratio:1/1;max-width:100%;border-radius:16px;overflow:hidden;background:linear-gradient(#10162A 0%,#1A2240 33%,#202B4C 35%,#141B30 74%,#0E1424 100%)}
 .pond-sky{position:absolute;inset:0 0 66% 0;background-image:radial-gradient(1.5px 1.5px at 12% 18%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 28% 9%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 46% 26%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 58% 12%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 88% 30%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 8% 38%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 37% 40%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 66% 34%,#FFF6DC 50%,transparent 51%);opacity:.8}
 .moon{position:absolute;right:9%;top:9%;width:9%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#FFF6DE 0%,#F3E1AE 58%,rgba(243,225,174,0) 72%);box-shadow:0 0 50px 14px rgba(255,236,190,.16)}
-.water{position:absolute;left:0;right:0;top:34%;bottom:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.03) 0 1px,transparent 1px 10px)}
-.water::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:rgba(255,236,190,.18)}
-.water::after{content:"";position:absolute;right:10%;top:0;width:8%;height:55%;background:linear-gradient(rgba(255,236,190,.22),transparent);filter:blur(5px);animation:shimmer 6s ease-in-out infinite}
+.water{position:absolute;left:0;right:0;top:34%;bottom:0;background:radial-gradient(120% 60% at 82% 0%,rgba(255,236,190,.07),transparent 60%),linear-gradient(rgba(40,52,90,.35),transparent 40%)}
+.hills{position:absolute;left:0;right:0;top:calc(34% - 9%);height:9.2%;width:100%;filter:blur(.6px)}
+.mist{position:absolute;left:-5%;right:-5%;top:-6%;height:16%;background:radial-gradient(60% 50% at 30% 50%,rgba(200,210,235,.10),transparent 70%),radial-gradient(50% 50% at 75% 50%,rgba(200,210,235,.08),transparent 70%);filter:blur(6px);animation:drift 24s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translateX(4%)}}
+.glint{position:absolute;right:6%;top:1%;width:16%;height:45%;fill:rgba(255,236,190,.35);filter:blur(.8px);animation:shimmer 6s ease-in-out infinite;-webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent)}
+.pads{position:absolute;inset:0;pointer-events:none}.pad{position:absolute;opacity:.8;overflow:visible;animation:padbob 9s ease-in-out infinite}
+.pad:nth-child(2n){animation-duration:12s;animation-delay:-4s}
+@keyframes padbob{50%{margin-top:.4%}}
+.lotus .rip{position:absolute;left:50%;bottom:4%;width:150%;aspect-ratio:4/1;border-radius:50%;border:1px solid rgba(255,236,190,.22);transform:translateX(-50%) scale(.35);opacity:0;animation:rip 8s ease-out infinite;animation-delay:var(--rd,0s);pointer-events:none}
+.lotus .rip+.rip{animation-delay:calc(var(--rd,0s) + 2.6s)}
+@keyframes rip{0%{opacity:0;transform:translateX(-50%) scale(.35)}15%{opacity:.8}100%{opacity:0;transform:translateX(-50%) scale(1.25)}}
+.water::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,236,190,.10) 30%,rgba(255,236,190,.14) 80%,transparent);filter:blur(1px)}
+.water::after{display:none;content:"";position:absolute;right:10%;top:0;width:8%;height:55%;background:linear-gradient(rgba(255,236,190,.22),transparent);filter:blur(5px);animation:shimmer 6s ease-in-out infinite}
 @keyframes shimmer{0%,100%{opacity:.7;transform:scaleX(1)}50%{opacity:1;transform:scaleX(1.35)}}
 .lotuses{position:absolute;inset:0}
 .lotus{position:absolute;transform:translate(-50%,-100%);background:none;border:0;padding:0;cursor:pointer}
@@ -436,7 +446,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 
     <section id="view-wish" hidden>
       <div class="pond" id="pond">
-        <div class="pond-sky"></div><div class="moon"></div><div class="water"></div>
+        <div class="pond-sky"></div><div class="moon"></div><svg class="hills" viewBox="0 0 400 60" preserveAspectRatio="none"><defs><radialGradient id="pg" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#3E5A48"/><stop offset="1" stop-color="#22362D"/></radialGradient></defs><path d="M0 60 L0 34 C40 26 70 18 110 24 C140 28 160 14 200 16 C240 18 260 30 300 26 C340 22 370 30 400 28 L400 60Z" fill="#161E36" opacity=".9"/><path d="M0 60 L0 44 C50 38 90 40 140 36 C190 32 230 42 280 40 C330 38 370 44 400 42 L400 60Z" fill="#121A2F"/></svg><div class="water"><svg class="glint" viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="16.2" y="3" width="55.0" height="1.2" rx=".8"/><rect x="31.9" y="8" width="30.0" height="1.6" rx=".8"/><rect x="22.0" y="14" width="62.0" height="1.2" rx=".8"/><rect x="40.5" y="21" width="24.0" height="1.6" rx=".8"/><rect x="22.2" y="29" width="44.0" height="1.2" rx=".8"/><rect x="33.6" y="38" width="18.0" height="1.6" rx=".8"/><rect x="36.0" y="48" width="30.0" height="1.6" rx=".8"/><rect x="40.5" y="60" width="14.0" height="1.2" rx=".8"/><rect x="33.6" y="72" width="20.0" height="1.2" rx=".8"/></svg><div class="mist"></div></div><div class="pads"><svg class="pad" style="left:7%;top:47%;width:9%;transform:translate(-50%,-50%) rotate(-8deg)" viewBox="0 0 100 40"><path d="M50 20 L95.7 18.1 A46 18 0 1 0 94.6 24.4 Z" fill="url(#pg)"/><path d="M50 20 L18 12 M50 20 L14 26 M50 20 L40 37 M50 20 L72 36 M50 20 L60 3" stroke="rgba(170,200,160,.16)" stroke-width=".8"/></svg><svg class="pad" style="left:93%;top:58%;width:10%;transform:translate(-50%,-50%) rotate(14deg)" viewBox="0 0 100 40"><path d="M50 20 L95.7 18.1 A46 18 0 1 0 94.6 24.4 Z" fill="url(#pg)"/><path d="M50 20 L18 12 M50 20 L14 26 M50 20 L40 37 M50 20 L72 36 M50 20 L60 3" stroke="rgba(170,200,160,.16)" stroke-width=".8"/></svg><svg class="pad" style="left:41%;top:50%;width:6%;transform:translate(-50%,-50%) rotate(4deg)" viewBox="0 0 100 40"><path d="M50 20 L95.7 18.1 A46 18 0 1 0 94.6 24.4 Z" fill="url(#pg)"/><path d="M50 20 L18 12 M50 20 L14 26 M50 20 L40 37 M50 20 L72 36 M50 20 L60 3" stroke="rgba(170,200,160,.16)" stroke-width=".8"/></svg><svg class="pad" style="left:96%;top:92%;width:12%;transform:translate(-50%,-50%) rotate(-20deg)" viewBox="0 0 100 40"><path d="M50 20 L95.7 18.1 A46 18 0 1 0 94.6 24.4 Z" fill="url(#pg)"/><path d="M50 20 L18 12 M50 20 L14 26 M50 20 L40 37 M50 20 L72 36 M50 20 L60 3" stroke="rgba(170,200,160,.16)" stroke-width=".8"/></svg><svg class="pad" style="left:3%;top:86%;width:9%;transform:translate(-50%,-50%) rotate(10deg)" viewBox="0 0 100 40"><path d="M50 20 L95.7 18.1 A46 18 0 1 0 94.6 24.4 Z" fill="url(#pg)"/><path d="M50 20 L18 12 M50 20 L14 26 M50 20 L40 37 M50 20 L72 36 M50 20 L60 3" stroke="rgba(170,200,160,.16)" stroke-width=".8"/></svg><svg class="pad" style="left:62%;top:47%;width:5%;transform:translate(-50%,-50%) rotate(-12deg)" viewBox="0 0 100 40"><path d="M50 20 L95.7 18.1 A46 18 0 1 0 94.6 24.4 Z" fill="url(#pg)"/><path d="M50 20 L18 12 M50 20 L14 26 M50 20 L40 37 M50 20 L72 36 M50 20 L60 3" stroke="rgba(170,200,160,.16)" stroke-width=".8"/></svg></div>
         <div class="lotuses" id="lotuses"></div>
         <div class="pond-cap" id="pond-cap" hidden></div><div class="pond-more" id="pond-more" hidden></div>
         <p class="pond-empty" id="pond-empty">가운데 ＋를 눌러 첫 바람을 띄워 보세요</p>
@@ -1055,11 +1065,11 @@ document.addEventListener("focusin",e=>{if(isField(e.target)){document.body.clas
 document.addEventListener("focusout",e=>{if(isField(e.target))setTimeout(()=>{if(!isField(document.activeElement))document.body.classList.remove("kb")},120)});
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const a=document.activeElement;if(isField(a))a.scrollIntoView({block:"center"})});
 /* ---------- 결제 (테스트) ---------- */
-const PRODUCTS={lotus1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1100,n:1},lotus5:{t:"연꽃 등 5개",s:"20% 할인 · 가족의 바람까지 함께",p:4400,o:5500,n:5},noads:{t:"광고 없애기",s:"한 번 구매로 평생, 광고 없이",p:5000}};
+const PRODUCTS={lotus1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1500,n:1},lotus5:{t:"연꽃 등 5개",s:"개당 1,100원 · 가족의 바람까지 함께",p:5500,n:5},lotus30:{t:"연꽃 등 30개",s:"개당 330원 · 한 달 동안 매일 하나씩",p:9900,n:30},noads:{t:"광고 없애기",s:"한 번 구매로 평생, 광고 없이",p:5000}};
 const METHODS=["간편결제","카드","휴대폰"];let payKind="",payPick="",payMethod="간편결제",payDone=null;
 const won=n=>n.toLocaleString("ko-KR")+"원";
 function payStep(n){["pay-s1","pay-s2","pay-s3"].forEach((id,i)=>$(id).hidden=i!==n-1)}
-function openPay(kind,done){payKind=kind;payDone=done||null;const ids=kind==="noads"?["noads"]:["lotus1","lotus5"];payPick=ids[0];
+function openPay(kind,done){payKind=kind;payDone=done||null;const ids=kind==="noads"?["noads"]:["lotus1","lotus5","lotus30"];payPick=ids[0];
   $("pay-title").textContent=kind==="noads"?"광고 없애기":"연꽃 등 준비하기";
   $("pay-opts").innerHTML=ids.map(id=>{const p=PRODUCTS[id];return '<button class="popt" data-p="'+id+'" aria-pressed="'+(id===payPick)+'">'+(id!=="noads"?'<img src="'+LOTUS+'" alt="">':"")+'<span class="pt"><b>'+p.t+"</b><span>"+p.s+'</span></span><span class="pp">'+(p.o?"<s>"+won(p.o)+"</s>":"")+won(p.p)+"</span></button>"}).join("");
   $("pay-opts").querySelectorAll(".popt").forEach(b=>b.addEventListener("click",()=>{payPick=b.dataset.p;$("pay-opts").querySelectorAll(".popt").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));updPayGo()}));
@@ -1096,7 +1106,7 @@ function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)
   const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]}));if(ph){const q=PSLOT[n];items.push({add:true,slot:[q[0],q[1]+(q[2]<16?3:0),Math.max(q[2],16)]})}items.sort((a,b)=>a.slot[1]-b.slot[1]);
   $("lotuses").innerHTML=items.map(o=>{const st='left:'+o.slot[0]+'%;top:'+PY(o.slot[1]).toFixed(1)+'%;width:'+o.slot[2]+'%;';
     if(o.add)return '<button class="lotus add" style="'+st+'" aria-label="새 바람 띄우기"><span class="lo">'+ADD_SVG+'</span></button>';
-    const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
+    const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><i class="rip" style="--rd:-'+(o.k*1.7%8).toFixed(1)+'s"></i><i class="rip"></i><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
   $("lotuses").querySelectorAll(".lotus:not(.add)").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
     const k=+b.dataset.k,x=L[k],gi=mem.lan.indexOf(x);inkCap(x);
     const it=$("wish-list").querySelector('[data-gi="'+gi+'"]');if(it){it.classList.remove("hl");void it.offsetWidth;it.classList.add("hl")}
@@ -1120,7 +1130,7 @@ function showWish(fresh){document.querySelectorAll(".tab").forEach(x=>x.setAttri
 function launchWish(v){mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();updWishBtn();$("wish-in").value="";updCount();$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
   try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})}
 function updCount(){const v=$("wish-in").value.length,e=$("wish-count");e.textContent=v?v+" / 30":""}
-function updWishBtn(){updCount();const b=$("wish-go");b.textContent=!mem.freeUsed?"연꽃 등 띄우기 · 첫 등은 무료":mem.credits>0?"연꽃 등 띄우기 · 남은 등 "+mem.credits+"개":"연꽃 등 띄우기 · 1,100원"}
+function updWishBtn(){updCount();const b=$("wish-go");b.textContent=!mem.freeUsed?"연꽃 등 띄우기 · 첫 등은 무료":mem.credits>0?"연꽃 등 띄우기 · 남은 등 "+mem.credits+"개":"연꽃 등 띄우기 · 1,500원부터"}
 $("wish-go").addEventListener("click",()=>{const v=$("wish-in").value.trim();if(!v){$("wish-err").hidden=false;$("wish-in").focus();return}
   if(!mem.freeUsed){mem.freeUsed=true;launchWish(v);return}
   if(mem.credits>0){mem.credits--;launchWish(v);return}
