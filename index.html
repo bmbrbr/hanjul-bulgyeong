@@ -65,6 +65,13 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 @keyframes rise{0%{opacity:0;transform:translateY(40%) scale(.5)}50%{opacity:1}100%{opacity:1;transform:none}}
 @keyframes flash{0%{filter:brightness(1.6) drop-shadow(0 0 0 rgba(255,200,120,0))}45%{filter:brightness(1.3) drop-shadow(0 0 30px rgba(255,210,140,.95))}100%{filter:drop-shadow(0 0 8px rgba(255,190,110,.55))}}
 .pond-empty{position:absolute;left:0;right:0;top:62%;text-align:center;color:#C9C3B4;font-size:13px;line-height:1.8;margin:0}
+.lotus.add .lo{animation:addpulse 3.2s ease-in-out infinite}
+.lotus.add svg{display:block;width:100%;height:auto}
+@keyframes addpulse{0%,100%{opacity:.6;transform:translateY(0)}50%{opacity:1;transform:translateY(-3%)}}
+.wedit{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.wedit .field{flex:1 1 180px;min-width:0}
+.item .d .link{font-size:12px;padding:0}
+.pond-empty{top:66%!important;pointer-events:none}
 .pond-cap{text-align:center;font-size:13px;color:var(--ink-2);margin:10px 0 22px;min-height:1.6em}
 .wish-form{display:flex;flex-direction:column;gap:10px}
 .wish-form h2,.wish-form p{margin:0}
@@ -385,7 +392,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="pond" id="pond">
         <div class="pond-sky"></div><div class="moon"></div><div class="water"></div>
         <div class="lotuses" id="lotuses"></div>
-        <p class="pond-empty" id="pond-empty">아직 띄운 연꽃 등이 없어요<br>첫 바람을 적어 띄워 보세요</p>
+        <p class="pond-empty" id="pond-empty">가운데 ＋를 눌러 첫 바람을 띄워 보세요</p>
       </div>
       <p class="pond-cap" id="pond-cap">등을 누르면 담긴 바람이 보여요</p>
       <div class="group wish-form">
@@ -968,21 +975,37 @@ $("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("
 
 /* ---------- 발원 연못 ---------- */
 const LOTUS="img/lotus.webp";
+const PAID=false,ADD_SVG="<svg viewBox=\"-8 -8 336 249\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M40,50 L38,85 L44,113 L5,117 L25,143 L26,153 L0,162 L0,166 L44,184 L46,193 L58,201 L58,209 L50,224 L52,232 L61,232 L65,226 L98,225 L116,215 L125,215 L145,227 L146,232 L167,232 L168,227 L189,213 L198,213 L208,222 L225,227 L226,232 L257,232 L253,200 L281,184 L282,175 L319,151 L319,145 L292,142 L292,133 L309,104 L271,106 L277,70 L274,42 L271,40 L251,50 L243,50 L229,12 L215,18 L199,33 L191,33 L165,0 L154,0 L129,32 L120,32 L112,24 L89,13 L74,58Z\" fill=\"rgba(243,225,174,.07)\" stroke=\"rgba(243,225,174,.8)\" stroke-width=\"5\" stroke-dasharray=\"14 11\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"160.0\" cy=\"130.48000000000002\" r=\"36\" fill=\"rgba(16,22,42,.6)\" stroke=\"rgba(243,225,174,.9)\" stroke-width=\"4.5\"/><path d=\"M145.0,130.48000000000002h30M160.0,115.48000000000002v30\" stroke=\"#F3E1AE\" stroke-width=\"5.5\" stroke-linecap=\"round\"/></svg>";
+const EDIT_MS=864e5;
+const canEdit=x=>!!x.w&&(x.at?Date.now()-x.at<EDIT_MS:x.d===TODAY);
 const PSLOT=[[50,93,27],[23,85,21],[77,87,22],[38,75,17],[63,73,17],[14,69,13],[86,71,14],[50,65,12],[30,62,11],[70,62,11],[90,60,10],[10,60,10]];
 function lanLabel(x){const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
   return x.w?{t:"발원 · "+x.w,d:md}:{t:(JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"+(x.to?" · "+x.to:""),d:md}}
-function renderPond(fresh){const L=mem.lan.slice(-PSLOT.length),n=L.length;
+function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)),n=L.length;
   $("pond-empty").hidden=n>0;
-  const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]})).sort((a,b)=>a.slot[1]-b.slot[1]);
-  $("lotuses").innerHTML=items.map(o=>{const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="left:'+o.slot[0]+'%;top:'+o.slot[1]+'%;width:'+o.slot[2]+'%;--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
-  $("lotuses").querySelectorAll(".lotus").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
+  const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k+ph]}));if(ph)items.push({add:true,slot:PSLOT[0]});items.sort((a,b)=>a.slot[1]-b.slot[1]);
+  $("lotuses").innerHTML=items.map(o=>{const st='left:'+o.slot[0]+'%;top:'+o.slot[1]+'%;width:'+o.slot[2]+'%;';
+    if(o.add)return '<button class="lotus add" style="'+st+'" aria-label="새 바람 띄우기"><span class="lo">'+ADD_SVG+'</span></button>';
+    const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
+  $("lotuses").querySelectorAll(".lotus:not(.add)").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
     const lb=lanLabel(L[+b.dataset.k]);$("pond-cap").textContent=lb.t+"  ·  "+lb.d}));
+  const ad=$("lotuses").querySelector(".lotus.add");if(ad)ad.addEventListener("click",()=>{$("wish-in").focus({preventScroll:true});document.querySelector(".wish-form").scrollIntoView({behavior:"smooth",block:"center"})});
   $("pond-cap").textContent=n?(fresh?"새 연꽃 등이 떠올랐어요":"등을 누르면 담긴 바람이 보여요"):"";
-  $("wish-list").innerHTML=mem.lan.slice().reverse().map(x=>{const lb=lanLabel(x);return '<article class="item"><div class="d"><span>'+esc(lb.d)+'</span><span>'+(x.w?"발원":"회향")+'</span></div><p class="v">'+esc(x.w||lb.t)+"</p></article>"}).join("")}
+  renderWishList()}
+let editIdx=-1;
+function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
+  $("wish-list").innerHTML=all.map(({x,i})=>{const lb=lanLabel(x),ed=canEdit(x);
+    if(i===editIdx&&ed)return '<article class="item"><div class="d"><span>'+esc(lb.d)+'</span><span>발원 고치기</span></div><div class="wedit"><input class="field" id="wedit-in" maxlength="40" value="'+esc(x.w)+'" aria-label="바람 고치기"><button class="btn solid" data-save="'+i+'">저장</button><button class="btn" data-cancel="1">취소</button></div></article>';
+    const left=ed&&x.at?Math.max(1,Math.ceil((EDIT_MS-(Date.now()-x.at))/36e5)):0;
+    return '<article class="item"><div class="d"><span>'+esc(lb.d)+(ed?' · '+(left?left+"시간 동안 고칠 수 있어요":"오늘까지 고칠 수 있어요"):"")+'</span><span>'+(ed?'<button class="link" data-edit="'+i+'">고치기</button>':(x.w?"발원":"회향"))+'</span></div><p class="v">'+esc(x.w||lb.t)+"</p></article>"}).join("");
+  $("wish-list").querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>{editIdx=+b.dataset.edit;renderWishList();const f=$("wedit-in");if(f){f.focus();f.setSelectionRange(f.value.length,f.value.length)}}));
+  $("wish-list").querySelectorAll("[data-cancel]").forEach(b=>b.addEventListener("click",()=>{editIdx=-1;renderWishList()}));
+  $("wish-list").querySelectorAll("[data-save]").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.save,v=$("wedit-in").value.trim(),x=mem.lan[i];
+    if(!v||!canEdit(x)){editIdx=-1;renderWishList();return}x.w=v;persist();editIdx=-1;renderPond(false)}))}
 function showWish(fresh){document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="wish")));
   ["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=v!=="wish");$("view-start").hidden=true;renderPond(fresh);window.scrollTo(0,0)}
 $("wish-go").addEventListener("click",()=>{const v=$("wish-in").value.trim();if(!v){$("wish-err").hidden=false;$("wish-in").focus();return}
-  mem.lan.push({w:v,d:TODAY});persist();$("wish-in").value="";$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
+  mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();$("wish-in").value="";$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
   try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})});
 $("wish-in").addEventListener("input",()=>{$("wish-err").hidden=true});
 $("finish-pond").addEventListener("click",()=>showWish(false));
