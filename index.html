@@ -25,16 +25,16 @@
 :root{
   --paper:#F3EEE3; --paper-2:#E9E2D3; --ink:#23211E; --ink-2:#615B50; --ghost:#C9C0AE;
   --seal:#B3352B; --seal-bg:#F6E2DC; --line:#DAD1BF; --wrong:#D63A2A; --wrong-bg:#F9D9D2; --sel:#E2D6BE;
-  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --art-bg:transparent;
+  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --halo:rgba(255,214,140,.8); --halo-2:rgba(255,232,184,.38); --halo-ring:rgba(205,160,80,.5); --art-bg:transparent;
   --f-verse:"Gowun Batang","Noto Serif KR","Nanum Myeongjo",serif;
   --f-ui:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
-  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --art-bg:transparent; color-scheme:dark}}
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --art-bg:transparent; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
-  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --art-bg:transparent; color-scheme:dark}
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --art-bg:transparent; color-scheme:dark}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.6;word-break:keep-all;
@@ -44,6 +44,16 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .monk{display:flex;justify-content:center;padding-block:0 14px}
 .art{position:relative;width:min(230px,60vw);aspect-ratio:560/613;max-width:100%;background:var(--art-bg);border-radius:16px;box-shadow:0 0 0 8px var(--art-bg)}
 .art img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.art .dbase{z-index:0}.art .stars{z-index:1}.art .halo{z-index:1}.art .tree{z-index:2}.art .monkimg{z-index:3}
+.art .halo{position:absolute;left:48%;top:47%;width:105%;aspect-ratio:1;border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.55);
+  background:radial-gradient(circle,var(--halo) 0%,var(--halo-2) 34%,transparent 66%)}
+.art .halo::after{content:"";position:absolute;inset:22%;border-radius:50%;box-shadow:0 0 0 2px var(--halo-ring),0 0 24px 4px var(--halo-2);opacity:0}
+.art.shine .halo{animation:halo 5.2s ease-out forwards}
+.art.shine .halo::after{animation:ring 3.4s ease-out .5s forwards}
+@keyframes halo{0%{opacity:0;transform:translate(-50%,-50%) scale(.55)}24%{opacity:1;transform:translate(-50%,-50%) scale(1)}55%{opacity:.85;transform:translate(-50%,-50%) scale(1.03)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.08)}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .art .halo{z-index:4;mix-blend-mode:screen}}
+:root[data-theme="dark"] .art .halo{z-index:4;mix-blend-mode:screen}
+@keyframes ring{0%{opacity:0;transform:scale(.7)}25%{opacity:.75}100%{opacity:0;transform:scale(1.4)}}
 .art .tree{transform-origin:18% 83%;animation:sway 30s ease-in-out 3s infinite}
 .art .monkimg{transform-origin:50% 92%}
 .art .dk{display:none}
@@ -283,6 +293,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     <section id="view-today">
       <div class="monk" id="monk" aria-hidden="true">
         <div class="art">
+          <div class="halo" aria-hidden="true"></div>
           <img class="lt tree" alt="" src="img/tree.webp">
           <img class="lt monkimg" alt="" src="img/monk.webp">
           <img class="dk dbase" alt="" src="img/dbase.webp">
@@ -691,14 +702,14 @@ function complete(){finished=true;typer.blur();typer.disabled=true;
   if(!same)mem.prog[mem.cur]=VI+1;
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
   showDone(true);sealSound();renderRecord()}
-function showDone(animate){paint();$("monk").classList.add("gassho");const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
+function showDone(animate){paint();$("monk").classList.add("gassho");if(animate){const ar=document.querySelector(".art");ar.classList.remove("shine");void ar.offsetWidth;ar.classList.add("shine")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
   $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
     $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 고요히 쌓였어요."}}
-function reset(){typeTimes=[];finished=false;$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
+function reset(){typeTimes=[];finished=false;document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
   $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint();typer.focus()}
 
 typer.addEventListener("compositionstart",()=>{composing=true});
@@ -805,7 +816,7 @@ function stBuildTimes(ts,mode){const ST=stText();const n=ST.length,out=new Array
   const gaps=idx.map((k,j)=>j?src[k]-src[idx[j-1]]:0).filter(g=>g>0).sort((a,b)=>a-b);const med=gaps[Math.floor(gaps.length/2)]||150;
   let acc=0;const comp={};idx.forEach((k,j)=>{if(j)acc+=Math.min(src[k]-src[idx[j-1]],med*3);comp[k]=acc});
   const mx=acc||1;idx.forEach(k=>{out[k]=0.7+comp[k]/mx*3.7});return out}
-function stDrawArt(ctx,t,dark){const w=580,h=Math.round(w*613/560),x=(SW-w)/2,y=240;
+function stDrawArt(ctx,t,dark,glow){const w=580,h=Math.round(w*613/560),x=(SW-w)/2,y=240;
   const fade=Math.min(1,t/0.5),sway=t>0.3?0.03*Math.sin((t-0.3)*2.8)*Math.exp(-(t-0.3)*0.85):0;
   const q=s=>document.querySelector(".art "+s);
   const oc=document.createElement("canvas");oc.width=w;oc.height=h;const o=oc.getContext("2d");
@@ -814,6 +825,8 @@ function stDrawArt(ctx,t,dark){const w=580,h=Math.round(w*613/560),x=(SW-w)/2,y=
     if(!stStars)stStars=[...document.querySelectorAll(".tw")].map((el,i)=>({x:parseFloat(el.style.left)/100,y:parseFloat(el.style.top)/100,big:el.classList.contains("big"),s:rnd(i+7)}));
     stStars.forEach(s=>{const a=Math.pow(Math.max(0,Math.sin((t*0.9+s.s*3)*Math.PI)),8);if(a<0.02)return;
       const g=o.createRadialGradient(s.x*w,s.y*h,0,s.x*w,s.y*h,s.big?16:9);g.addColorStop(0,"rgba(255,246,220,"+a+")");g.addColorStop(1,"rgba(255,246,220,0)");o.fillStyle=g;o.beginPath();o.arc(s.x*w,s.y*h,s.big?16:9,0,7);o.fill()})}
+  if(glow>0.01){const gx=w*0.48,gy=h*0.47,R=w*0.55*(0.75+0.25*Math.min(1,glow*1.6));const g=o.createRadialGradient(gx,gy,0,gx,gy,R);
+    g.addColorStop(0,"rgba(255,216,145,"+(0.8*glow)+")");g.addColorStop(0.5,"rgba(255,232,184,"+(0.32*glow)+")");g.addColorStop(1,"rgba(255,232,184,0)");o.fillStyle=g;o.fillRect(0,0,w,h)}
   const tr=img(q((dark?".dk":".lt")+".tree")),mk=img(q((dark?".dk":".lt")+".monkimg"));
   if(tr){o.save();o.translate(w*0.18,h*0.83);o.rotate(sway);o.drawImage(tr,-w*0.18,-h*0.83,w,h);o.restore()}
   if(mk){const br=1+0.012*(0.5+0.5*Math.sin(t*1.2));o.save();o.translate(w/2,h*0.92);o.scale(1,br);o.drawImage(mk,-w/2,-h*0.92,w,h);o.restore()}
@@ -824,14 +837,15 @@ function stDrawSeal(ctx,t,T,cx,cy,seal,paper){const k=(t-T)/0.45;if(k<0)return;c
   ctx.strokeStyle=seal;ctx.lineWidth=7;const s=150;ctx.beginPath();ctx.roundRect?ctx.roundRect(-s/2,-s/2,s,s,10):ctx.rect(-s/2,-s/2,s,s);ctx.stroke();
   ctx.fillStyle=seal;ctx.font='700 54px "Gowun Batang", serif';ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("寫",0,-30);ctx.fillText("經",0,32);ctx.restore()}
 function stFrame(now){const cv=$("story-cv"),ctx=cv.getContext("2d"),mode="ink",dark=isDark();
-  const D=mode==="ink"?6.8:7.4,sealT=mode==="ink"?3.9:4.7,footT=sealT+0.5;
+  const D=mode==="ink"?8:7.4,sealT=mode==="ink"?3.9:4.7,footT=sealT+0.5;
   let t=(now-stT0)/1000;if(t>D){stT0=now;t=0;stLoop++;stSealDone=false}
   if(RM)t=D-0.3;
   const paper=cssv("--paper"),paper2=cssv("--paper-2"),ink=cssv("--ink"),ink2=cssv("--ink-2"),ghost=cssv("--ghost"),seal=cssv("--seal");
   let shake=0;if(t>sealT+0.42&&t<sealT+0.62)shake=(rnd(Math.floor(t*60))-0.5)*14;
   ctx.setTransform(1,0,0,1,0,shake);
   const g=ctx.createRadialGradient(SW/2,SH*0.42,SW*0.2,SW/2,SH*0.5,SH*0.75);g.addColorStop(0,paper);g.addColorStop(1,paper2);ctx.fillStyle=g;ctx.fillRect(0,-20,SW,SH+40);
-  stDrawArt(ctx,t,dark);
+  const gk=(t-sealT-0.3)/4.2,glow=gk<0||gk>1?0:(gk<0.25?gk/0.25:1-(gk-0.25)/0.75);
+  stDrawArt(ctx,t,dark,glow);
   if(!stL){ctx.font='76px "Gowun Batang", serif';stL=stLayout(ctx,stText())}
   ctx.font=stL.size+'px "Gowun Batang", serif';ctx.textBaseline="middle";ctx.textAlign="left";
   for(const c of stL.chars){if(c.ch===" ")continue;const T0=stTimes[c.i];
@@ -881,12 +895,12 @@ $("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("
     setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000);n.textContent="영상을 저장했어요. 인스타그램 스토리에서 불러와 올려 보세요.";return}
   const type=pickType(),cv=$("story-cv");
   if(!type||!cv.captureStream){n.textContent="이 브라우저는 영상 만들기를 지원하지 않아요. 화면 녹화로 저장해 주세요.";return}
-  b.disabled=true;n.textContent="영상을 만드는 중이에요. 7초만 기다려 주세요.";
+  b.disabled=true;n.textContent="영상을 만드는 중이에요. 8초만 기다려 주세요.";
   const chunks=[],rec=new MediaRecorder(cv.captureStream(30),{mimeType:type,videoBitsPerSecond:6000000});
   rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
   rec.onstop=()=>{recBlob=new Blob(chunks,{type:type.split(";")[0]});recType=type;b.disabled=false;
     b.textContent=navigator.canShare?"인스타그램에 공유하기":"영상 저장하기";n.textContent="영상이 준비됐어요. 버튼을 눌러 저장하거나 공유하세요."};
-  storyRestart();rec.start(250);setTimeout(()=>{try{rec.stop()}catch(_){}},7000)});
+  storyRestart();rec.start(250);setTimeout(()=>{try{rec.stop()}catch(_){}},8100)});
 
 
 
