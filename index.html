@@ -139,6 +139,19 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 body.kb nav,body.kb .breath{display:none}
 body:has(#view-today[hidden]) .breath{display:none}
 body.kb .app{padding-bottom:40vh}
+.kakao-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:360px;height:48px;border:0;border-radius:12px;background:#FEE500;color:rgba(0,0,0,.85);font:inherit;font-size:15px;font-weight:500;cursor:pointer}
+.kakao-btn .ksym{width:20px;height:20px}
+.kakao-btn:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+.acct-on{display:flex;align-items:center;gap:10px;font-size:15px}
+.acct-badge{width:28px;height:28px;border-radius:50%;background:#FEE500;display:flex;align-items:center;justify-content:center}.acct-badge .ksym{width:16px;height:16px}
+.acct-on .link{margin-left:auto;font-size:13px}
+.tag-test{font-size:12px;color:var(--ink-2);font-weight:400}
+.fb-btn{display:inline-block;text-decoration:none;margin-top:4px}
+.login-in{align-items:center;text-align:center;gap:12px}
+.login-in .story-top{width:100%}
+.login-seal{width:56px;height:56px;border-radius:10px;background:var(--seal);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-size:28px;font-weight:700;transform:rotate(-4deg)}
+.login-p{margin:0;color:var(--ink-2);font-size:14px;line-height:1.7;max-width:320px}
+.login-later{font-size:13px;color:var(--ink-2);padding:6px}
 .pay-test{margin:0;font-size:12px;color:var(--seal);background:var(--seal-bg);border-radius:8px;padding:6px 10px}
 .pay-step{display:flex;flex-direction:column;gap:10px}
 .pay-opts{display:flex;flex-direction:column;gap:8px}
@@ -512,6 +525,12 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     </section>
 
     <section id="view-sound" hidden>
+      <div class="group" id="acct-group">
+        <h2>내 기록 지키기 <span class="tag-test">테스트</span></h2>
+        <p id="acct-desc">로그인하면 휴대폰을 바꾸거나 앱을 지워도 사경 기록과 연꽃 등이 그대로 남아요.</p>
+        <button class="kakao-btn" id="acct-login"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg><span>카카오 로그인</span></button>
+        <div class="acct-on" id="acct-on" hidden><span class="acct-badge"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg></span><span id="acct-name"></span><button class="link" id="acct-out">로그아웃</button></div>
+      </div>
       <div class="group">
         <h2>나의 여정</h2>
         <div class="jcard" id="jcard"></div>
@@ -551,12 +570,17 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <div class="chips" id="key-chips"></div>
       </div>
       <div class="group">
+        <h2>의견 보내기</h2>
+        <p>불편한 점, 바라는 점, 좋았던 점 모두 반가워요. 하나하나 읽고 답할게요.</p>
+        <a class="btn fb-btn" href="mailto:hello@dualtimestudio.com?subject=%5B%ED%95%9C%EC%A4%84%20%EB%B6%88%EA%B2%BD%5D%20%EC%9D%98%EA%B2%AC">hello@dualtimestudio.com 으로 메일 쓰기</a>
+      </div>
+      <div class="group">
         <h2>구매 <span style="font-size:12px;color:var(--ink-2);font-weight:400">테스트</span></h2>
         <p id="buy-sum"></p>
         <div class="list" id="buy-list" style="margin-top:6px"></div>
       </div>
       <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">사찰음식으로 차리는 한 끼, 마음 밥상</span><button class="link" data-noads>광고 없애기</button></div>
-      <p class="note">기록은 이 기기의 브라우저에만 저장돼요. 첫 번째 시제품이라 로그인과 백업은 아직 없어요.</p>
+      <p class="note">지금은 기록이 이 기기에 저장돼요. 카카오 로그인 보관은 테스트 중이에요.</p>
       <p class="note"><a href="https://sutra.dualtimestudio.com/privacy.html" target="_blank" rel="noopener" style="color:inherit">개인정보처리방침</a> · Dual Time Studio</p>
     </section>
   </main>
@@ -583,6 +607,19 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     </div>
     <div id="pay-s2" class="pay-step pay-mid" hidden><div class="spin" aria-hidden="true"></div><p>결제하는 중이에요</p></div>
     <div id="pay-s3" class="pay-step pay-mid" hidden><div class="pay-check" aria-hidden="true">✓</div><p id="pay-done-t">결제가 완료됐어요</p><button class="btn solid" id="pay-ok">확인</button></div>
+  </div>
+</div>
+
+<div class="sheet" id="login" hidden>
+  <div class="sheet-in login-in" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="story-top"><span></span><button class="iconbtn" id="login-close" aria-label="닫기">✕</button></div>
+    <div class="login-seal" aria-hidden="true">記</div>
+    <h2 class="sh-t" id="login-title">소중한 나의 기록을 지켜요</h2>
+    <p class="login-p" id="login-p">카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 오늘 쓴 사경과 연꽃 등이 그대로 남아요.</p>
+    <p class="pay-test">테스트 로그인이에요. 아직 실제 카카오 계정과 연결되지 않아요.</p>
+    <button class="kakao-btn" id="login-go"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg><span>카카오 로그인</span></button>
+    <button class="link login-later" id="login-later">나중에 할게요</button>
+    <div class="pay-mid" id="login-done" hidden><div class="pay-check" aria-hidden="true">✓</div><p>이제 기록이 안전하게 보관돼요</p></div>
   </div>
 </div>
 
@@ -764,8 +801,8 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 
 
 const KEY="hanjul.v1";
-let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
-function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
+function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}}
 
 const pad=n=>String(n).padStart(2,"0");
@@ -897,7 +934,7 @@ function complete(){finished=true;typer.blur();typer.disabled=true;
   const e=mem.entries[EK()]||{},same=e.i===VI;
   let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,to:(mem.ded[mem.cur]||"").trim(),d:TODAY});newLan=true}}
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
-  showDone(true);sealSound();renderRecord();renderPond(newLan)}
+  showDone(true);sealSound();renderRecord();renderPond(newLan);setTimeout(()=>{if(!$("view-today").hidden)maybeAskLogin()},RM?600:6200)}
 function showDone(animate){paint();$("monk").classList.add("gassho");if(animate)playShine();else{$("monk-done").hidden=false;$("monk-done").classList.remove("show")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
   $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";
@@ -1107,6 +1144,21 @@ function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");a
   clearTimeout(shineT1);clearTimeout(shineT2);
   shineT1=setTimeout(()=>{void ar.offsetWidth;ar.classList.add("shine");md.hidden=false;void md.offsetWidth;md.classList.add("show")},RM?0:650);
   shineT2=setTimeout(()=>{if($("view-today").hidden)return;const y=$("done").getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:Math.max(0,y),behavior:RM?"auto":"smooth"})},RM?400:4600)}
+/* ---------- 로그인 (테스트) ---------- */
+function renderAcct(){const a=mem.acct;$("acct-login").hidden=!!a;$("acct-on").hidden=!a;$("acct-desc").hidden=!!a;if(a)$("acct-name").textContent=a.name+"님의 기록이 보관되고 있어요"}
+function recCount(){return Object.keys(mem.entries).length+mem.lan.filter(x=>x.w).length}
+function openLogin(ctx){$("login-p").textContent=ctx==="settings"?"카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 사경 기록과 연꽃 등이 그대로 남아요.":"오늘 남긴 기록, 잃어버리지 않게 보관해 둘까요? 카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 그대로 남아요.";
+  ["login-go","login-later"].forEach(id=>$(id).hidden=false);$("login-done").hidden=true;$("login").hidden=false;$("login-go").focus()}
+function closeLogin(){$("login").hidden=true}
+function maybeAskLogin(){if(mem.acct)return;const n=recCount();if((mem.lp===0&&n>=1)||(mem.lp===1&&n>=7)){mem.lp++;persist();openLogin("record")}}
+$("acct-login").addEventListener("click",()=>openLogin("settings"));
+$("acct-out").addEventListener("click",()=>{mem.acct=null;persist();renderAcct()});
+$("login-close").addEventListener("click",closeLogin);
+$("login-later").addEventListener("click",closeLogin);
+$("login").addEventListener("click",e=>{if(e.target===$("login"))closeLogin()});
+$("login-go").addEventListener("click",()=>{mem.acct={name:"카카오 사용자",via:"kakao",at:Date.now(),test:true};persist();renderAcct();
+  ["login-go","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;setTimeout(closeLogin,1600)});
+renderAcct();
 /* ---------- 입력창과 키보드 ---------- */
 const isField=el=>el&&el!==typer&&(el.tagName==="INPUT"||el.tagName==="TEXTAREA");
 function keepInView(el){[60,350,700].forEach(t=>setTimeout(()=>{if(document.activeElement===el)el.scrollIntoView({block:"center",behavior:t===60?"auto":"smooth"})},t))}
@@ -1177,7 +1229,7 @@ function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
     if(!v||!canEdit(x)){editIdx=-1;renderWishList();return}x.w=v;persist();editIdx=-1;renderPond(false)}))}
 function showWish(fresh){document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="wish")));
   ["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=v!=="wish");$("view-start").hidden=true;renderPond(fresh);window.scrollTo(0,0)}
-function launchWish(v){mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();updWishBtn();$("wish-in").value="";updCount();$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
+function launchWish(v){mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();setTimeout(maybeAskLogin,4200);updWishBtn();$("wish-in").value="";updCount();$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
   try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})}
 function updCount(){const v=$("wish-in").value.length,e=$("wish-count");e.textContent=v?v+" / 30":""}
 function updWishBtn(){updCount();const b=$("wish-go");b.textContent=!mem.freeUsed?"연꽃 등 띄우기 · 첫 등은 무료":mem.credits>0?"연꽃 등 띄우기 · 남은 등 "+mem.credits+"개":"연꽃 등 띄우기 · 1,500원부터"}
@@ -1275,7 +1327,7 @@ let devTaps=0,devT=null;
 $("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
 $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
 $("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
-$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.seen=false;persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
+$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.acct=null;mem.lp=0;mem.seen=false;renderAcct();persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
 
 /* ---------- 시작 ---------- */
 load();
