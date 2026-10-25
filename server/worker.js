@@ -85,10 +85,16 @@ export default {
       if (env.KAKAO_CLIENT_SECRET) form.set("client_secret", env.KAKAO_CLIENT_SECRET);
       const tr = await fetch("https://kauth.kakao.com/oauth/token", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=utf-8" }, body: form });
       const tk = await tr.json();
-      if (!tk.access_token) return back("login_error=token");
+      if (!tk.access_token) {
+        await env.KV.put("err:last", JSON.stringify({ at: Date.now(), step: "token", status: tr.status, body: tk }), { expirationTtl: 86400 * 7 });
+        return back("login_error=token&code=" + encodeURIComponent(tk.error_code || tk.error || tr.status));
+      }
       const mr = await fetch("https://kapi.kakao.com/v2/user/me", { headers: { Authorization: "Bearer " + tk.access_token } });
       const me = await mr.json();
-      if (!me.id) return back("login_error=profile");
+      if (!me.id) {
+        await env.KV.put("err:last", JSON.stringify({ at: Date.now(), step: "profile", status: mr.status, body: me }), { expirationTtl: 86400 * 7 });
+        return back("login_error=profile&code=" + encodeURIComponent(me.code || mr.status));
+      }
       const uid = String(me.id);
       const nick = (me.kakao_account && me.kakao_account.profile && me.kakao_account.profile.nickname) || (me.properties && me.properties.nickname) || "도반";
       const prev = (await env.KV.get("u:" + uid, "json")) || {};
