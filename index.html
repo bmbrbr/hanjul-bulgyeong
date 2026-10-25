@@ -77,6 +77,28 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .item .d .link{font-size:12px;padding:0}
 .pond-empty{top:66%!important;pointer-events:none}
 .pond{margin-bottom:22px}
+.pay-test{margin:0;font-size:12px;color:var(--seal);background:var(--seal-bg);border-radius:8px;padding:6px 10px}
+.pay-step{display:flex;flex-direction:column;gap:10px}
+.pay-opts{display:flex;flex-direction:column;gap:8px}
+.popt{display:flex;align-items:center;gap:12px;text-align:left;font:inherit;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer}
+.popt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.popt:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.popt img{width:44px;height:auto;flex:none}
+.popt .pt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.popt .pt b{font-family:var(--f-verse);font-size:16px}
+.popt .pt span{font-size:12px;color:var(--ink-2)}
+.popt .pp{font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.popt .pp s{font-size:12px;color:var(--ink-2);font-weight:400;margin-right:4px}
+.pay-go{width:100%;padding:12px 16px;font-size:15px}
+.pay-mid{align-items:center;text-align:center;padding-block:26px 10px}
+.pay-mid p{margin:0;font-size:15px}
+.spin{width:38px;height:38px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--seal);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pay-check{width:52px;height:52px;border-radius:50%;background:var(--seal);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:26px;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.adbar{display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px 14px;border:1px dashed var(--line);border-radius:10px;font-size:13px;color:var(--ink-2)}
+.ad-tag{font-size:11px;border:1px solid var(--line);border-radius:4px;padding:1px 5px;flex:none}
+.ad-tx{flex:1;min-width:0}
 .pond-cap{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;top:36%;max-width:86%;box-sizing:border-box;display:flex;align-items:center;gap:10px;background:rgba(10,14,28,.6);color:#F3E9CF;font-size:13px;padding:7px 14px;border-radius:999px;border:1px solid rgba(243,225,174,.25);animation:capin .5s ease both}
 .pond-cap .link{color:#F3E1AE;font-size:12px;white-space:nowrap}
 @keyframes capin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -397,6 +419,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="cal" id="cal"></div>
       <div class="legend"><span><i class="lo"></i>사경한 날</span><span><i class="lt"></i>오늘</span></div>
       <div class="list" id="list"></div>
+      <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">고요한 산사에서 보내는 주말, 템플스테이</span><button class="link" data-noads>광고 없애기</button></div>
     </section>
 
     <section id="view-wish" hidden>
@@ -457,6 +480,12 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <p>한 글자 쓸 때마다 나는 소리예요.</p>
         <div class="chips" id="key-chips"></div>
       </div>
+      <div class="group">
+        <h2>구매 <span style="font-size:12px;color:var(--ink-2);font-weight:400">테스트</span></h2>
+        <p id="buy-sum"></p>
+        <div class="list" id="buy-list" style="margin-top:6px"></div>
+      </div>
+      <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">사찰음식으로 차리는 한 끼, 마음 밥상</span><button class="link" data-noads>광고 없애기</button></div>
       <p class="note">기록은 이 기기의 브라우저에만 저장돼요. 첫 번째 시제품이라 로그인과 백업은 아직 없어요.</p>
     </section>
   </main>
@@ -470,6 +499,21 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     <button class="tab" role="tab" data-view="sound" aria-selected="false">설정</button>
   </div>
 </nav>
+
+<div class="sheet" id="pay" hidden>
+  <div class="sheet-in" role="dialog" aria-modal="true" aria-labelledby="pay-title">
+    <div class="story-top"><h2 class="sh-t" id="pay-title">연꽃 등 준비하기</h2><button class="iconbtn" id="pay-close" aria-label="닫기">✕</button></div>
+    <p class="pay-test">테스트 결제예요. 실제로 돈이 나가지 않아요.</p>
+    <div id="pay-s1" class="pay-step">
+      <div class="pay-opts" id="pay-opts"></div>
+      <p class="lbl">결제 수단</p>
+      <div class="chips" id="pay-method"></div>
+      <button class="btn solid pay-go" id="pay-go">결제하기</button>
+    </div>
+    <div id="pay-s2" class="pay-step pay-mid" hidden><div class="spin" aria-hidden="true"></div><p>결제하는 중이에요</p></div>
+    <div id="pay-s3" class="pay-step pay-mid" hidden><div class="pay-check" aria-hidden="true">✓</div><p id="pay-done-t">결제가 완료됐어요</p><button class="btn solid" id="pay-ok">확인</button></div>
+  </div>
+</div>
 
 <div class="sheet" id="sheet" hidden>
   <div class="sheet-in" role="dialog" aria-modal="true" aria-label="나의 여정">
@@ -649,8 +693,8 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 
 
 const KEY="hanjul.v1";
-let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
-function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
+function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}}
 
 const pad=n=>String(n).padStart(2,"0");
@@ -992,6 +1036,31 @@ function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");a
   clearTimeout(shineT1);clearTimeout(shineT2);
   shineT1=setTimeout(()=>{void ar.offsetWidth;ar.classList.add("shine");md.hidden=false;void md.offsetWidth;md.classList.add("show")},RM?0:650);
   shineT2=setTimeout(()=>{if($("view-today").hidden)return;const y=$("done").getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:Math.max(0,y),behavior:RM?"auto":"smooth"})},RM?400:4600)}
+/* ---------- 결제 (테스트) ---------- */
+const PRODUCTS={lotus1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1100,n:1},lotus5:{t:"연꽃 등 5개",s:"20% 할인 · 가족의 바람까지 함께",p:4400,o:5500,n:5},noads:{t:"광고 없애기",s:"한 번 구매로 평생, 광고 없이",p:5000}};
+const METHODS=["간편결제","카드","휴대폰"];let payKind="",payPick="",payMethod="간편결제",payDone=null;
+const won=n=>n.toLocaleString("ko-KR")+"원";
+function payStep(n){["pay-s1","pay-s2","pay-s3"].forEach((id,i)=>$(id).hidden=i!==n-1)}
+function openPay(kind,done){payKind=kind;payDone=done||null;const ids=kind==="noads"?["noads"]:["lotus1","lotus5"];payPick=ids[0];
+  $("pay-title").textContent=kind==="noads"?"광고 없애기":"연꽃 등 준비하기";
+  $("pay-opts").innerHTML=ids.map(id=>{const p=PRODUCTS[id];return '<button class="popt" data-p="'+id+'" aria-pressed="'+(id===payPick)+'">'+(id!=="noads"?'<img src="'+LOTUS+'" alt="">':"")+'<span class="pt"><b>'+p.t+"</b><span>"+p.s+'</span></span><span class="pp">'+(p.o?"<s>"+won(p.o)+"</s>":"")+won(p.p)+"</span></button>"}).join("");
+  $("pay-opts").querySelectorAll(".popt").forEach(b=>b.addEventListener("click",()=>{payPick=b.dataset.p;$("pay-opts").querySelectorAll(".popt").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));updPayGo()}));
+  $("pay-method").innerHTML=METHODS.map(m=>'<button class="chip" data-m="'+m+'" aria-pressed="'+(m===payMethod)+'">'+m+"</button>").join("");
+  $("pay-method").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{payMethod=b.dataset.m;$("pay-method").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))}));
+  updPayGo();payStep(1);$("pay").hidden=false;$("pay-go").focus()}
+function updPayGo(){$("pay-go").textContent=won(PRODUCTS[payPick].p)+" 결제하기"}
+function closePay(){$("pay").hidden=true;payDone=null}
+$("pay-close").addEventListener("click",closePay);
+$("pay").addEventListener("click",e=>{if(e.target===$("pay")&&$("pay-s2").hidden)closePay()});
+$("pay-go").addEventListener("click",()=>{payStep(2);setTimeout(()=>{const p=PRODUCTS[payPick];
+  mem.buys.push({id:payPick,t:p.t,p:p.p,m:payMethod,d:TODAY});if(p.n)mem.credits+=p.n;if(payPick==="noads")mem.noads=true;persist();
+  $("pay-done-t").textContent=payPick==="noads"?"이제 광고 없이 쓸 수 있어요":p.t+"를 준비했어요";payStep(3);updWishBtn();renderAds();renderBuys()},1600)});
+$("pay-ok").addEventListener("click",()=>{const f=payDone;$("pay").hidden=true;payDone=null;if(f)f()});
+function renderAds(){document.querySelectorAll("[data-ad]").forEach(el=>el.hidden=!!mem.noads)}
+document.querySelectorAll("[data-noads]").forEach(b=>b.addEventListener("click",()=>openPay("noads")));
+function renderBuys(){$("buy-sum").textContent="남은 연꽃 등 "+mem.credits+"개"+(mem.noads?" · 광고 없음":"")+(mem.freeUsed?"":" · 첫 등 무료 남음");
+  $("buy-list").innerHTML=mem.buys.length?mem.buys.slice().reverse().map(b=>'<article class="item"><div class="d"><span>'+(+b.d.slice(5,7))+"월 "+(+b.d.slice(8,10))+"일 · "+esc(b.m)+'</span><span>'+won(b.p)+'</span></div><p class="v">'+esc(b.t)+"</p></article>").join(""):'<p class="emptytxt">아직 구매한 것이 없어요</p>'}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("pay").hidden&&$("pay-s2").hidden)closePay()});
 /* ---------- 발원 연못 ---------- */
 const LOTUS="img/lotus.webp";
 const PAID=false,ADD_SVG="<svg viewBox=\"-8 -8 336 249\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M40,50 L38,85 L44,113 L5,117 L25,143 L26,153 L0,162 L0,166 L44,184 L46,193 L58,201 L58,209 L50,224 L52,232 L61,232 L65,226 L98,225 L116,215 L125,215 L145,227 L146,232 L167,232 L168,227 L189,213 L198,213 L208,222 L225,227 L226,232 L257,232 L253,200 L281,184 L282,175 L319,151 L319,145 L292,142 L292,133 L309,104 L271,106 L277,70 L274,42 L271,40 L251,50 L243,50 L229,12 L215,18 L199,33 L191,33 L165,0 L154,0 L129,32 L120,32 L112,24 L89,13 L74,58Z\" fill=\"rgba(243,225,174,.07)\" stroke=\"rgba(243,225,174,.8)\" stroke-width=\"5\" stroke-dasharray=\"14 11\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"160.0\" cy=\"130.48000000000002\" r=\"36\" fill=\"rgba(16,22,42,.6)\" stroke=\"rgba(243,225,174,.9)\" stroke-width=\"4.5\"/><path d=\"M145.0,130.48000000000002h30M160.0,115.48000000000002v30\" stroke=\"#F3E1AE\" stroke-width=\"5.5\" stroke-linecap=\"round\"/></svg>";
@@ -1027,9 +1096,13 @@ function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
     if(!v||!canEdit(x)){editIdx=-1;renderWishList();return}x.w=v;persist();editIdx=-1;renderPond(false)}))}
 function showWish(fresh){document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="wish")));
   ["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=v!=="wish");$("view-start").hidden=true;renderPond(fresh);window.scrollTo(0,0)}
+function launchWish(v){mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();updWishBtn();$("wish-in").value="";$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
+  try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})}
+function updWishBtn(){const b=$("wish-go");b.textContent=!mem.freeUsed?"연꽃 등 띄우기 · 첫 등은 무료":mem.credits>0?"연꽃 등 띄우기 · 남은 등 "+mem.credits+"개":"연꽃 등 띄우기 · 1,100원"}
 $("wish-go").addEventListener("click",()=>{const v=$("wish-in").value.trim();if(!v){$("wish-err").hidden=false;$("wish-in").focus();return}
-  mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();$("wish-in").value="";$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
-  try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})});
+  if(!mem.freeUsed){mem.freeUsed=true;launchWish(v);return}
+  if(mem.credits>0){mem.credits--;launchWish(v);return}
+  openPay("lotus",()=>{mem.credits--;launchWish(v)})});
 $("wish-in").addEventListener("input",()=>{$("wish-err").hidden=true});
 $("finish-pond").addEventListener("click",()=>showWish(false));
 
@@ -1120,7 +1193,7 @@ let devTaps=0,devT=null;
 $("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
 $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
 $("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
-$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.seen=false;persist();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
+$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.seen=false;persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
 
 /* ---------- 시작 ---------- */
 load();
@@ -1132,7 +1205,7 @@ function applyTheme(){const r=document.documentElement,t=mem.prefs.theme;if(t===
 chips("theme-chips",TH,"theme");applyTheme();
 chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
 chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
-renderJourney();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
+renderJourney();updWishBtn();renderAds();renderBuys();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
 renderRecord();
 (function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
   $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 사경 중이에요":"오늘도 한 줄, 천천히";
