@@ -25,16 +25,16 @@
 :root{
   --paper:#F3EEE3; --paper-2:#E9E2D3; --ink:#23211E; --ink-2:#615B50; --ghost:#C9C0AE;
   --seal:#B3352B; --seal-bg:#F6E2DC; --line:#DAD1BF; --wrong:#D63A2A; --wrong-bg:#F9D9D2; --sel:#E2D6BE;
-  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --halo:rgba(255,214,140,.8); --halo-2:rgba(255,232,184,.38); --halo-ring:rgba(205,160,80,.5); --lan-glow:rgba(255,170,90,.32); --art-bg:transparent;
+  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --halo:rgba(255,214,140,.8); --halo-2:rgba(255,232,184,.38); --halo-ring:rgba(205,160,80,.5); --art-bg:transparent;
   --f-verse:"Gowun Batang","Noto Serif KR","Nanum Myeongjo",serif;
   --f-ui:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
-  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --lan-glow:rgba(255,196,110,.6); --art-bg:transparent; color-scheme:dark}}
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --art-bg:transparent; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
-  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --lan-glow:rgba(255,196,110,.6); --art-bg:transparent; color-scheme:dark}
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --art-bg:transparent; color-scheme:dark}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.6;word-break:keep-all;
@@ -44,17 +44,32 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .monk{display:flex;justify-content:center;padding-block:0 14px}
 .art{position:relative;width:min(230px,60vw);aspect-ratio:560/613;max-width:100%;background:var(--art-bg);border-radius:16px;box-shadow:0 0 0 8px var(--art-bg)}
 .art img{position:absolute;inset:0;width:100%;height:100%;display:block}
-.art .lanterns{position:absolute;inset:0;z-index:2;pointer-events:none;transform-origin:18% 83%;animation:sway 30s ease-in-out 3s infinite}
-.lan{position:absolute;width:5%;height:6.8%;margin-left:-2.5%;transform-origin:50% -70%;animation:swing 4.5s ease-in-out infinite}
-.lan::before{content:"";position:absolute;left:50%;top:-70%;width:1px;height:70%;background:var(--ink-2);opacity:.55}
-.lan b{position:absolute;inset:0;border-radius:45%/40%;background:radial-gradient(circle at 50% 42%,#FFE6A8 0%,#EE7458 46%,#B3352B 100%);box-shadow:0 0 10px 3px var(--lan-glow)}
-.lan b::before,.lan b::after{content:"";position:absolute;left:24%;right:24%;height:11%;background:#6B2A22;border-radius:2px}
-.lan b::before{top:-7%}.lan b::after{bottom:-7%}
-.lan.new{animation:lanin 2.6s ease-out 1.4s both,swing 4.5s ease-in-out 4s infinite}
-.lan.new b{animation:lanflash 2.6s ease-out 1.4s both}
-@keyframes swing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-@keyframes lanin{0%{opacity:0;transform:translateY(80%) scale(.5)}55%{opacity:1}100%{opacity:1;transform:none}}
-@keyframes lanflash{0%{box-shadow:0 0 0 0 var(--lan-glow)}50%{box-shadow:0 0 26px 10px var(--lan-glow)}100%{box-shadow:0 0 10px 3px var(--lan-glow)}}
+.pond{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:16px;overflow:hidden;background:linear-gradient(#10162A 0%,#1A2240 50%,#202B4C 52%,#141B30 78%,#0E1424 100%)}
+.pond-sky{position:absolute;inset:0 0 48% 0;background-image:radial-gradient(1.5px 1.5px at 12% 18%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 28% 9%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 46% 26%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 58% 12%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 88% 30%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 8% 38%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 37% 40%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 66% 34%,#FFF6DC 50%,transparent 51%);opacity:.8}
+.moon{position:absolute;right:15%;top:10%;width:12%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#FFF6DE 0%,#F3E1AE 58%,rgba(243,225,174,0) 72%);box-shadow:0 0 50px 14px rgba(255,236,190,.16)}
+.water{position:absolute;left:0;right:0;top:51%;bottom:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.03) 0 1px,transparent 1px 10px)}
+.water::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:rgba(255,236,190,.18)}
+.water::after{content:"";position:absolute;right:17%;top:0;width:10%;height:55%;background:linear-gradient(rgba(255,236,190,.22),transparent);filter:blur(5px);animation:shimmer 6s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:.7;transform:scaleX(1)}50%{opacity:1;transform:scaleX(1.35)}}
+.lotuses{position:absolute;inset:0}
+.lotus{position:absolute;transform:translate(-50%,-100%);background:none;border:0;padding:0;cursor:pointer}
+.lotus:focus-visible{outline:2px solid #F3E1AE;outline-offset:4px;border-radius:8px}
+.lotus .lo{display:block;position:relative;animation:bob var(--d,5s) ease-in-out infinite}
+.lotus img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 8px rgba(255,190,110,.55)) drop-shadow(0 0 22px rgba(255,170,90,.25));animation:glow var(--g,4s) ease-in-out infinite alternate}
+.lotus .refl{position:absolute;left:0;top:0;transform-origin:bottom;transform:scaleY(-.42);opacity:.22;filter:blur(2px);animation:none}
+.lotus.new .lo{animation:rise 3.2s cubic-bezier(.2,.7,.3,1) .3s both,bob var(--d,5s) ease-in-out 3.5s infinite}
+.lotus.new img:first-child{animation:flash 3.2s ease-out .3s both,glow var(--g,4s) ease-in-out 3.5s infinite alternate}
+.lotus.sel img:first-child{filter:drop-shadow(0 0 10px rgba(255,214,150,.9)) drop-shadow(0 0 30px rgba(255,190,110,.5))}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.2deg)}50%{transform:translateY(-4%) rotate(1.2deg)}}
+@keyframes glow{from{filter:drop-shadow(0 0 6px rgba(255,190,110,.45)) drop-shadow(0 0 16px rgba(255,170,90,.18))}to{filter:drop-shadow(0 0 10px rgba(255,200,120,.7)) drop-shadow(0 0 28px rgba(255,170,90,.32))}}
+@keyframes rise{0%{opacity:0;transform:translateY(40%) scale(.5)}50%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes flash{0%{filter:brightness(1.6) drop-shadow(0 0 0 rgba(255,200,120,0))}45%{filter:brightness(1.3) drop-shadow(0 0 30px rgba(255,210,140,.95))}100%{filter:drop-shadow(0 0 8px rgba(255,190,110,.55))}}
+.pond-empty{position:absolute;left:0;right:0;top:62%;text-align:center;color:#C9C3B4;font-size:13px;line-height:1.8;margin:0}
+.pond-cap{text-align:center;font-size:13px;color:var(--ink-2);margin:10px 0 22px;min-height:1.6em}
+.wish-form{display:flex;flex-direction:column;gap:10px}
+.wish-form h2,.wish-form p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.err{font-size:13px;color:var(--wrong);margin:0}
 .art .dbase{z-index:0}.art .stars{z-index:1}.art .halo{z-index:1}.art .tree{z-index:2}.art .monkimg{z-index:3}
 .art .halo{position:absolute;left:48%;top:47%;width:105%;aspect-ratio:1;border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.55);
   background:radial-gradient(circle,var(--halo) 0%,var(--halo-2) 34%,transparent 66%)}
@@ -161,7 +176,7 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
   padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
 .tab{font:inherit;font-size:13px;background:none;border:0;color:var(--ink-2);padding:8px 0;cursor:pointer;letter-spacing:1px}
 .tab[aria-selected="true"]{color:var(--ink);font-weight:500}
 .note{font-size:12px;color:var(--ink-2);margin-top:6px}
@@ -309,7 +324,6 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
           <div class="dk stars" id="stars"><i class="tw big" style="left:88.6%;top:29.2%"></i><i class="tw big" style="left:12.4%;top:17.3%"></i><i class="tw big" style="left:75.8%;top:36.7%"></i><i class="tw big" style="left:92.1%;top:56.0%"></i><i class="tw big" style="left:78.1%;top:48.7%"></i><i class="tw big" style="left:75.4%;top:5.3%"></i><i class="tw" style="left:66.1%;top:2.3%"></i><i class="tw" style="left:77.3%;top:41.8%"></i><i class="tw" style="left:90.3%;top:31.9%"></i><i class="tw" style="left:92.2%;top:38.9%"></i><i class="tw" style="left:24.3%;top:13.5%"></i><i class="tw" style="left:4.3%;top:26.3%"></i><i class="tw" style="left:32.1%;top:26.9%"></i><i class="tw" style="left:61.3%;top:35.7%"></i><i class="tw" style="left:78.6%;top:37.8%"></i><i class="tw" style="left:93.2%;top:12.4%"></i><i class="tw" style="left:91.8%;top:34.7%"></i></div>
           <img class="dk tree" alt="" src="img/dtree.webp">
           <img class="dk monkimg" alt="" src="img/dmonk.webp">
-          <div class="lanterns" id="lanterns" aria-hidden="true"></div>
         </div>
       </div>
       <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><span id="meta-right">오늘의 한 줄</span></div>
@@ -336,7 +350,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <div class="finish" id="finish" hidden>
           <p class="question" id="finish-title"></p>
           <p class="meaning" id="finish-text"></p>
-          <div class="row"><button class="btn solid" id="finish-next">다음 여정 고르기</button></div>
+          <div class="row"><button class="btn solid" id="finish-next">다음 여정 고르기</button><button class="btn" id="finish-pond">연꽃 등 보러 가기</button></div>
         </div>
         <div class="row">
           <button class="btn solid" id="save">남기기</button>
@@ -365,6 +379,24 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="cal" id="cal"></div>
       <div class="legend"><span><i class="lo"></i>사경한 날</span><span><i class="lt"></i>오늘</span></div>
       <div class="list" id="list"></div>
+    </section>
+
+    <section id="view-wish" hidden>
+      <div class="pond" id="pond">
+        <div class="pond-sky"></div><div class="moon"></div><div class="water"></div>
+        <div class="lotuses" id="lotuses"></div>
+        <p class="pond-empty" id="pond-empty">아직 띄운 연꽃 등이 없어요<br>첫 바람을 적어 띄워 보세요</p>
+      </div>
+      <p class="pond-cap" id="pond-cap">등을 누르면 담긴 바람이 보여요</p>
+      <div class="group wish-form">
+        <h2>발원하기</h2>
+        <p>마음에 품은 바람을 적고 연꽃 등을 띄워요. 여정을 마칠 때도 회향 등이 하나씩 떠올라요.</p>
+        <label for="wish-in" class="sr">바람</label>
+        <input class="field" id="wish-in" type="text" maxlength="40" placeholder="가족 모두 건강하기를" autocomplete="off">
+        <p class="err" id="wish-err" hidden>바람을 한 줄 적어 주세요.</p>
+        <div class="row"><button class="btn solid" id="wish-go">연꽃 등 띄우기</button><span class="saved" id="wish-msg" hidden>등을 띄웠어요</span></div>
+      </div>
+      <div class="list" id="wish-list"></div>
     </section>
 
     <section id="view-sound" hidden>
@@ -415,6 +447,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
   <div class="in" role="tablist">
     <button class="tab" role="tab" data-view="today" aria-selected="true">오늘</button>
     <button class="tab" role="tab" data-view="record" aria-selected="false">기록</button>
+    <button class="tab" role="tab" data-view="wish" aria-selected="false">발원</button>
     <button class="tab" role="tab" data-view="sound" aria-selected="false">설정</button>
   </div>
 </nav>
@@ -728,16 +761,16 @@ function onType(){if(finished)return;
   paint();recordTimes();const A=align(typer.value);if(A.end>=V.t.length&&!A.st.some(k=>k==="g"||k==="w"))complete()}
 function complete(){finished=true;typer.blur();typer.disabled=true;
   const e=mem.entries[EK()]||{},same=e.i===VI;
-  let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,d:TODAY});newLan=true}}
+  let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,to:(mem.ded[mem.cur]||"").trim(),d:TODAY});newLan=true}}
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
-  showDone(true);sealSound();renderRecord();renderLanterns(newLan)}
+  showDone(true);sealSound();renderRecord();renderPond(newLan)}
 function showDone(animate){paint();$("monk").classList.add("gassho");if(animate){const ar=document.querySelector(".art");ar.classList.remove("shine");void ar.offsetWidth;ar.classList.add("shine")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
   $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
-    $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 고요히 쌓여, 보리수에 연등 하나를 밝혔어요."}}
+    $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 쌓여, 발원 연못에 회향 연꽃 등 하나가 떠올랐어요."}}
 function reset(){typeTimes=[];finished=false;document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
   $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint();typer.focus()}
 
@@ -813,8 +846,8 @@ $("breath").addEventListener("click",()=>{const n=performance.now();
 /* ---------- 탭 ---------- */
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
   document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
-  ["today","record","sound"].forEach(v=>{$("view-"+v).hidden=v!==t.dataset.view});$("view-start").hidden=true;
-  if(t.dataset.view==="record")renderRecord();window.scrollTo(0,0)}));
+  ["today","record","wish","sound"].forEach(v=>{$("view-"+v).hidden=v!==t.dataset.view});$("view-start").hidden=true;
+  if(t.dataset.view==="record")renderRecord();if(t.dataset.view==="wish")renderPond(false);window.scrollTo(0,0)}));
 
 /* ---------- 스토리 카드 ---------- */
 let typeTimes=[];
@@ -933,10 +966,27 @@ $("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("
 
 
 
-/* ---------- 보리수 연등 ---------- */
-const LSLOT=[[34,30],[52,17],[68,25],[83,30],[24,41],[61,36],[44,26],[77,41],[90,22],[29,22]];
-function renderLanterns(fresh){const L=mem.lan.slice(-LSLOT.length);
-  $("lanterns").innerHTML=L.map((x,i)=>'<i class="lan'+(fresh&&i===L.length-1?" new":"")+'" style="left:'+LSLOT[i][0]+'%;top:'+LSLOT[i][1]+'%;animation-duration:'+(4+((i*7)%5)*0.3).toFixed(1)+'s"><b></b></i>').join("")}
+/* ---------- 발원 연못 ---------- */
+const LOTUS="img/lotus.webp";
+const PSLOT=[[50,93,27],[23,85,21],[77,87,22],[38,75,17],[63,73,17],[14,69,13],[86,71,14],[50,65,12],[30,62,11],[70,62,11],[90,60,10],[10,60,10]];
+function lanLabel(x){const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
+  return x.w?{t:"발원 · "+x.w,d:md}:{t:(JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"+(x.to?" · "+x.to:""),d:md}}
+function renderPond(fresh){const L=mem.lan.slice(-PSLOT.length),n=L.length;
+  $("pond-empty").hidden=n>0;
+  const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]})).sort((a,b)=>a.slot[1]-b.slot[1]);
+  $("lotuses").innerHTML=items.map(o=>{const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="left:'+o.slot[0]+'%;top:'+o.slot[1]+'%;width:'+o.slot[2]+'%;--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
+  $("lotuses").querySelectorAll(".lotus").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
+    const lb=lanLabel(L[+b.dataset.k]);$("pond-cap").textContent=lb.t+"  ·  "+lb.d}));
+  $("pond-cap").textContent=n?(fresh?"새 연꽃 등이 떠올랐어요":"등을 누르면 담긴 바람이 보여요"):"";
+  $("wish-list").innerHTML=mem.lan.slice().reverse().map(x=>{const lb=lanLabel(x);return '<article class="item"><div class="d"><span>'+esc(lb.d)+'</span><span>'+(x.w?"발원":"회향")+'</span></div><p class="v">'+esc(x.w||lb.t)+"</p></article>"}).join("")}
+function showWish(fresh){document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="wish")));
+  ["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=v!=="wish");$("view-start").hidden=true;renderPond(fresh);window.scrollTo(0,0)}
+$("wish-go").addEventListener("click",()=>{const v=$("wish-in").value.trim();if(!v){$("wish-err").hidden=false;$("wish-in").focus();return}
+  mem.lan.push({w:v,d:TODAY});persist();$("wish-in").value="";$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
+  try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})});
+$("wish-in").addEventListener("input",()=>{$("wish-err").hidden=true});
+$("finish-pond").addEventListener("click",()=>showWish(false));
+
 /* ---------- 여정 ---------- */
 function setTrans(open){$("tlist").hidden=!open;$("trans-tgl").setAttribute("aria-expanded",String(open));$("trans-pm").textContent=open?"－":"＋";$("trans-lbl").textContent=open?"우리말 뜻 접기":"우리말 뜻 보기"}
 $("trans-tgl").addEventListener("click",()=>{mem.prefs.trans=$("tlist").hidden;persist();setTrans(mem.prefs.trans)});
@@ -980,7 +1030,7 @@ function addJourney(id){mem.ded[id]=$("ded").value.trim();if(!mem.active.include
   if((mem.prog[id]||0)>=JOURNEYS[id].items.length)mem.prog[id]=0;if(!basket.includes(id))basket.push(id);persist()}
 function renderBasket(){$("basket").hidden=!basket.length;$("basket-tx").innerHTML='담은 여정 <b>'+basket.map(id=>esc(JOURNEYS[id].name)).join(", ")+"</b>"}
 let pickId=null;
-function showStart(){basket=[];["today","record","sound"].forEach(v=>$("view-"+v).hidden=true);$("view-start").hidden=false;$("breath").hidden=true;document.querySelector("nav").hidden=!mem.cur;
+function showStart(){basket=[];["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=true);$("view-start").hidden=false;$("breath").hidden=true;document.querySelector("nav").hidden=!mem.cur;
   $("pd-back").hidden=!mem.cur;renderMoods();window.scrollTo(0,0)}
 function jMeta(id){const j=JOURNEYS[id],lv=META[id].lv;return j.items.length+'일 · <span class="lv" aria-hidden="true">'+dots(lv)+"</span> "+LVW[lv]}
 function renderMoods(){pickId=null;$("pick-detail").hidden=true;$("st-back").hidden=true;
@@ -1004,7 +1054,7 @@ function choose(b){pickId=b.dataset.id;
 $("st-back").addEventListener("click",renderMoods);
 function goToday(){$("view-start").hidden=true;document.querySelector("nav").hidden=false;$("breath").hidden=mem.prefs.breath==="off";
   document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="today")));
-  ["today","record","sound"].forEach(v=>$("view-"+v).hidden=v!=="today");window.scrollTo(0,0)}
+  ["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=v!=="today");window.scrollTo(0,0)}
 function playBegin(ids){const B=$("begin"),t="여정을 시작합니다";
   $("begin-t").innerHTML=[...t].map((c,i)=>'<span style="animation-delay:'+(0.2+i*0.13).toFixed(2)+'s">'+(c===" "?"&nbsp;":esc(c))+"</span>").join("");
   const d=ids.length===1?(mem.ded[ids[0]]||"").trim():"",S=$("begin-s");
@@ -1024,7 +1074,7 @@ let devTaps=0,devT=null;
 $("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
 $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
 $("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
-$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.seen=false;persist();renderLanterns();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
+$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.seen=false;persist();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
 
 /* ---------- 시작 ---------- */
 load();
@@ -1036,7 +1086,7 @@ function applyTheme(){const r=document.documentElement,t=mem.prefs.theme;if(t===
 chips("theme-chips",TH,"theme");applyTheme();
 chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
 chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
-renderJourney();renderLanterns();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
+renderJourney();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
 renderRecord();
 (function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
   $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 사경 중이에요":"오늘도 한 줄, 천천히";
