@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>한줄 불경</title>
+<meta name="description" content="하루 한 줄, 마음에 새기는 사경">
+<meta name="theme-color" content="#F3EEE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171E32" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="한줄 불경">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="og:title" content="한줄 불경">
+<meta property="og:description" content="하루 한 줄, 마음에 새기는 사경">
+<meta property="og:image" content="icons/icon-512.png">
+<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}img{max-width:100%}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500&display=swap">
+<style>
+/* 한지 위에 먹: 한 장의 종이를 가운데 두고, 위아래에 조용한 머리말과 탭 */
+:root{
+  --paper:#F3EEE3; --paper-2:#E9E2D3; --ink:#23211E; --ink-2:#615B50; --ghost:#C9C0AE;
+  --seal:#B3352B; --seal-bg:#F6E2DC; --line:#DAD1BF; --wrong:#D63A2A; --wrong-bg:#F9D9D2; --sel:#E2D6BE;
+  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --art-bg:transparent;
+  --f-verse:"Gowun Batang","Noto Serif KR","Nanum Myeongjo",serif;
+  --f-ui:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --art-bg:transparent; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --art-bg:transparent; color-scheme:dark}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.6;word-break:keep-all;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-block:20px 96px}
+header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-right:76px}
+.monk{display:flex;justify-content:center;padding-block:0 14px}
+.art{position:relative;width:min(230px,60vw);aspect-ratio:560/613;max-width:100%;background:var(--art-bg);border-radius:16px;box-shadow:0 0 0 8px var(--art-bg)}
+.art img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.art .tree{transform-origin:18% 83%;animation:sway 30s ease-in-out 3s infinite}
+.art .monkimg{transform-origin:50% 92%}
+.art .dk{display:none}
+.stars{position:absolute;inset:0;pointer-events:none}
+.tw{position:absolute;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:#FFF6DC;box-shadow:0 0 6px 2px rgba(255,240,200,.7);opacity:0;animation:twinkle 30s linear infinite}
+.tw.big{width:5px;height:5px;margin:-2.5px 0 0 -2.5px}
+.tw.big::before,.tw.big::after{content:"";position:absolute;left:50%;top:50%;background:#FFF6DC;border-radius:1px}
+.tw.big::before{width:1.5px;height:18px;transform:translate(-50%,-50%)}
+.tw.big::after{width:18px;height:1.5px;transform:translate(-50%,-50%)}
+@keyframes twinkle{0%{opacity:0;transform:scale(.3)}1.5%{opacity:1;transform:scale(1)}3%{opacity:.5;transform:scale(.7)}4.5%{opacity:0;transform:scale(.3)}100%{opacity:0}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .art .lt{display:none}:root:not([data-theme="light"]) .art .dk{display:block}:root:not([data-theme="light"]) .art{-webkit-mask-image:radial-gradient(ellipse 60% 58% at 50% 48%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 60% 58% at 50% 48%,#000 70%,transparent 100%)}}
+:root[data-theme="dark"] .art .lt{display:none}:root[data-theme="dark"] .art .dk{display:block}
+:root[data-theme="dark"] .art{-webkit-mask-image:radial-gradient(ellipse 60% 58% at 50% 48%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 60% 58% at 50% 48%,#000 70%,transparent 100%)}
+@keyframes sway{0%{transform:rotate(0)}2.5%{transform:rotate(1.6deg)}5%{transform:rotate(-1.1deg)}7.5%{transform:rotate(.7deg)}10%{transform:rotate(-.3deg)}12.5%,100%{transform:rotate(0)}}
+.breath{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:max(16px,env(safe-area-inset-right,0px));z-index:5;
+  width:64px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;color:var(--ink-2);font:inherit}
+.breath .orb-wrap{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line)}
+.breath .orb{width:56px;height:56px;border-radius:50%;background:var(--breath);opacity:.55;box-shadow:0 0 0 1.5px var(--breath-ring);transform:scale(.35);will-change:transform}
+.breath .bl{font-size:11px;letter-spacing:1px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.breath[aria-pressed="false"] .orb{opacity:.25}
+.breath[hidden]{display:none}
+.breath:focus-visible{outline:2px solid var(--seal);outline-offset:4px;border-radius:8px}
+.brand{font-family:var(--f-verse);font-size:20px;font-weight:700;letter-spacing:1px}
+.date{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);letter-spacing:1.5px;margin-bottom:10px}
+.paper{position:relative;background:var(--paper-2);border-radius:6px;padding:36px 24px 72px;min-height:240px;cursor:text}
+.verse{font-family:var(--f-verse);font-size:22px;line-height:2.05;word-break:keep-all;text-wrap:pretty;margin:0}
+.verse span{transition:color .18s ease}
+.c-ghost{color:var(--ghost)}
+.trans{margin-top:14px;border-top:1px solid var(--line)}
+.tgl{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:0;font:inherit;color:var(--ink);padding:12px 0;cursor:pointer;font-family:var(--f-verse);font-size:15px}
+.tgl:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.pm{width:28px;height:28px;border:1px solid var(--line);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-2)}
+.tlist{list-style:none;margin:0;padding:0 0 10px;display:flex;flex-direction:column;gap:14px}
+.tlist li{display:flex;flex-direction:column;gap:3px;padding-left:12px;border-left:2px solid transparent}
+.tlist li.now{border-left-color:var(--seal)}
+.tlist .tr-o{font-size:12px;color:var(--ink-2);letter-spacing:.3px}
+.tlist li.now .tr-o{color:var(--seal)}
+.tlist .tr-k{font-family:var(--f-verse);font-size:15px;line-height:1.7}
+.c-hl{background:linear-gradient(transparent 60%,var(--seal-bg) 60%)}
+.verse.long{font-size:18px;line-height:2}
+.c-ink{color:var(--ink)}
+.c-pend{color:var(--ink-2)}
+.c-wrong{color:var(--wrong);background:var(--wrong-bg);border-radius:3px;text-decoration:underline;text-decoration-color:var(--wrong);text-decoration-thickness:2px;text-underline-offset:6px;cursor:pointer}
+.c-sel{background:var(--sel);border-radius:3px}
+.c-cur{box-shadow:inset 2px 0 0 var(--ink);animation:blink 1.1s steps(2) infinite}
+.c-end{display:inline-block;width:2px}
+@keyframes blink{50%{box-shadow:inset 2px 0 0 transparent}}
+#typer{position:absolute;inset:0;pointer-events:none;width:100%;height:100%;opacity:0;resize:none;border:0;font-size:16px;caret-color:transparent;color:transparent;background:transparent}
+.seal{position:absolute;right:22px;bottom:20px;width:48px;height:48px;border:2px solid var(--seal);color:var(--seal);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-weight:700;font-size:15px;line-height:1.1;
+  writing-mode:vertical-rl;letter-spacing:2px;transform:rotate(-6deg)}
+.seal.stamp{animation:stamp .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes stamp{0%{opacity:0;transform:scale(2.2) rotate(-14deg)}100%{opacity:1;transform:scale(1) rotate(-6deg)}}
+.under{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-2);padding-block:10px 0;font-variant-numeric:tabular-nums}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+.btn:hover{border-color:var(--ink-2)}
+.btn:focus-visible,.tab:focus-visible,.chip:focus-visible,textarea:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.btn.solid{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.done{display:flex;flex-direction:column;gap:18px;margin-top:28px}
+.lbl{font-size:12px;letter-spacing:1.5px;color:var(--ink-2);margin:0 0 6px}
+.meaning{margin:0;font-size:15px;line-height:1.8}
+.question{font-family:var(--f-verse);font-size:18px;margin:0}
+#reflect{width:100%;box-sizing:border-box;min-height:110px;font:inherit;font-size:16px;line-height:1.7;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;resize:vertical}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.saved{font-size:13px;color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:22px}
+.stat{background:var(--paper-2);border-radius:6px;padding:12px}
+.stat b{display:block;font-family:var(--f-verse);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.stat span{font-size:12px;color:var(--ink-2)}
+.calhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.calhead h2{font-family:var(--f-verse);font-size:18px;margin:0;font-weight:700}
+.iconbtn{font:inherit;background:none;border:0;color:var(--ink-2);font-size:20px;padding:4px 10px;cursor:pointer}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;font-variant-numeric:tabular-nums}
+.cal .dow{font-size:11px;color:var(--ink-2);padding-block:4px}
+.day{aspect-ratio:1;max-width:100%;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:4px;color:var(--ink-2)}
+.day.on{background:var(--seal);color:var(--paper);font-family:var(--f-verse);font-weight:700;border-radius:3px;transform:rotate(-4deg) scale(.86)}
+.day.today:not(.on){outline:1.5px dashed var(--ink-2);outline-offset:-3px;color:var(--ink);font-weight:500}
+.day.past:not(.on){color:var(--ghost)}
+.legend{display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--ink-2);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;border-radius:2px}
+.legend .lo{background:var(--seal)}
+.legend .lt{outline:1.5px dashed var(--ink-2);outline-offset:-1.5px}
+.day.empty{visibility:hidden}
+.list{display:flex;flex-direction:column;margin-top:28px;border-top:1px solid var(--line)}
+.item{padding-block:16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.item .d{font-size:12px;color:var(--ink-2);display:flex;justify-content:space-between}
+.item .v{font-family:var(--f-verse);font-size:16px;line-height:1.8;margin:0;word-break:keep-all}
+.item .r{margin:0;font-size:14px;color:var(--ink-2);white-space:pre-wrap}
+.emptytxt{color:var(--ink-2);font-size:14px;padding-block:20px}
+.group{margin-bottom:26px}
+.group h2{font-family:var(--f-verse);font-size:18px;margin:0 0 4px;font-weight:700}
+.group p{margin:0 0 12px;font-size:13px;color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
+  padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+.tab{font:inherit;font-size:13px;background:none;border:0;color:var(--ink-2);padding:8px 0;cursor:pointer;letter-spacing:1px}
+.tab[aria-selected="true"]{color:var(--ink);font-weight:500}
+.note{font-size:12px;color:var(--ink-2);margin-top:6px}
+.start{display:flex;flex-direction:column;gap:14px;padding-block:8px 24px}
+.st-title{font-family:var(--f-verse);font-size:24px;font-weight:700;margin:0;text-wrap:balance}
+.st-sub{margin:0;color:var(--ink-2);font-size:14px}
+.picks{display:flex;flex-direction:column;gap:10px}
+.pick{text-align:left;border:1px solid var(--line);background:var(--paper-2);border-radius:12px;padding:14px 16px;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:row;align-items:center;gap:14px}
+.pick b{font-family:var(--f-verse);font-size:17px;font-weight:700}
+.pick .pk{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pk .pmeta{font-size:13px;color:var(--ink-2)}
+.pk .pon{font-size:12px;color:var(--seal)}
+.pk .pdesc{font-size:13px;color:var(--ink-2)}
+#st-back{align-self:flex-start}
+.dev{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;background:var(--seal-bg);border:1px solid var(--seal);border-radius:10px;padding:8px 10px;margin-top:8px}
+.basket{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--seal-bg);border:1px solid var(--seal);border-radius:12px;padding:12px 14px;font-size:14px}
+.basket b{color:var(--seal);font-weight:500}
+.glyph,.pick .glyph{width:46px;height:46px;flex:none;border:1.5px solid var(--seal);color:var(--seal);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-weight:700;font-size:23px;transform:rotate(-4deg)}
+.lv{color:var(--seal);letter-spacing:1px}
+.jbtn{font:inherit;font-size:12px;letter-spacing:1px;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer}
+.jbtn::after{content:" ▾";color:var(--ink-2)}
+.jbtn:focus-visible,.jrow:focus-visible,.link:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(12,14,22,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet-in{background:var(--paper);width:min(460px,100%);box-sizing:border-box;border-radius:16px 16px 0 0;max-height:82%;overflow:auto;display:flex;flex-direction:column;gap:10px;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sh-t{font-family:var(--f-verse);font-size:19px;margin:0}
+.jlist{display:flex;flex-direction:column;gap:8px}
+.jrow{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2);text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.jrow[aria-current="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.jr{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.jr b{font-family:var(--f-verse);font-size:16px}
+.jr span{font-size:12px;color:var(--ink-2)}
+.jr .bar{display:block;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.jr .bar i{display:block;height:100%;background:var(--seal);border-radius:2px}
+.meaning.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.link{font:inherit;font-size:13px;color:var(--ink-2);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.done label.question{display:block;margin-bottom:10px}
+.row.sub{gap:18px}
+.share{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--seal-bg);border:1.5px solid var(--seal);border-radius:12px;padding:14px 16px;cursor:pointer}
+.share:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+.share-tx{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.share-tx b{font-family:var(--f-verse);font-size:16px;color:var(--seal)}
+.share-tx span{font-size:12px;color:var(--ink-2)}
+.share-seal{width:40px;height:40px;flex:none;background:var(--seal);color:var(--paper);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-weight:700;font-size:20px;transform:rotate(-5deg)}
+.share-go{font-size:24px;color:var(--seal)}
+.pick[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.pick:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.detail{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.detail h2{font-family:var(--f-verse);font-size:20px;margin:0}
+.detail p{margin:0;font-size:14px;color:var(--ink-2)}
+.field{width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.guide details{border-top:1px solid var(--line);padding-block:12px}
+.guide details:last-child{border-bottom:1px solid var(--line)}
+.guide summary{cursor:pointer;font-family:var(--f-verse);font-size:16px;font-weight:700;list-style:none}
+.guide summary::-webkit-details-marker{display:none}
+.guide summary::after{content:"＋";float:right;color:var(--ink-2);font-weight:400}
+.guide details[open] summary::after{content:"－"}
+.guide p,.guide ol{margin:10px 0 0;font-size:14px;line-height:1.8;color:var(--ink-2)}
+.guide ol{padding-left:20px}
+.jcard{background:var(--paper-2);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.jcard b{font-family:var(--f-verse);font-size:17px}
+.jcard span{font-size:13px;color:var(--ink-2)}
+.finish{border:1.5px solid var(--seal);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.finish .question{color:var(--seal)}
+.splash{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:opacity 1.6s cubic-bezier(.4,0,.2,1) .5s}
+.splash.out{opacity:0;pointer-events:none}
+.sp-in{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;transition:opacity 1.1s ease,transform 1.8s ease}
+.splash.out .sp-in{opacity:0;transform:translateY(-8px)}
+.app,nav,.breath{transition:opacity 1.8s ease}
+body.entering .app,body.entering nav,body.entering .breath{opacity:0}
+.sp-name{font-family:var(--f-verse);font-size:32px;font-weight:700;letter-spacing:4px;animation:inkin 2.4s ease .3s both}
+.sp-seal{width:60px;height:60px;border:2.5px solid var(--seal);color:var(--seal);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-weight:700;font-size:18px;writing-mode:vertical-rl;letter-spacing:3px;animation:stamp .8s cubic-bezier(.2,1.4,.4,1) 2.1s both}
+.sp-tag{font-size:14px;color:var(--ink-2);animation:fadein 1.4s ease 2.8s both}
+.sp-streak{font-size:13px;color:var(--seal);min-height:1.3em;animation:fadein 1.4s ease 3.4s both}
+.begin{position:fixed;inset:0;z-index:45;background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:opacity 1.5s cubic-bezier(.4,0,.2,1)}
+.begin.out{opacity:0;pointer-events:none}
+.bg-in{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.bg-t{font-family:var(--f-verse);font-size:28px;font-weight:700;letter-spacing:3px}
+.bg-t span{display:inline-block;animation:bleed 1.7s ease both}
+.bg-s{font-size:14px;color:var(--ink-2);letter-spacing:1px;animation:fadein 1.3s ease 1.7s both}
+@keyframes bleed{0%{opacity:0;filter:blur(10px);transform:scale(1.18)}60%{opacity:.8}100%{opacity:1;filter:blur(0);transform:none}}
+@keyframes inkin{0%{opacity:0;filter:blur(8px);letter-spacing:12px}100%{opacity:1;filter:blur(0);letter-spacing:4px}}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.story{position:fixed;inset:0;z-index:40;background:rgba(12,14,22,.6);display:flex;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) max(12px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 12px) max(12px,env(safe-area-inset-left,0px))}
+.story-in{background:var(--paper);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;align-items:center;max-height:100%;overflow:auto;width:min(420px,100%);box-sizing:border-box}
+.story-top{display:flex;justify-content:space-between;align-items:center;width:100%;gap:8px}
+#story-cv{height:min(60vh,600px);width:auto;aspect-ratio:9/16;max-width:100%;border-radius:10px;box-shadow:0 0 0 1px var(--line);display:block}
+.story-opts{display:flex;gap:16px;font-size:14px;flex-wrap:wrap;justify-content:center;color:var(--ink-2)}
+.story-opts input{accent-color:var(--seal);margin-right:4px}
+.story .note{text-align:center;margin:0;transition:color .3s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="splash" id="splash" role="status" aria-label="한줄 불경을 여는 중">
+  <div class="sp-in">
+    <div class="sp-name">한줄 불경</div>
+    <div class="sp-seal">寫經</div>
+    <div class="sp-tag">하루 한 줄, 마음에 새기는 사경</div>
+    <div class="sp-streak" id="sp-streak"></div>
+  </div>
+</div>
+
+<div class="begin" id="begin" hidden role="status" aria-live="polite">
+  <div class="bg-in"><div class="bg-t" id="begin-t"></div><div class="bg-s" id="begin-s"></div></div>
+</div>
+
+<div class="app">
+  <header>
+    <div class="brand" id="brand">한줄 불경</div>
+    <div class="dev" id="dev" hidden><span>테스트용: 모든 기록을 지울까요?</span><button class="btn solid" id="dev-yes">지우기</button><button class="btn" id="dev-no">취소</button></div>
+    <div class="date" id="today-label"></div>
+  </header>
+
+  <main>
+    <section id="view-start" class="start" hidden>
+      <button class="link" id="st-back" hidden>← 다른 마음 고르기</button>
+      <h1 class="st-title" id="st-title">어떤 마음으로 쓰고 싶나요?</h1>
+      <p class="st-sub" id="st-sub">하루 한 구절, 처음부터 끝까지 옮겨 써요.</p>
+      <div class="picks" id="picks"></div>
+      <div class="basket" id="basket" hidden><span id="basket-tx"></span><button class="btn solid" id="basket-go">이대로 시작하기</button></div>
+      <div class="detail" id="pick-detail" hidden>
+        <h2 id="pd-name"></h2>
+        <p id="pd-meta"></p>
+        <label for="ded" id="pd-ded-label" style="font-size:14px">누구를 위해 쓰나요? <span style="color:var(--ink-2)">(선택)</span></label>
+        <input class="field" id="ded" type="text" maxlength="20" placeholder="어머니, 친구, 나 자신" autocomplete="off">
+        <p style="font-size:12px">완주하는 날, 이분께 회향해요.</p>
+        <div class="row"><button class="btn solid" id="pd-start">이 여정 시작하기</button><button class="btn" id="pd-add">＋ 담고 다른 여정도 고르기</button></div>
+        <div class="row sub"><button class="link" id="pd-moods">← 다른 마음 고르기</button><button class="link" id="pd-back" hidden>홈으로 돌아가기</button></div>
+      </div>
+    </section>
+
+    <section id="view-today">
+      <div class="monk" id="monk" aria-hidden="true">
+        <div class="art">
+          <img class="lt tree" alt="" src="img/tree.webp">
+          <img class="lt monkimg" alt="" src="img/monk.webp">
+          <img class="dk dbase" alt="" src="img/dbase.webp">
+          <div class="dk stars" id="stars"><i class="tw big" style="left:88.6%;top:29.2%"></i><i class="tw big" style="left:12.4%;top:17.3%"></i><i class="tw big" style="left:75.8%;top:36.7%"></i><i class="tw big" style="left:92.1%;top:56.0%"></i><i class="tw big" style="left:78.1%;top:48.7%"></i><i class="tw big" style="left:75.4%;top:5.3%"></i><i class="tw" style="left:66.1%;top:2.3%"></i><i class="tw" style="left:77.3%;top:41.8%"></i><i class="tw" style="left:90.3%;top:31.9%"></i><i class="tw" style="left:92.2%;top:38.9%"></i><i class="tw" style="left:24.3%;top:13.5%"></i><i class="tw" style="left:4.3%;top:26.3%"></i><i class="tw" style="left:32.1%;top:26.9%"></i><i class="tw" style="left:61.3%;top:35.7%"></i><i class="tw" style="left:78.6%;top:37.8%"></i><i class="tw" style="left:93.2%;top:12.4%"></i><i class="tw" style="left:91.8%;top:34.7%"></i></div>
+          <img class="dk tree" alt="" src="img/dtree.webp">
+          <img class="dk monkimg" alt="" src="img/dmonk.webp">
+        </div>
+      </div>
+      <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><span id="meta-right">오늘의 한 줄</span></div>
+      <div class="paper" id="paper">
+        <p class="verse" id="verse" aria-live="off"></p>
+        <textarea id="typer" aria-label="구절 따라 쓰기" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <div class="seal" id="seal" hidden>寫經</div>
+      </div>
+      <div class="under">
+        <span id="hint" title="띄어쓰기는 안 쳐도 돼요">종이를 눌러 한 글자씩 따라 써 보세요</span>
+        <span id="count"></span>
+      </div>
+
+      <div class="done" id="done" hidden>
+        <button class="share" id="story-open"><span class="share-seal" aria-hidden="true">寫</span><span class="share-tx"><b>오늘의 사경, 스토리로 공유하기</b><span>먹이 번지는 짧은 영상으로 만들어 드려요</span></span><span class="share-go" aria-hidden="true">›</span></button>
+        <div>
+          <p class="meaning clamp" id="meaning"></p>
+          <button class="link" id="more">풀이 더 보기</button>
+        </div>
+        <div>
+          <label class="question" for="reflect" id="question"></label>
+          <textarea id="reflect" placeholder="한 줄이어도 괜찮아요"></textarea>
+        </div>
+        <div class="finish" id="finish" hidden>
+          <p class="question" id="finish-title"></p>
+          <p class="meaning" id="finish-text"></p>
+          <div class="row"><button class="btn solid" id="finish-next">다음 여정 고르기</button></div>
+        </div>
+        <div class="row">
+          <button class="btn solid" id="save">남기기</button>
+          <span class="saved" id="saved" hidden>남겼어요</span>
+        </div>
+        <div class="row sub"><button class="link" id="again">다시 쓰기</button></div>
+      </div>
+
+      <div class="trans" id="trans" hidden>
+        <button class="tgl" id="trans-tgl" aria-expanded="false" aria-controls="tlist"><span id="trans-lbl">우리말 뜻 보기</span><span class="pm" id="trans-pm" aria-hidden="true">＋</span></button>
+        <ol class="tlist" id="tlist" hidden></ol>
+      </div>
+    </section>
+
+    <section id="view-record" hidden>
+      <div class="stats">
+        <div class="stat"><b id="st-streak">0</b><span>연속 일수</span></div>
+        <div class="stat"><b id="st-month">0</b><span id="st-month-l">여정 진도</span></div>
+        <div class="stat"><b id="st-total">0</b><span>전체 사경</span></div>
+      </div>
+      <div class="calhead">
+        <button class="iconbtn" id="prev" aria-label="지난 달">‹</button>
+        <h2 id="cal-title"></h2>
+        <button class="iconbtn" id="next" aria-label="다음 달">›</button>
+      </div>
+      <div class="cal" id="cal"></div>
+      <div class="legend"><span><i class="lo"></i>사경한 날</span><span><i class="lt"></i>오늘</span></div>
+      <div class="list" id="list"></div>
+    </section>
+
+    <section id="view-sound" hidden>
+      <div class="group">
+        <h2>나의 여정</h2>
+        <div class="jcard" id="jcard"></div>
+        <button class="btn" id="change-j">여정 바꾸기 · 추가</button>
+      </div>
+      <div class="group guide">
+        <h2>사경이란?</h2>
+        <details open><summary>사경은 무엇인가요</summary>
+          <p>경전을 한 글자씩 옮겨 쓰며 마음을 모으는 오래된 수행이에요. 인쇄술이 없던 시절 경전을 널리 전하려고 시작되었고, 지금은 마음을 가다듬는 수행으로 이어지고 있어요. 잘 쓰는 것보다 한 글자에 집중하는 것이 중요해요.</p></details>
+        <details><summary>하루의 순서</summary>
+          <ol><li>오른쪽 위 호흡 공을 따라 숨을 고르며 마음을 가라앉혀요.</li><li>오늘의 구절을 한 글자씩 따라 써요.</li><li>풀이와 오늘의 질문을 천천히 읽어요.</li><li>떠오른 마음을 느낀 점으로 남겨요.</li></ol></details>
+        <details><summary>완주까지</summary>
+          <p>하루에 한 구절씩 처음부터 끝까지 순서대로 써요. 하루를 빠져도 건너뛰지 않고 멈춘 곳에서 이어 쓰면 돼요. 마지막 구절을 쓰는 날, 회향으로 여정을 마무리해요.</p></details>
+        <details><summary>회향이란?</summary>
+          <p>내가 쓴 사경의 좋은 기운을 다른 이에게 돌려 바치는 일이에요. 돌아가신 분, 아픈 가족, 힘든 친구, 혹은 세상의 모든 이를 위해 회향할 수 있어요.</p></details>
+        <details><summary>진언은 왜 번역하지 않나요?</summary>
+          <p>진언은 뜻보다 소리 자체에 힘이 있다고 보아, 옛 소리를 그대로 외우고 써요. 대신 풀이에서 뜻과 오늘의 확언을 함께 보여드려요.</p></details>
+      </div>
+      <div class="group">
+        <h2>화면</h2>
+        <p>밝은 한지 화면과 어두운 새벽 화면 중에 골라요.</p>
+        <div class="chips" id="theme-chips"></div>
+      </div>
+      <div class="group">
+        <h2>호흡</h2>
+        <p>오른쪽 위의 공이 커지면 들이쉬고, 작아지면 내쉬어요. 공을 누르면 잠시 멈춰요.</p>
+        <div class="chips" id="breath-chips"></div>
+      </div>
+      <div class="group">
+        <h2>배경 소리</h2>
+        <p>사경하는 동안 들을 자연의 소리를 골라요.</p>
+        <div class="chips" id="bg-chips"></div>
+      </div>
+      <div class="group">
+        <h2>글자 소리</h2>
+        <p>한 글자 쓸 때마다 나는 소리예요.</p>
+        <div class="chips" id="key-chips"></div>
+      </div>
+      <p class="note">기록은 이 기기의 브라우저에만 저장돼요. 첫 번째 시제품이라 로그인과 백업은 아직 없어요.</p>
+    </section>
+  </main>
+</div>
+
+<nav>
+  <div class="in" role="tablist">
+    <button class="tab" role="tab" data-view="today" aria-selected="true">오늘</button>
+    <button class="tab" role="tab" data-view="record" aria-selected="false">기록</button>
+    <button class="tab" role="tab" data-view="sound" aria-selected="false">설정</button>
+  </div>
+</nav>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-in" role="dialog" aria-modal="true" aria-label="나의 여정">
+    <div class="story-top"><h2 class="sh-t">나의 여정</h2><button class="iconbtn" id="sheet-close" aria-label="닫기">✕</button></div>
+    <div class="jlist" id="jlist"></div>
+    <button class="btn" id="add-j">＋ 새 여정 추가</button>
+  </div>
+</div>
+
+<div class="story" id="story" hidden>
+  <div class="story-in" role="dialog" aria-modal="true" aria-label="스토리 만들기">
+    <div class="story-top"><h2 class="sh-t">스토리 미리보기</h2><button class="iconbtn" id="story-close" aria-label="닫기">✕</button></div>
+    <canvas id="story-cv" width="1080" height="1920" aria-label="스토리 미리보기"></canvas>
+    <div class="story-opts">
+      <label><input type="checkbox" id="opt-r">느낀 점 넣기</label>
+      <label><input type="checkbox" id="opt-d">회향 대상 넣기</label>
+    </div>
+    <div class="row"><button class="btn" id="story-replay">다시 보기</button><button class="btn solid" id="story-save">영상 만들기</button></div>
+    <p class="note" id="story-note">영상을 만든 뒤 공유 버튼으로 인스타그램 스토리에 올릴 수 있어요.</p>
+  </div>
+</div>
+
+<button class="breath" id="breath" aria-pressed="true" aria-label="호흡 안내, 누르면 멈추거나 다시 시작해요">
+  <span class="orb-wrap"><span class="orb" id="orb"></span></span>
+  <span class="bl" id="breath-label">들이쉬고</span>
+</button>
+
+<script>
+const D=(t,m,q)=>({t,m,q});
+const AFF=["나는 오늘 나에게 다정하게 말한다","나는 남의 말을 끝까지 듣는다","나는 화가 날 때 한 번 더 숨을 고른다","나는 고맙다는 말을 아끼지 않는다","나는 그 자리에 없는 사람의 흉을 보지 않는다","나는 나를 깎아내리는 말을 멈춘다","나는 미안하다는 말을 미루지 않는다","나는 사실과 짐작을 나누어 말한다","나는 칭찬을 먼저 건넨다","나는 침묵도 좋은 대답이 될 수 있음을 안다","나는 내가 한 말을 지킨다","나는 가까운 사람에게 더 공손하다","나는 비교하는 말 대신 응원하는 말을 한다","나는 부드럽게 말해도 단단할 수 있다","나는 내 마음을 솔직하고 따뜻하게 전한다","나는 오늘 누군가에게 힘이 되는 말을 한다","나는 불평 대신 바라는 것을 말한다","나는 실수한 나를 너그럽게 다독인다","나는 듣기 좋은 말보다 진실한 말을 고른다","나는 말하기 전에 그 말이 필요한지 묻는다","나의 말이 나와 세상을 맑게 한다"];
+const AQ=["오늘 이 다짐을 떠올린 순간이 있었나요?","이 다짐을 지키기 어려운 순간은 언제일까요?","이 말을 가장 먼저 건네고 싶은 사람은 누구인가요?"];
+const MANTRA="수리수리 마하수리 수수리 사바하 수리수리 마하수리 수수리 사바하 수리수리 마하수리 수수리 사바하";
+const JOURNEYS={
+dhamma:{name:"법구경",part:"제1품 쌍서품",unit:i=>"제"+(i+1)+"게",days:20,mood:"마음을 다스리고 싶어요",desc:"짧은 게송으로 일상의 마음을 돌아봐요",items:[
+D("마음이 모든 일에 앞서고 마음이 주인이 되어 모든 것을 짓는다","흐린 마음으로 말하고 행하면 수레바퀴가 소의 발자국을 따르듯 괴로움이 따른다고 이어집니다. 바깥을 바꾸기 전에 내 마음이 어디를 향하는지 먼저 살펴보라는 말씀입니다.","오늘 내 하루를 만든 마음은 어떤 마음이었나요?"),
+D("맑은 마음으로 말하고 행하면 행복이 그림자처럼 따른다","행복은 쫓아가 붙잡는 것이 아니라 맑은 행동 뒤에 저절로 따라옵니다. 그림자가 몸을 떠나지 않듯 좋은 마음은 결국 나에게 돌아옵니다.","오늘 맑은 마음으로 한 말이나 행동이 있었나요?"),
+D("그가 나를 욕하고 때리고 이기고 빼앗았다 이 생각을 품으면 미움은 가라앉지 않는다","억울했던 일을 마음속에서 계속 되감으면 그 일은 끝나지 않고 오늘도 나를 아프게 합니다. 미움을 키우는 것은 그 사람보다 되풀이하는 내 생각이라는 말씀입니다.","자꾸 되감게 되는 억울한 기억이 있나요?"),
+D("그가 나를 욕하고 때렸다는 생각을 품지 않으면 미움은 가라앉는다","일어난 일을 지울 수는 없지만, 그 생각을 붙잡을지 내려놓을지는 고를 수 있습니다. 내려놓는 순간 미움은 조금씩 가라앉기 시작합니다.","오늘 내려놓고 싶은 생각 하나는 무엇인가요?"),
+D("미움은 미움으로 그치지 않고 미움을 내려놓을 때 그친다 이것은 영원한 진리다","미움에 미움으로 답하면 불이 불을 키우듯 커지기만 합니다. 내려놓는 것은 지는 일이 아니라 그 불을 끄는 유일한 방법입니다.","요즘 마음에 오래 품고 있는 미움이 있나요?"),
+D("우리가 언젠가 죽는다는 것을 깨달으면 다툼은 저절로 그친다","사람들은 영원히 살 것처럼 사소한 일로 다툽니다. 삶이 유한하다는 것을 떠올리면 무엇이 정말 중요한지 보이고 다툼은 힘을 잃습니다.","지금 다투고 있는 일이 일 년 뒤에도 중요할까요?"),
+D("즐거움만 쫓고 감각을 다스리지 못하는 이는 바람에 쓰러지는 약한 나무와 같다","편한 것만 찾고 절제하지 못하면 작은 유혹에도 쉽게 흔들립니다. 뿌리가 약한 나무가 바람 한 번에 넘어지는 것과 같습니다.","요즘 나를 쉽게 흔드는 유혹은 무엇인가요?"),
+D("감각을 다스리고 먹고 쉼을 알맞게 하는 이는 바람에도 흔들리지 않는 바위산과 같다","먹는 것, 쉬는 것, 보는 것을 알맞게 조절하는 작은 절제가 쌓이면 마음에 뿌리가 생깁니다. 그런 사람은 어떤 바람에도 바위산처럼 흔들리지 않습니다.","오늘 하루 알맞게 조절한 것은 무엇인가요?"),
+D("마음의 때를 씻지 않고 가사만 걸친 이는 그 옷을 입을 자격이 없다","겉모습을 갖추는 것과 마음을 닦는 것은 다릅니다. 직함이나 옷이 아니라 안에 담긴 마음이 그 사람을 말해줍니다.","겉모습만 갖추고 속은 채우지 못한 일이 있나요?"),
+D("마음의 때를 씻고 계율을 지키며 진실한 이가 그 옷을 입을 만하다","진짜 자격은 꾸준히 자신을 닦고 정직하게 사는 데서 나옵니다. 보여주기보다 되어가는 것이 먼저입니다.","내가 진실하게 지켜가고 있는 것은 무엇인가요?"),
+D("헛된 것을 참되다 하고 참된 것을 헛되다 하는 이는 참된 것에 이르지 못한다","중요하지 않은 것에 마음을 쏟고 정작 중요한 것을 흘려보내는 일이 많습니다. 무엇이 참으로 중요한지 가리는 눈이 먼저 필요합니다.","요즘 너무 많은 마음을 쏟고 있는 헛된 것은 무엇인가요?"),
+D("참된 것을 참되다 알고 헛된 것을 헛되다 아는 이는 참된 것에 이른다","가려볼 줄 아는 눈이 생기면 시간과 마음을 어디에 써야 할지 저절로 정해집니다. 지혜는 많이 아는 것이 아니라 바르게 가리는 것입니다.","나에게 정말 중요한 것 세 가지는 무엇인가요?"),
+D("지붕이 엉성한 집에 비가 새듯 닦지 않은 마음에는 욕심이 스며든다","틈이 있는 지붕으로 빗물이 들어오듯, 돌보지 않은 마음에는 욕심과 불안이 쉽게 스며듭니다. 매일의 작은 수행이 지붕을 고치는 일입니다.","요즘 내 마음에 새어 들어오는 것은 무엇인가요?"),
+D("지붕을 잘 이은 집에 비가 새지 않듯 잘 닦은 마음에는 욕심이 스며들지 못한다","잘 이은 지붕은 큰비에도 집 안을 지켜줍니다. 오늘 쓰는 한 줄이 내 마음의 지붕을 한 겹 더 단단하게 합니다.","내 마음의 지붕을 단단하게 해주는 것은 무엇인가요?"),
+D("나쁜 일을 한 이는 지금도 뒤에도 근심하고 자기 행동을 보며 괴로워한다","잘못은 남이 몰라도 내가 압니다. 그 기억이 오래도록 마음을 무겁게 하는 것이 가장 큰 대가입니다.","마음 한쪽을 무겁게 하는 일이 있나요?"),
+D("좋은 일을 한 이는 지금도 뒤에도 기뻐하고 자기 행동을 보며 즐거워한다","좋은 일은 남이 알아주지 않아도 나를 기쁘게 합니다. 떳떳한 마음은 그 자체로 오래가는 행복입니다.","떠올리면 마음이 따뜻해지는 나의 행동은 무엇인가요?"),
+D("나쁜 일을 한 이는 지금도 뒤에도 괴로워하며 내가 잘못했다고 뉘우친다","잘못을 외면할수록 괴로움은 더 커집니다. 그래서 뉘우침은 괴로움이 아니라 다시 시작하는 문이 되기도 합니다.","지금이라도 바로잡고 싶은 일이 있나요?"),
+D("좋은 일을 한 이는 지금도 뒤에도 기뻐하며 내가 좋은 일을 했다고 즐거워한다","작은 선행이 쌓이면 스스로를 믿는 힘이 됩니다. 나를 좋아하게 되는 가장 확실한 방법입니다.","오늘 나를 조금 더 좋아하게 만든 일이 있었나요?"),
+D("경전을 많이 외워도 행하지 않으면 남의 소를 세는 목동과 같다","남의 소를 아무리 세어도 내 것이 되지 않듯, 좋은 말을 많이 알아도 실천하지 않으면 내 삶은 그대로입니다. 오늘 쓴 한 줄을 하루 동안 살아보는 것이 진짜 사경입니다.","최근 알게 된 좋은 말 중 실천해 본 것이 있나요?"),
+D("조금만 외워도 가르침대로 살며 욕심과 미움을 버리는 이는 참된 수행자다","얼마나 많이 아는지보다 얼마나 그대로 사는지가 중요합니다. 한 구절이라도 삶에 스며들면 그것으로 충분합니다.","제1품을 마치며 가장 마음에 남은 구절은 무엇인가요?")]},
+mantra:{name:"정구업진언",part:"진언과 확언",unit:i=>(i+1)+"일째",days:21,mood:"나에게 힘이 되는 말을 새기고 싶어요",desc:"진언을 세 번 쓰고 오늘의 확언을 새겨요",
+ items:AFF.map((a,i)=>D(MANTRA,(i===0?"정구업진언은 '입으로 지은 업을 맑히는 진언'으로, 독경을 시작할 때 가장 먼저 외웁니다. 진언은 뜻보다 소리에 힘이 있다고 보아 번역하지 않고 그대로 씁니다. ":"진언을 세 번 쓰며 입과 마음을 맑혔다면, 아래 확언을 소리 내어 한 번 읽어 보세요. ")+"오늘의 확언: "+a,AQ[i%3]))},
+parents:{name:"부모은중경",part:"열 가지 은혜",unit:i=>["첫","두","세","네","다섯","여섯","일곱","여덟","아홉","열"][i]+" 번째 은혜",days:10,mood:"누군가를 위해 쓰고 싶어요",desc:"부모님의 열 가지 은혜를 새기며 감사를 전해요",items:[
+D("나를 품에 안고 열 달 동안 지켜주신 은혜","회탐수호은(懷耽守護恩). 아이를 품은 열 달 동안 어머니는 먹는 것, 걷는 것 하나까지 조심하셨습니다. 내가 세상에 오기 전부터 나는 이미 누군가의 보살핌 안에 있었습니다.","나를 지켜준 첫 번째 사람은 누구인가요?"),
+D("나를 낳으실 때 큰 고통을 견디신 은혜","임산수고은(臨産受苦恩). 나를 세상에 내보내기 위해 어머니는 목숨을 건 고통을 견디셨습니다. 내가 지금 숨 쉬는 이 순간이 그 견딤 위에 있습니다.","내가 태어난 날에 대해 들어본 이야기가 있나요?"),
+D("나를 낳고 모든 근심을 잊으신 은혜","생자망우은(生子忘憂恩). 갓 태어난 나를 보는 순간 어머니는 고통도 근심도 잊으셨다고 합니다. 나는 존재만으로 누군가의 기쁨이었습니다.","내가 누군가의 기쁨이었던 순간을 떠올려 보세요."),
+D("쓴 것은 삼키고 단 것은 뱉어 먹여주신 은혜","인고토감은(咽苦吐甘恩). 좋은 것은 자식에게 주고 궂은 것은 당신이 드셨습니다. 당연하게 받았던 것들이 사실은 누군가의 양보였습니다.","부모님이 나를 위해 양보하셨던 것은 무엇인가요?"),
+D("마른자리에 나를 눕히고 젖은 자리에 누우신 은혜","회건취습은(廻乾就濕恩). 밤새 아이가 젖은 자리를 적시면 마른 곳으로 옮겨 누이고 당신은 젖은 자리에 누우셨습니다. 편안한 자리는 늘 누군가가 비켜준 자리입니다.","나를 위해 불편을 감수해 준 사람은 누구인가요?"),
+D("젖을 먹여 길러주신 은혜","유포양육은(乳哺養育恩). 수많은 밤 잠을 줄여가며 나를 먹이고 키우셨습니다. 내 몸의 한 부분은 그 정성으로 자라났습니다.","부모님이 해주신 음식 중 그리운 맛이 있나요?"),
+D("더러운 것을 씻어주신 은혜","세탁부정은(洗濯不淨恩). 스스로 씻지 못하던 나를 수없이 씻기고 입히셨습니다. 내가 기억하지 못하는 시간에도 사랑은 쉬지 않았습니다.","기억나지 않지만 분명히 받았던 보살핌은 무엇일까요?"),
+D("멀리 떠난 나를 늘 걱정하신 은혜","원행억념은(遠行憶念恩). 자식이 먼 길을 떠나면 부모의 마음은 함께 따라갑니다. 연락 한 통이 누군가에게는 하루치 안심이 됩니다.","오늘 안부를 전하고 싶은 사람이 있나요?"),
+D("나를 위해 궂은 일도 마다하지 않으신 은혜","위조악업은(爲造惡業恩). 자식을 위해서라면 하기 싫은 일도, 고된 일도 마다하지 않으셨습니다. 그 수고는 말하지 않아서 더 크게 남습니다.","부모님이 말없이 해오신 수고는 무엇인가요?"),
+D("끝까지 나를 가엾이 여기시는 은혜","구경연민은(究竟憐愍恩). 자식이 백 살이 되어도 부모는 여든 살 자식을 걱정한다고 합니다. 이 열 가지 은혜를 쓴 오늘, 그 마음을 한 번 돌려드려 보세요.","부모님께 꼭 전하고 싶은 한마디는 무엇인가요?")]},
+heart:{name:"반야심경",part:"한문 독송본",unit:i=>(i+1)+" / 18",days:18,mood:"경전을 제대로 공부하고 싶어요",desc:"가장 짧고 가장 많이 외우는 경전을 한 구절씩",items:[
+D("마하반야바라밀다심경","'크고 밝은 지혜로 괴로움의 강을 건너는 마음의 경'이라는 뜻입니다. 260자 남짓한 짧은 경전에 대승불교의 핵심인 공(空)의 가르침이 담겨 있습니다.","오늘 내가 건너고 싶은 괴로움의 강은 무엇인가요?"),
+D("관자재보살 행심반야바라밀다시","관세음보살께서 깊은 지혜를 닦으실 때라는 뜻입니다. 세상을 자유롭게 꿰뚫어 보는 분이 깊이 들여다본 이야기가 이제 시작됩니다.","요즘 깊이 들여다보고 싶은 내 마음은 무엇인가요?"),
+D("조견오온개공 도일체고액","몸과 느낌, 생각, 의지, 의식이 모두 텅 비어 있음을 비추어 보고 모든 괴로움에서 벗어났다는 뜻입니다. '나'라고 굳게 믿는 것들도 늘 변하는 것들의 모임이라는 통찰입니다.","내가 '나'라고 굳게 믿고 있는 모습은 무엇인가요?"),
+D("사리자 색불이공 공불이색","사리자여, 모양 있는 것은 공과 다르지 않고 공은 모양 있는 것과 다르지 않다는 뜻입니다. 눈에 보이는 것과 비어 있음이 따로 있지 않다는 말씀입니다.","단단해 보이지만 사실은 변하고 있는 것이 있나요?"),
+D("색즉시공 공즉시색 수상행식 역부여시","모양이 곧 공이고 공이 곧 모양이며, 느낌과 생각과 의지와 의식도 그러하다는 뜻입니다. 반야심경에서 가장 널리 알려진 구절입니다.","오늘 내 마음을 채웠다가 사라진 생각은 무엇인가요?"),
+D("사리자 시제법공상 불생불멸 불구부정 부증불감","모든 것은 공한 모습이라 생겨나지도 사라지지도 않고, 더럽지도 깨끗하지도 않으며, 늘지도 줄지도 않는다는 뜻입니다. 좋고 나쁨을 가르는 마음을 잠시 내려놓아 보라는 말씀입니다.","좋다 나쁘다 판단하느라 지친 일이 있나요?"),
+D("시고 공중무색 무수상행식","그러므로 공 가운데에는 모양도 없고 느낌과 생각과 의지와 의식도 없다는 뜻입니다. 붙잡을 실체가 없으니 붙잡느라 생긴 괴로움도 놓을 수 있습니다.","붙잡고 있어서 더 무거워진 것이 있나요?"),
+D("무안이비설신의 무색성향미촉법","눈, 귀, 코, 혀, 몸, 마음도 없고, 그것들이 만나는 빛깔, 소리, 냄새, 맛, 감촉, 생각도 없다는 뜻입니다. 감각이 보여주는 세상이 전부가 아니라는 말씀입니다.","오늘 감각에 휘둘렸던 순간이 있었나요?"),
+D("무안계 내지 무의식계","눈으로 보는 세계부터 의식의 세계까지 모두 없다는 뜻입니다. 우리가 나누어 놓은 경계가 사실은 마음이 그은 선이라는 말씀입니다.","내가 스스로 그어 놓은 선은 무엇인가요?"),
+D("무무명 역무무명진 내지 무노사 역무노사진","어리석음도 없고 어리석음이 다함도 없으며, 늙고 죽음도 없고 늙고 죽음이 다함도 없다는 뜻입니다. 괴로움이 생기는 사슬조차 붙잡을 것이 아니라는 깊은 가르침입니다.","늙고 변하는 것에 대해 나는 어떤 마음을 품고 있나요?"),
+D("무고집멸도 무지역무득 이무소득고","괴로움과 그 원인, 소멸과 그 길도 없고, 지혜도 얻음도 없으니 얻을 것이 없기 때문이라는 뜻입니다. 무언가를 얻으려는 마음마저 내려놓을 때 자유로워집니다.","꼭 얻어야 한다고 믿는 것이 있나요?"),
+D("보리살타 의반야바라밀다고 심무가애","보살은 이 지혜에 의지하므로 마음에 걸림이 없다는 뜻입니다. 걸림 없는 마음이란 무엇에도 막히지 않고 흐르는 물 같은 마음입니다.","요즘 내 마음이 걸려 있는 곳은 어디인가요?"),
+D("무가애고 무유공포 원리전도몽상 구경열반","걸림이 없으므로 두려움이 없고, 뒤바뀐 헛된 생각을 멀리 떠나 마침내 평안에 이른다는 뜻입니다. 두려움은 대개 실제가 아니라 마음이 만든 그림에서 옵니다.","요즘 나를 두렵게 하는 상상은 무엇인가요?"),
+D("삼세제불 의반야바라밀다고 득아뇩다라삼먁삼보리","과거, 현재, 미래의 모든 부처님도 이 지혜에 의지해 가장 높고 바른 깨달음을 얻었다는 뜻입니다.","나를 이끌어 주는 한 가지 지혜가 있다면 무엇인가요?"),
+D("고지반야바라밀다 시대신주 시대명주","그러므로 알라, 이 지혜는 크게 신령한 주문이며 크게 밝은 주문이라는 뜻입니다. 경전이 이제 지혜를 마음에 새기는 주문으로 바뀝니다.","내 마음을 밝혀 주는 한마디는 무엇인가요?"),
+D("시무상주 시무등등주 능제일체고 진실불허","위없는 주문이며 견줄 것 없는 주문이니, 모든 괴로움을 없애고 진실하여 헛되지 않다는 뜻입니다.","오늘 내려놓고 싶은 괴로움은 무엇인가요?"),
+D("고설반야바라밀다주 즉설주왈","그러므로 이 지혜의 주문을 말하니 주문은 이러하다는 뜻입니다. 내일 쓸 마지막 구절이 바로 그 주문입니다.","반야심경을 쓰며 가장 마음에 남은 구절은 무엇인가요?"),
+D("아제아제 바라아제 바라승아제 모지 사바하","가자 가자, 저 언덕으로 가자, 모두 함께 저 언덕으로 가자, 깨달음이여 이루어지이다. 진언이라 소리 그대로 외우는 것이 전통입니다.","반야심경을 마치며 이 사경을 누구에게 회향하고 싶나요?")]}
+};
+JOURNEYS.diamond={name:"금강경",part:"핵심 일곱 구절",unit:i=>"제"+[3,5,6,10,18,26,32][i]+"분",days:7,mood:"집착을 내려놓고 싶어요",desc:"금강경의 핵심 일곱 구절을 새겨요",items:[
+D("약보살 유아상 인상 중생상 수자상 즉비보살","보살이 '나', '남', '중생', '오래 사는 존재'라는 생각에 매여 있다면 보살이 아니라는 뜻입니다. 남을 돕는 일에도 '내가 했다'는 생각이 붙으면 집착이 된다는 금강경의 첫 가르침입니다.","'내가 해줬다'는 생각이 마음에 남아 있는 일이 있나요?"),
+D("범소유상 개시허망 약견제상비상 즉견여래","모든 모양 있는 것은 허망하니, 모양이 모양 아님을 보면 곧 여래를 본다는 뜻입니다. 겉모습과 조건은 늘 변하니 그 너머를 보라는 금강경의 대표 사구게입니다.","겉모습만 보고 판단했던 사람이나 일이 있나요?"),
+D("지아설법 여벌유자 법상응사 하황비법","나의 가르침은 강을 건너는 뗏목과 같으니, 가르침도 놓아야 하거늘 하물며 가르침 아닌 것이랴. 강을 건넜으면 뗏목을 메고 다닐 필요가 없듯, 좋은 생각조차 붙잡지 말라는 말씀입니다.","이미 강을 건넜는데도 아직 메고 다니는 뗏목이 있나요?"),
+D("불응주색생심 불응주성향미촉법생심 응무소주 이생기심","보이는 것에 머물러 마음을 내지 말고, 소리와 냄새와 맛과 감촉과 생각에 머물러 마음을 내지 말며, 머무는 바 없이 마음을 내라는 뜻입니다. 육조 혜능 스님이 이 구절을 듣고 깨달았다고 전해집니다.","오늘 무언가에 매이지 않고 낸 마음이 있었나요?"),
+D("과거심불가득 현재심불가득 미래심불가득","지나간 마음도, 지금의 마음도, 오지 않은 마음도 붙잡을 수 없다는 뜻입니다. 후회와 걱정이 붙잡고 있는 그 마음은 사실 어디에도 머물러 있지 않습니다.","지나간 일과 오지 않은 일 중 무엇이 더 나를 붙잡나요?"),
+D("약이색견아 이음성구아 시인행사도 불능견여래","모습으로 나를 보려 하거나 소리로 나를 찾으면 그릇된 길을 가는 것이니 여래를 볼 수 없다는 뜻입니다. 진리는 화려한 모습이나 그럴듯한 말 속에 있지 않습니다.","그럴듯한 겉모습에 끌렸던 경험이 있나요?"),
+D("일체유위법 여몽환포영 여로역여전 응작여시관","모든 만들어진 것은 꿈, 환영, 물거품, 그림자 같고 이슬 같고 번개 같으니 이렇게 보라는 뜻입니다. 금강경을 마무리하는 사구게로, 붙잡을 수 없는 것을 놓을 때 자유로워진다고 말합니다.","일곱 구절 중 가장 오래 마음에 남을 구절은 무엇인가요?")]};
+JOURNEYS.bowang={name:"보왕삼매론",part:"열 가지 가르침",unit:i=>(i+1)+"번째 가르침",days:10,mood:"힘든 시기를 버티고 싶어요",desc:"어려움을 피하지 않고 받아들이는 열 가지 가르침",items:[
+D("몸에 병 없기를 바라지 말라 병을 좋은 약으로 삼으라","보왕삼매론은 명나라 묘협 스님의 글로, 한국 불자들이 가장 많이 외우는 가르침 중 하나입니다. 몸이 늘 편하면 욕심이 쉽게 자라니, 아픔을 나를 돌보게 하는 약으로 삼으라는 첫 가르침입니다.","요즘 몸이 나에게 보내는 신호는 무엇인가요?"),
+D("세상살이에 어려움 없기를 바라지 말라 근심과 어려움으로 세상을 살아가라","어려움이 없으면 남을 업신여기고 쉽게 들뜨게 됩니다. 어려움을 지나며 생긴 단단함이 결국 나를 지켜줍니다.","지금 지나고 있는 어려움은 나에게 무엇을 가르치나요?"),
+D("공부에 장애 없기를 바라지 말라 장애 속에서 벗어남을 얻으라","막힘없이 배우면 아는 것만 넘치고 깊어지지는 않습니다. 막히는 그 자리가 바로 깊어지는 자리입니다.","요즘 배움이나 일에서 막혀 있는 곳은 어디인가요?"),
+D("수행에 방해 없기를 바라지 말라 방해를 수행의 벗으로 삼으라","방해가 없으면 다짐도 단단해지지 않습니다. 나를 흔드는 것들이 오히려 다짐을 시험하고 키워줍니다.","요즘 내 다짐을 흔드는 것은 무엇인가요?"),
+D("일이 쉽게 되기를 바라지 말라 오래 걸려 이루어라","일이 쉽게 풀리면 마음이 가벼워져 경솔해지기 쉽습니다. 오래 걸려 이룬 일은 그만큼 깊게 남습니다.","오래 걸려서 조급해지는 일이 있나요?"),
+D("친구를 사귀되 내가 이롭기를 바라지 말라 맑은 마음으로 오래 사귀라","이익을 바라고 사귀면 결국 사이가 상합니다. 바라는 것 없는 사귐이 오래갑니다.","아무것도 바라지 않고 만나는 친구가 있나요?"),
+D("남이 내 뜻대로 따라주기를 바라지 말라 뜻이 다른 이를 나의 숲으로 삼으라","모두가 내 뜻대로 움직이면 마음이 교만해집니다. 나와 다른 사람들이 나를 넓혀주는 숲이 됩니다.","요즘 나와 뜻이 다른 사람은 누구인가요?"),
+D("덕을 베풀되 보답을 바라지 말라 베푼 일은 헌 신발처럼 버리라","보답을 바라는 베풂은 거래가 됩니다. 베풀고 잊는 마음이 가장 가볍고 큰 덕입니다.","베풀고 나서 보답을 기다린 적이 있나요?"),
+D("이익을 분에 넘치게 바라지 말라 적은 이익으로 부자가 되라","넘치는 이익은 판단을 흐리게 합니다. 적은 것에 만족할 줄 아는 사람이 진짜 부자입니다.","지금 이미 충분한 것은 무엇인가요?"),
+D("억울함을 밝히려 애쓰지 말라 억울함을 수행의 문으로 삼으라","억울함을 밝히려 애쓸수록 원망이 커지기도 합니다. 억울함을 견디는 그 자리가 마음을 닦는 문이 됩니다.","마음에 남은 억울함을 오늘 조금 내려놓을 수 있을까요?")]};
+const WSRC=["법구경 223게","맛지마 니까야 21","상윳따 니까야 36:6","법구경 222게","법구경 197게","앙굿따라 니까야 5:198","법구경 100게","법구경 133게","숫타니파타 451","법구경 227게","상윳따 니까야 45:2","숫타니파타 행복경","상윳따 니까야 3:8","법구경 76게","숫타니파타 자비경","법구경 35게","맛지마 니까야 131","법구경 277게","법구경 81게","맛지마 니까야 63","법구경 204게","법구경 186게","숫타니파타 무소의 뿔 경","맛지마 니까야 22","법구경 50게","법구경 160게","디가 니까야 16","법구경 116게","앙굿따라 니까야 3:65","디가 니까야 16"];
+JOURNEYS.words={name:"부처님 말씀",part:"출처가 분명한 서른 말씀",unit:i=>WSRC[i],days:30,mood:"일상에 힘이 되는 말씀이 필요해요",desc:"화, 말, 관계, 불안, 욕심, 노력에 관한 말씀",items:[
+D("성냄은 성내지 않음으로 이기고 악은 선으로 이겨라","같은 방식으로 맞서면 같은 것이 더 커질 뿐입니다. 이 서른 말씀은 모두 경전에서 출처를 확인한 구절이며, 첫 주제는 화와 미움입니다.","화가 날 때 나는 주로 어떻게 반응하나요?"),
+D("도둑이 톱으로 몸을 베어도 미움을 품는다면 나의 가르침을 따르는 것이 아니다","톱의 비유로 알려진 말씀입니다. 아무리 부당한 일을 당해도 미움에 마음을 내주지 말라는, 가장 엄격하고 깊은 자비의 가르침입니다.","도저히 미워하지 않을 수 없는 사람이 있나요?"),
+D("지혜로운 이는 두 번째 화살을 맞지 않는다","아픈 일이라는 첫 번째 화살은 누구나 맞습니다. 그 일을 곱씹으며 스스로 쏘는 두 번째 화살은 피할 수 있다는 말씀입니다.","요즘 내가 나에게 쏘고 있는 두 번째 화살은 무엇인가요?"),
+D("치솟는 화를 달리는 수레 붙잡듯 다스리는 이를 참된 마부라 부른다","화는 달리는 수레처럼 한번 내달리면 멈추기 어렵습니다. 그 고삐를 쥘 줄 아는 사람이 자기 삶의 진짜 주인입니다.","최근 화의 고삐를 잘 붙잡았던 순간이 있나요?"),
+D("미워하는 이들 속에서도 미워하지 않으며 우리는 즐겁게 산다","주변의 미움에 물들지 않는 것은 남이 아닌 나를 위한 일입니다. 미움을 품지 않은 마음은 그 자체로 가볍습니다.","미움에 물들지 않으려면 오늘 무엇이 필요할까요?"),
+D("때에 맞게 진실하게 부드럽게 이롭게 자애로운 마음으로 말하라","좋은 말의 다섯 가지 조건입니다. 맞는 말이라도 때가 아니거나 거칠면 상처가 되니, 다섯 가지를 함께 살피라는 말씀입니다.","오늘 다섯 가지 중 가장 놓치기 쉬운 것은 무엇인가요?"),
+D("쓸데없는 천 마디보다 마음을 고요하게 하는 한마디가 낫다","말이 많다고 뜻이 깊어지지는 않습니다. 듣는 이의 마음을 가라앉히는 한마디가 더 오래 남습니다.","오늘 누군가에게 건네고 싶은 한마디는 무엇인가요?"),
+D("거친 말을 하지 말라 들은 이도 거칠게 되돌려준다","말은 메아리처럼 돌아옵니다. 내가 보낸 말의 온도가 결국 내가 받는 말의 온도가 됩니다.","최근 거칠게 돌아온 말이 있었다면 처음 보낸 말은 어땠나요?"),
+D("나를 괴롭히지 않고 남을 해치지 않는 말만 하라","좋은 말의 기준은 단순합니다. 말한 뒤 내 마음이 무겁지 않고 듣는 이가 다치지 않는 말이면 됩니다.","말하고 나서 마음이 무거웠던 적이 있나요?"),
+D("말이 없어도 말이 많아도 비난받는다 비난받지 않는 이는 없다","모두에게 좋은 평가를 받는 일은 처음부터 불가능합니다. 그것을 알면 남의 평가에서 조금 자유로워집니다.","남의 평가 때문에 망설이는 일이 있나요?"),
+D("좋은 벗은 수행의 절반이 아니라 전부다","아난다가 좋은 벗은 수행의 절반이라고 말하자 부처님이 전부라고 고쳐 주신 대화입니다. 누구와 함께하느냐가 내가 어떤 사람이 되느냐를 정합니다.","나를 좋은 쪽으로 이끄는 벗은 누구인가요?"),
+D("어리석은 이를 멀리하고 지혜로운 이를 가까이하는 것이 으뜸가는 행복이다","행복경의 첫 구절입니다. 행복은 멀리 있는 것이 아니라 곁에 누구를 두느냐에서 시작된다는 말씀입니다.","요즘 가장 자주 만나는 사람은 나에게 어떤 영향을 주나요?"),
+D("어디를 둘러보아도 자신보다 소중한 이는 없다 그러니 남을 해치지 말라","왕비 말리까의 고백에 부처님이 답한 말씀입니다. 내가 나를 아끼듯 남도 그만큼 자신을 아끼니, 그 마음을 헤아리라는 뜻입니다.","오늘 나를 아끼듯 누군가를 아낀 순간이 있었나요?"),
+D("허물을 짚어주는 이를 보물 있는 곳을 알려주는 사람처럼 따르라","쓴소리는 듣기 싫지만 나를 자라게 하는 보물 지도이기도 합니다. 고마운 마음으로 들으면 그 말이 나를 바꿉니다.","최근 들은 쓴소리 중 마음에 남은 것이 있나요?"),
+D("어머니가 외아들을 목숨 걸고 지키듯 모든 생명에게 끝없는 자비를","자비경의 핵심 구절입니다. 가장 소중한 사람을 지키는 그 마음을 모든 생명으로 넓히라는 말씀입니다.","오늘 그 마음을 조금 나눠주고 싶은 사람은 누구인가요?"),
+D("다스리기 어려운 마음을 다스리면 그 마음이 행복을 가져온다","마음은 가볍고 빨라서 제멋대로 날아다닙니다. 그 마음을 길들이는 일은 어렵지만 그만큼 큰 평안을 줍니다. 이제 불안과 마음에 관한 말씀입니다.","오늘 내 마음은 어디로 자주 날아갔나요?"),
+D("지나간 것을 좇지 말고 오지 않은 것을 바라지 말라 지금 이 순간을 살펴라","과거는 이미 지나갔고 미래는 아직 오지 않았습니다. 우리가 실제로 살 수 있는 곳은 지금 여기뿐입니다.","지금 이 순간 내 몸과 마음은 어떤가요?"),
+D("모든 것은 변한다는 것을 지혜로 볼 때 괴로움에서 벗어난다","좋은 것도 힘든 것도 영원히 머물지 않습니다. 변한다는 사실을 받아들이면 붙잡느라 생긴 괴로움이 풀립니다.","요즘 놓지 못하고 붙잡고 있는 것이 있나요?"),
+D("바위가 바람에 흔들리지 않듯 지혜로운 이는 칭찬과 비난에 흔들리지 않는다","칭찬에 들뜨고 비난에 무너지면 마음의 주인이 남이 됩니다. 중심을 지키면 어떤 바람도 지나갈 뿐입니다.","남의 한마디에 크게 흔들렸던 적이 있나요?"),
+D("독화살을 맞은 이는 누가 쏘았는지 묻기 전에 화살부터 뽑아야 한다","독화살의 비유입니다. 답 없는 질문을 붙잡기보다 지금 나를 아프게 하는 것부터 돌보라는 말씀입니다.","지금 먼저 뽑아야 할 화살은 무엇인가요?"),
+D("건강은 가장 큰 이익이고 만족은 가장 큰 재산이다","더 가지려는 마음은 끝이 없어 늘 가난하게 만듭니다. 지금 가진 것에 만족할 줄 알면 이미 넉넉한 사람입니다. 이제 욕심과 만족에 관한 말씀입니다.","지금 이미 가진 것 중 감사한 것은 무엇인가요?"),
+D("금화가 비처럼 쏟아져도 욕망은 채워지지 않는다","욕망은 채울수록 커지는 그릇입니다. 더 많이 갖는 것이 아니라 덜 바라는 것이 채움의 길이라는 말씀입니다.","요즘 채워도 채워지지 않는 바람이 있나요?"),
+D("소리에 놀라지 않는 사자처럼 그물에 걸리지 않는 바람처럼 무소의 뿔처럼 혼자서 가라","남의 소리와 세상의 그물에 휘둘리지 말고 자기 길을 가라는 말씀입니다. 외로움이 아니라 단단함에 관한 구절입니다.","남의 시선 때문에 미뤄둔 나의 길이 있나요?"),
+D("강을 건넜으면 뗏목을 메고 가지 말라","뗏목의 비유입니다. 한때 나를 도운 것이라도 쓸모를 다했다면 내려놓아야 가볍게 갈 수 있습니다.","이미 쓸모를 다했는데 메고 다니는 것이 있나요?"),
+D("남의 허물을 보지 말고 내가 한 일과 하지 않은 일을 보라","남의 잘못을 따져도 내 삶은 나아지지 않습니다. 시선을 돌려 나의 하루를 돌아보는 것이 시작입니다.","오늘 내가 한 일과 미뤄둔 일은 무엇인가요?"),
+D("나의 의지처는 나 자신이다 누가 나의 의지처가 되겠는가","결국 나를 일으키는 것은 나입니다. 스스로를 잘 돌보는 것이 가장 든든한 의지처를 만드는 일입니다. 이제 노력과 나에 관한 말씀입니다.","요즘 나는 나 자신을 얼마나 믿고 있나요?"),
+D("자신을 등불로 삼고 법을 등불로 삼아라","부처님이 열반을 앞두고 아난다에게 남긴 말씀입니다. 스승이 떠난 뒤에도 남에게 기대지 말고 스스로와 진리를 등불 삼아 가라는 뜻입니다.","내 길을 비추는 나만의 등불은 무엇인가요?"),
+D("선한 일은 서둘러 하라 망설이면 마음은 악을 즐긴다","좋은 마음이 들었을 때 미루면 그 마음은 금세 식습니다. 착한 일은 생각났을 때 바로 하는 것이 가장 쉽습니다.","미뤄둔 좋은 일 하나를 오늘 할 수 있을까요?"),
+D("전해 들었다고 믿지 말고 스스로 살펴 옳다고 알 때 받아들여라","칼라마경의 말씀입니다. 소문이나 전통이나 스승의 말이라도 그대로 믿지 말고, 직접 살펴보고 받아들이라는 열린 가르침입니다.","확인하지 않고 그대로 믿고 있는 것이 있나요?"),
+D("모든 것은 변하니 게으르지 말고 정진하라","부처님이 세상을 떠나며 남긴 마지막 말씀입니다. 서른 말씀을 마치며, 오늘의 작은 정진이 내일의 나를 만든다는 것을 새겨 보세요.","서른 말씀 중 가장 오래 간직하고 싶은 말씀은 무엇인가요?")]};
+JOURNEYS.diamond.trans=["보살에게 '나'라는 생각, '남'이라는 생각, '중생'이라는 생각, '오래 사는 이'라는 생각이 있다면 보살이 아니다", "무릇 모양 있는 것은 모두 허망하니, 모든 모양이 모양 아님을 보면 곧 여래를 보리라", "나의 가르침이 뗏목과 같은 줄 알라. 가르침도 놓아야 하거늘 하물며 가르침 아닌 것이랴", "보이는 것에 머물러 마음을 내지 말고, 소리와 냄새와 맛과 감촉과 생각에 머물러 마음을 내지 말며, 머무는 바 없이 그 마음을 내라", "지나간 마음도 얻을 수 없고, 지금의 마음도 얻을 수 없고, 오지 않은 마음도 얻을 수 없다", "모습으로 나를 보거나 소리로 나를 찾으면 그릇된 길을 가는 것이니 여래를 볼 수 없다", "모든 만들어진 것은 꿈, 환영, 물거품, 그림자 같고 이슬 같고 번개 같으니 마땅히 이렇게 보라"];
+JOURNEYS.yaksa={name:"약사경",part:"열두 가지 큰 서원",unit:i=>"제"+(i+1)+"대원",days:12,mood:"아픈 이가 낫기를 바라요",desc:"아픈 이를 위해 약사여래의 열두 서원을 새겨요",items:[
+D("내 몸의 광명이 온 세상을 비추어 모든 이가 나와 같아지게 하리라","약사경은 약사유리광여래가 보살이었을 때 세운 열두 가지 큰 서원을 담은 경전입니다. 첫 서원은 깨달음의 빛을 혼자 갖지 않고 모든 이가 나처럼 밝아지기를 바라는 마음입니다.","내가 가진 밝은 것 중 나누고 싶은 것은 무엇인가요?"),
+D("유리처럼 맑은 빛으로 어둠 속을 헤매는 이들이 길을 찾게 하리라","어둠 속에서 길을 잃은 이에게 필요한 것은 먼 곳의 답이 아니라 지금 발밑을 비추는 빛입니다.","요즘 길을 잃은 듯한 사람이 곁에 있나요?"),
+D("끝없는 지혜로 모든 이가 필요한 것을 얻어 모자람이 없게 하리라","가진 것이 부족해 마음까지 움츠러드는 일이 없기를 바라는 서원입니다. 넉넉함은 나누는 마음에서 시작됩니다.","오늘 누군가의 모자람을 채워줄 수 있는 일이 있을까요?"),
+D("그릇된 길에 든 이를 바른길로 이끌리라","그릇된 길에서 벗어나 모두가 함께 깨달음의 길을 걷도록 이끌겠다는 서원입니다. 혼자보다 함께 가는 길을 바라는 마음입니다.","다시 바른길로 돌아오고 싶은 습관이 있나요?"),
+D("맑게 살고자 하는 이가 계를 지키고 넘어져도 다시 일어서게 하리라","바르게 살려다 넘어지는 일은 누구에게나 있습니다. 넘어져도 나쁜 길로 떨어지지 않고 다시 일어서게 하겠다는 다정한 서원입니다.","최근 넘어졌다가 다시 일어선 일이 있나요?"),
+D("몸이 불편하고 아픈 이가 내 이름을 듣고 온전해지게 하리라","눈과 귀가 불편하거나 몸이 아픈 이들이 온전해지기를 바라는 서원입니다. 아픈 이를 떠올리며 이 구절을 써 보세요.","몸이 아픈 누군가를 위해 오늘 기도하고 싶나요?"),
+D("병들고 가난하고 의지할 데 없는 이가 병이 낫고 몸과 마음이 편안하게 하리라","약사여래를 약사라 부르는 까닭이 가장 잘 드러난 서원입니다. 병과 가난과 외로움이 겹친 이에게 가장 먼저 손을 내밉니다.","외롭고 힘든 시간을 보내는 사람이 떠오르나요?"),
+D("몸으로 인해 큰 괴로움을 겪는 이가 그 괴로움에서 벗어나게 하리라","원문은 '여인의 몸으로 괴로워하는 이가 남자의 몸을 얻게 하리라'입니다. 여성의 삶이 훨씬 고단했던 옛 시대의 표현으로, 오늘날에는 어떤 몸으로 태어났든 그 몸 때문에 겪는 괴로움에서 벗어나게 하겠다는 자비로 읽습니다.","내가 내 몸에 대해 품고 있는 괴로움이 있나요?"),
+D("그릇된 생각의 그물에 걸린 이를 바른 견해로 이끌리라","잘못된 믿음이나 생각에 갇히면 스스로 빠져나오기 어렵습니다. 그 그물을 풀어 바른 견해로 이끌겠다는 서원입니다.","나를 가두고 있는 생각의 그물은 무엇인가요?"),
+D("갇히고 묶이고 고난에 처한 이가 모든 근심에서 벗어나게 하리라","억울하게 갇히거나 큰 고난에 처한 이를 구하겠다는 서원입니다. 몸이 아니라 마음이 갇힌 사람에게도 닿는 말입니다.","요즘 내 마음을 묶고 있는 것은 무엇인가요?"),
+D("굶주린 이를 좋은 음식으로 배부르게 하고 법의 맛으로 편안하게 하리라","배고파서 나쁜 일을 저지른 이에게도 먼저 밥을 주고, 그다음에 가르침을 주겠다는 서원입니다. 몸의 허기와 마음의 허기를 함께 채웁니다.","요즘 나는 어떤 허기를 느끼고 있나요?"),
+D("헐벗고 추위와 더위에 시달리는 이에게 좋은 옷과 원하는 것을 주리라","마지막 서원은 가장 구체적인 보살핌입니다. 열두 서원을 마치며 이 사경의 공덕을 아픈 이, 힘든 이에게 돌려 보세요.","열두 서원 중 내가 닮고 싶은 서원은 무엇인가요?")]};
+const MOODS=[{g:"心",t:"마음을 다스리고 싶어요",js:["dhamma","words"]},{g:"忍",t:"힘든 시기를 버티고 싶어요",js:["bowang","mantra"]},{g:"恩",t:"누군가를 위해 쓰고 싶어요",js:["parents","yaksa"]},{g:"經",t:"경전을 깊이 공부하고 싶어요",js:["diamond","heart"]}];
+const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","heart"];
+(function(){const h=JOURNEYS.heart,segs=h.items.map(x=>x.t),full=segs.join(" ");let pos=0;
+  h.items=h.items.map((x,i)=>{const hs=pos,he=pos+segs[i].length;pos=he+1;return {t:full,m:x.m,q:x.q,hl:segs[i],hs,he}});
+  h.trans=["큰 지혜로 저 언덕에 건너가는 마음의 경", "관자재보살께서 깊은 지혜를 닦으실 때", "몸과 마음을 이루는 다섯 가지가 모두 비어 있음을 비추어 보시고 모든 괴로움에서 벗어나셨다", "사리자여, 모양은 공과 다르지 않고 공은 모양과 다르지 않다", "모양이 곧 공이요 공이 곧 모양이니, 느낌과 생각과 의지와 앎도 그러하다", "사리자여, 모든 것은 공한 모습이라 생겨나지도 사라지지도 않고, 더럽지도 깨끗하지도 않으며, 늘지도 줄지도 않는다", "그러므로 공 가운데에는 모양도 없고, 느낌과 생각과 의지와 앎도 없다", "눈, 귀, 코, 혀, 몸, 마음도 없고 빛깔, 소리, 냄새, 맛, 감촉, 생각의 대상도 없다", "눈으로 보는 세계도 없고 의식의 세계까지도 없다", "어리석음도 없고 어리석음이 다함도 없으며, 늙고 죽음도 없고 늙고 죽음이 다함도 없다", "괴로움과 그 원인, 괴로움의 그침과 그 길도 없으며, 지혜도 얻음도 없으니 얻을 것이 없기 때문이다", "보살은 이 지혜에 의지하므로 마음에 걸림이 없고", "걸림이 없으므로 두려움이 없어, 뒤바뀐 헛된 생각을 멀리 떠나 마침내 평안에 이른다", "과거, 현재, 미래의 모든 부처님도 이 지혜에 의지하여 가장 높고 바른 깨달음을 얻으셨다", "그러므로 알라, 이 지혜는 크게 신비로운 주문이요 크게 밝은 주문이며", "위없는 주문이요 견줄 데 없는 주문이니, 모든 괴로움을 없애고 참되어 헛되지 않다", "그러므로 이 지혜의 주문을 말하니, 주문은 이러하다", "가자, 가자, 저 언덕으로 가자, 모두 함께 저 언덕으로 가자, 깨달음이여 이루어지이다"];h.part="전체 사경";h.unit=i=>(i+1)+"일째";h.desc="매일 전체를 쓰고 한 구절씩 깊이 새겨요"})();
+
+
+const KEY="hanjul.v1";
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
+function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}}
+
+const pad=n=>String(n).padStart(2,"0");
+const keyOf=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const DOW=["일","월","화","수","목","금","토"];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const now=new Date(), TODAY=keyOf(now);let V={t:"",m:"",q:""},VI=0;
+const $=id=>document.getElementById(id);
+const verseEl=$("verse"),typer=$("typer");
+let composing=false, finished=false;
+
+/* ---------- 소리 ---------- */
+let ctx=null,bgNodes=[],bgTimer=null;
+function ac(){try{if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();if(ctx.state==="suspended")ctx.resume();return ctx}catch(e){return null}}
+const _nb={};
+function noiseBuf(c,kind){if(_nb[kind])return _nb[kind];return _nb[kind]=makeNoise(c,kind)}
+function makeNoise(c,kind){const len=c.sampleRate*2,b=c.createBuffer(1,len,c.sampleRate),d=b.getChannelData(0);let last=0,b0=0,b1=0,b2=0;
+  for(let i=0;i<len;i++){const w=Math.random()*2-1;
+    if(kind==="brown"){last=(last+0.02*w)/1.02;d[i]=last*3.5}
+    else if(kind==="pink"){b0=0.997*b0+w*0.029;b1=0.985*b1+w*0.032;b2=0.95*b2+w*0.048;d[i]=(b0+b1+b2+w*0.02)*0.9}
+    else d[i]=w}return b}
+function loopNoise(c,kind,filterType,freq,q,gain){const s=c.createBufferSource();s.buffer=noiseBuf(c,kind);s.loop=true;
+  const f=c.createBiquadFilter();f.type=filterType;f.frequency.value=freq;f.Q.value=q;const g=c.createGain();g.gain.value=gain;
+  s.connect(f).connect(g).connect(c.destination);s.start();bgNodes.push(s,g);return g}
+function bell(c,freq,vol,dur){const t=c.currentTime;[1,2.76].forEach((m,i)=>{const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=freq*m;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol/(i+1),t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur/(i+1));o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur)})}
+function chirp(c){const t0=c.currentTime,n=2+Math.floor(Math.random()*3),base=2300+Math.random()*1500;
+  for(let i=0;i<n;i++){const t=t0+i*0.11,o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(base,t);o.frequency.exponentialRampToValueAtTime(base*1.5,t+0.07);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.04,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+0.09);o.connect(g).connect(c.destination);o.start(t);o.stop(t+0.1)}}
+function stopBg(){bgNodes.forEach(n=>{try{n.stop&&n.stop()}catch(e){}try{n.disconnect()}catch(e){}});bgNodes=[];clearTimeout(bgTimer);clearInterval(bgTimer);bgTimer=null}
+/* 시냇물: 작은 물방울(공기방울 공명)이 빠르게 겹치며 졸졸 흐르는 소리 */
+function bubble(c,t,vol){const f=450+Math.random()*1100,d=0.015+Math.random()*0.045,o=c.createOscillator(),g=c.createGain();
+  o.type="sine";o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*(1.5+Math.random()*0.7),t+d);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+0.003);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+0.01)}
+/* 풍경: 같은 음높이의 금속 울림, 비조화 배음이 길게 남음 */
+function chimeStrike(c,t,vel){const f0=1240;
+  [[1,1,5.5],[1.004,0.35,5],[2.42,0.5,3.4],[3.89,0.3,2.3],[5.46,0.18,1.5],[7.13,0.1,0.9]].forEach(([m,a,d])=>{
+    const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f0*m;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel*a*(0.7+Math.random()*0.6)*0.05,t+0.002);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+0.05)});
+  const s=c.createBufferSource();s.buffer=clickBuf(c);const hp=c.createBiquadFilter();hp.type="highpass";hp.frequency.value=4000;const g=c.createGain();g.gain.value=vel*0.08;
+  s.connect(hp).connect(g).connect(c.destination);s.start(t)}
+let _click=null;
+function clickBuf(c){if(_click)return _click;const n=Math.floor(c.sampleRate*0.02),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(c.sampleRate*0.0015));return _click=b}
+/* 목탁: 속 빈 나무의 짧은 공명음 */
+function moktak(c,t,vol,pitch){const p=pitch||1,s=c.createBufferSource();s.buffer=clickBuf(c);const out=c.createGain();out.gain.value=vol;out.connect(c.destination);
+  [[620*p,28,3.2],[1480*p,20,1.1],[2350*p,14,0.4]].forEach(([f,q,a])=>{const bp=c.createBiquadFilter();bp.type="bandpass";bp.frequency.value=f;bp.Q.value=q;const g=c.createGain();g.gain.value=a;s.connect(bp).connect(g).connect(out)});
+  const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=620*p;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol*0.35,t+0.002);g.gain.exponentialRampToValueAtTime(0.0001,t+0.17);
+  o.connect(g).connect(c.destination);o.start(t);o.stop(t+0.2);s.start(t)}
+function startBg(kind){stopBg();if(kind==="off")return;const c=ac();if(!c)return;
+  if(kind==="stream"){loopNoise(c,"pink","bandpass",1100,0.7,0.05);loopNoise(c,"white","bandpass",3000,0.8,0.012);
+    let next=c.currentTime+0.1,flow=0.6;
+    bgTimer=setInterval(()=>{flow+=(Math.random()-0.5)*0.08;flow=Math.max(0.3,Math.min(0.9,flow));
+      while(next<c.currentTime+0.3){
+        if(Math.random()<0.25){next+=0.25+Math.random()*0.5;continue}
+        next+=(0.07+Math.random()*0.18)/flow;slowBubble(c,next,0.006+Math.random()*0.016)}},80)}
+  if(kind==="rain"){loopNoise(c,"pink","bandpass",2200,0.4,0.05);
+    let next=c.currentTime+0.1;bgTimer=setInterval(()=>{while(next<c.currentTime+0.3){next+=0.06+Math.random()*0.25;drop(c,next,0.01+Math.random()*0.025)}},80)}
+  if(kind==="birds"){loopNoise(c,"pink","lowpass",700,0.5,0.03);
+    const tick=()=>{const t=c.currentTime+0.05;songPhrase(c,t,2600+Math.random()*900,0.03);
+      if(Math.random()<0.35)songPhrase(c,t+1.2+Math.random()*1.5,3400+Math.random()*800,0.012);
+      bgTimer=setTimeout(tick,4500+Math.random()*7000)};bgTimer=setTimeout(tick,600)}
+  if(kind==="chime"){loopNoise(c,"pink","lowpass",450,0.5,0.035);
+    const tick=()=>{const t=c.currentTime+0.02,r=Math.random(),n=r<0.55?1:r<0.85?2:3;let at=t;
+      for(let i=0;i<n;i++){chimeStrike(c,at,(0.35+Math.random()*0.55)*(i?0.75:1));at+=0.25+Math.random()*0.7}
+      bgTimer=setTimeout(tick,7000+Math.random()*11000)};bgTimer=setTimeout(tick,800)}}
+function slowBubble(c,t,vol){const f=300+Math.random()*650,d=0.04+Math.random()*0.08,o=c.createOscillator(),g=c.createGain();
+  o.type="sine";o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*(1.25+Math.random()*0.35),t+d);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+0.008);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+0.02)}
+function drop(c,t,vol){const s=c.createBufferSource();s.buffer=clickBuf(c);const bp=c.createBiquadFilter();bp.type="bandpass";bp.frequency.value=2500+Math.random()*3500;bp.Q.value=4;
+  const g=c.createGain();g.gain.value=vol*6;s.connect(bp).connect(g).connect(c.destination);s.start(t)}
+function birdNote(c,t,f,d,vol,shape){const o=c.createOscillator(),g=c.createGain(),lfo=c.createOscillator(),lg=c.createGain();
+  o.type="sine";lfo.frequency.value=shape==="trill"?38+Math.random()*12:7;lg.gain.value=shape==="trill"?f*0.09:f*0.02;lfo.connect(lg).connect(o.frequency);
+  o.frequency.setValueAtTime(f,t);
+  if(shape==="up")o.frequency.exponentialRampToValueAtTime(f*1.35,t+d);
+  else if(shape==="down")o.frequency.exponentialRampToValueAtTime(f*0.7,t+d);
+  else o.frequency.exponentialRampToValueAtTime(f*0.95,t+d);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+0.015);g.gain.setValueAtTime(vol,t+d*0.7);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  const hp=c.createBiquadFilter();hp.type="highpass";hp.frequency.value=1500;
+  o.connect(g).connect(hp).connect(c.destination);o.start(t);lfo.start(t);o.stop(t+d+0.02);lfo.stop(t+d+0.02)}
+function songPhrase(c,t,base,vol){const shapes=["up","down","trill","flat"];let at=t,n=3+Math.floor(Math.random()*5);
+  for(let i=0;i<n;i++){const sh=shapes[Math.floor(Math.random()*4)],d=sh==="trill"?0.25+Math.random()*0.3:0.07+Math.random()*0.12;
+    birdNote(c,at,base*(0.85+Math.random()*0.35),d,vol*(0.6+Math.random()*0.4),sh);at+=d+0.03+Math.random()*0.12}}
+function keySound(){const k=mem.prefs.key;if(k==="off")return;const c=ac();if(!c)return;const t=c.currentTime;
+  if(k==="brush"){const s=c.createBufferSource();s.buffer=noiseBuf(c,"white");const f=c.createBiquadFilter();f.type="bandpass";f.frequency.value=2600;f.Q.value=0.8;const g=c.createGain();
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.06,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.12);s.connect(f).connect(g).connect(c.destination);s.start(t);s.stop(t+0.14)}
+  if(k==="wood")moktak(c,t,0.5,1)}
+function sealSound(){const c=ac();if(!c)return;const t=c.currentTime;moktak(c,t,0.7,0.85);moktak(c,t+0.32,0.7,0.85);setTimeout(()=>bell(c,528,0.08,4),650)}
+
+/* ---------- 오늘의 사경 ---------- */
+/* 띄어쓰기는 선택: 글자만 쳐도 원문의 빈칸은 자동으로 채우고, 맞는 자리에서 친 스페이스도 인정한다.
+   원문에 없는 자리에서 친 스페이스는 조용히 무시한다. */
+function align(typed){const T=V.t,st=new Array(T.length).fill("g"),tpos=[],inv={};let ti=0;
+  for(let ui=0;ui<typed.length;ui++){const u=typed[ui];
+    if(ti>=T.length){tpos[ui]=T.length;continue}
+    if(u===" "){if(T[ti]===" "){st[ti]="i";inv[ti]=ui;tpos[ui]=ti;ti++}else tpos[ui]=ti;continue}
+    while(ti<T.length&&T[ti]===" "){st[ti]="a";ti++}
+    if(ti>=T.length){tpos[ui]=T.length;continue}
+    st[ti]=u===T[ti]?"i":"w";inv[ti]=ui;tpos[ui]=ti;ti++}
+  return {st,tpos,inv,end:ti}}
+function paint(){const target=V.t,typed=finished?target:typer.value;let html="";
+  const A=align(typed);
+  const focused=!finished&&document.activeElement===typer;
+  const s=typer.selectionStart||0,e=typer.selectionEnd||0;
+  const toT=k=>k<typed.length?A.tpos[k]:A.end;
+  const cs=toT(s),ce=e>s?toT(e-1)+1:cs;
+  const pendAt=composing&&s>0?A.tpos[s-1]:-1;
+  for(let i=0;i<target.length;i++){const ch=target[i]===" "?" ":esc(target[i]),k=A.st[i];
+    let cls=k==="g"?"c-ghost":k==="w"?(i===pendAt?"c-pend":"c-wrong"):"c-ink";if(V.hl&&i>=V.hs&&i<V.he)cls+=" c-hl";
+    if(focused&&!composing){if(e>s&&i>=cs&&i<ce)cls+=" c-sel";else if(s===e&&i===cs)cls+=" c-cur"}
+    html+='<span data-i="'+i+'" class="'+cls+'">'+ch+"</span>"}
+  if(focused&&!composing&&s===e&&cs>=target.length)html+='<span class="c-cur c-end"> </span>';
+  verseEl.innerHTML=html;
+  const ok=A.st.filter((k,i)=>k==="i"&&target[i]!==" ").length;
+  $("count").textContent=finished?"완성":ok+" / "+[...target].filter(c=>c!==" ").length}
+let lastLen=0;
+function onType(){if(finished)return;
+  if(!composing){let v=typer.value.replace(/[\r\n]/g,"");const A=align(v);
+    if(A.end>=V.t.length){const last=A.inv[V.t.length-1];if(last!=null&&v.length>last+1)v=v.slice(0,last+1)}
+    if(v!==typer.value)typer.value=v}
+  if(typer.value.length!==lastLen){keySound();lastLen=typer.value.length}
+  paint();recordTimes();const A=align(typer.value);if(A.end>=V.t.length&&!A.st.some(k=>k==="g"||k==="w"))complete()}
+function complete(){finished=true;typer.blur();typer.disabled=true;
+  const e=mem.entries[EK()]||{},same=e.i===VI;
+  if(!same)mem.prog[mem.cur]=VI+1;
+  mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
+  showDone(true);sealSound();renderRecord()}
+function showDone(animate){paint();$("monk").classList.add("gassho");const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
+  $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
+  $("reflect").value=(mem.entries[EK()]||{}).r||"";
+  const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
+  $("finish").hidden=!over;
+  if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
+    $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 고요히 쌓였어요."}}
+function reset(){typeTimes=[];finished=false;$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
+  $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint();typer.focus()}
+
+typer.addEventListener("compositionstart",()=>{composing=true});
+typer.addEventListener("compositionend",()=>{composing=false;onType()});
+typer.addEventListener("input",onType);
+typer.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing&&!composing)e.preventDefault()});
+if(window.matchMedia&&matchMedia("(pointer:fine)").matches)$("hint").textContent="종이를 클릭한 뒤 키보드로 따라 써 보세요";
+typer.addEventListener("focus",()=>{ac();paint()});
+typer.addEventListener("blur",paint);
+["keyup","select","selectionchange"].forEach(ev=>typer.addEventListener(ev,()=>{if(!finished)paint()}));
+document.addEventListener("selectionchange",()=>{if(!finished&&document.activeElement===typer)paint()});
+$("paper").addEventListener("mousedown",e=>{if(!finished&&document.activeElement===typer)e.preventDefault()});
+$("paper").addEventListener("click",e=>{if(finished)return;const sp=e.target.closest&&e.target.closest(".verse span[data-i]");
+  const len=typer.value.length;let a=len,b=len;
+  if(sp){const i=+sp.dataset.i,A=align(typer.value),u=A.inv[i];if(u!=null){a=u;b=A.st[i]==="w"?u+1:u}}
+  typer.focus({preventScroll:true});try{typer.setSelectionRange(a,b)}catch(_){}paint()});
+$("save").addEventListener("click",()=>{const e=mem.entries[EK()];if(!e)return;e.r=$("reflect").value.trim();persist();$("saved").hidden=false;renderRecord()});
+$("reflect").addEventListener("input",()=>{$("saved").hidden=true});
+$("again").addEventListener("click",reset);
+
+/* ---------- 기록 ---------- */
+let viewMonth=new Date(now.getFullYear(),now.getMonth(),1);
+function daySet(){const s=new Set();Object.keys(mem.entries).forEach(k=>s.add(k.slice(0,10)));return s}
+function streak(){const S=daySet();let d=new Date(now);if(!S.has(keyOf(d)))d.setDate(d.getDate()-1);let n=0;while(S.has(keyOf(d))){n++;d.setDate(d.getDate()-1)}return n}
+function renderRecord(){const keys=Object.keys(mem.entries).sort().reverse(),DS=daySet();
+  $("st-streak").textContent=streak();
+  const cj=JOURNEYS[mem.cur];$("st-month").textContent=cj?Math.min(mem.prog[mem.cur]||0,cj.items.length)+"/"+cj.items.length:"-";$("st-total").textContent=keys.length;
+  const y=viewMonth.getFullYear(),m=viewMonth.getMonth();$("cal-title").textContent=y+"년 "+(m+1)+"월";
+  let h=DOW.map(d=>'<div class="dow">'+d+"</div>").join("");const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();
+  for(let i=0;i<first;i++)h+='<div class="day empty"></div>';
+  for(let d=1;d<=last;d++){const k=y+"-"+pad(m+1)+"-"+pad(d);let c="day";if(DS.has(k))c+=" on";if(k===TODAY)c+=" today";else if(k<TODAY)c+=" past";
+    h+='<div class="'+c+'" aria-label="'+(m+1)+"월 "+d+"일"+(DS.has(k)?" 사경 완료":"")+'">'+d+"</div>"}
+  $("cal").innerHTML=h;
+  if(!keys.length){$("list").innerHTML='<p class="emptytxt">아직 남긴 사경이 없어요. 오늘의 한 줄부터 시작해 보세요.</p>';return}
+  $("list").innerHTML=keys.map(k=>{const e=mem.entries[k],p=k.slice(0,10).split("-"),dd=new Date(+p[0],+p[1]-1,+p[2]);
+    const lab=e.j&&JOURNEYS[e.j]?JOURNEYS[e.j].name+" "+JOURNEYS[e.j].unit(e.i):"법구경 제"+e.n+"게";
+    return '<article class="item"><div class="d"><span>'+(+p[1])+"월 "+(+p[2])+"일 "+DOW[dd.getDay()]+"요일</span><span>"+lab+'</span></div><p class="v">'+esc(e.t)+'</p><p class="r">'+(e.r?esc(e.r):"느낀 점을 남기지 않았어요")+"</p></article>"}).join("")}
+$("prev").addEventListener("click",()=>{viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()-1,1);renderRecord()});
+$("next").addEventListener("click",()=>{viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()+1,1);renderRecord()});
+
+/* ---------- 소리 설정 ---------- */
+const BG=[["off","끄기"],["stream","시냇물"],["rain","빗소리"],["birds","새소리"],["chime","풍경"]];
+const KS=[["off","끄기"],["brush","붓"],["wood","목탁"]];
+function chips(el,list,pref){$(el).innerHTML=list.map(([v,l])=>'<button class="chip" data-v="'+v+'" aria-pressed="'+(mem.prefs[pref]===v)+'">'+l+"</button>").join("");
+  $(el).querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{mem.prefs[pref]=b.dataset.v;persist();chips(el,list,pref);
+    if(pref==="bg")startBg(b.dataset.v);else if(pref==="breath")applyBreath();else if(pref==="theme")applyTheme();else if(pref==="story")storyRestart();else keySound()}))}
+
+
+/* 별: 30초마다 몇 개씩 차례로 반짝 */
+document.querySelectorAll(".tw").forEach(el=>{el.style.animationDelay=(2+Math.random()*5).toFixed(2)+"s"});
+/* ---------- 호흡 ---------- */
+const BR={calm:[["들이쉬고",4,1],["멈추고",2,1],["내쉬고",6,0]],box:[["들이쉬고",4,1],["멈추고",4,1],["내쉬고",4,0],["멈추고",4,0]],sleep:[["들이쉬고",4,1],["멈추고",7,1],["내쉬고",8,0]]};
+const BRL=[["calm","편안하게 4·2·6"],["box","네모 호흡 4·4·4·4"],["sleep","잠들기 전 4·7·8"],["off","숨기기"]];
+let brStart=performance.now(),brPaused=false,brPauseAt=0;
+const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function brFrame(now){const p=BR[mem.prefs.breath];
+  if(p&&!brPaused){const total=p.reduce((a,x)=>a+x[1],0);let t=((now-brStart)/1000)%total,prev=p[p.length-1][2],i=0;
+    for(;i<p.length;i++){if(t<p[i][1])break;t-=p[i][1];prev=p[i][2]}
+    if(i>=p.length)i=p.length-1;
+    const ph=p[i],k=(1-Math.cos(Math.PI*Math.min(1,t/ph[1])))/2,v=prev+(ph[2]-prev)*k;
+    $("orb").style.transform="scale("+(0.35+0.65*v).toFixed(3)+")";
+    if(!RM)document.querySelectorAll(".monkimg").forEach(el=>el.style.transform="scale("+(1+0.008*v).toFixed(4)+","+(1+0.014*v).toFixed(4)+")");
+    $("breath-label").textContent=ph[0]+" "+Math.max(1,Math.ceil(ph[1]-t))}
+  requestAnimationFrame(brFrame)}
+function placeBreath(){const r=document.querySelector(".app").getBoundingClientRect(),b=$("breath");b.style.right="auto";b.style.left=Math.round(r.right-64)+"px"}
+window.addEventListener("resize",placeBreath);placeBreath();
+function applyBreath(){$("breath").hidden=mem.prefs.breath==="off";brStart=performance.now();brPaused=false;$("breath").setAttribute("aria-pressed","true")}
+$("breath").addEventListener("click",()=>{const n=performance.now();
+  if(brPaused){brStart+=n-brPauseAt;brPaused=false;$("breath").setAttribute("aria-pressed","true")}
+  else{brPaused=true;brPauseAt=n;$("breath").setAttribute("aria-pressed","false");$("breath-label").textContent="잠시 멈춤"}});
+
+/* ---------- 탭 ---------- */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
+  ["today","record","sound"].forEach(v=>{$("view-"+v).hidden=v!==t.dataset.view});$("view-start").hidden=true;
+  if(t.dataset.view==="record")renderRecord();window.scrollTo(0,0)}));
+
+/* ---------- 스토리 카드 ---------- */
+let typeTimes=[];
+function recordTimes(){const A=align(typer.value),n=performance.now();
+  A.st.forEach((k,i)=>{if(V.t[i]===" ")return;if(k==="i"){if(typeTimes[i]==null)typeTimes[i]=n}else typeTimes[i]=undefined})}
+function packTimes(){const v=[];for(let i=0;i<V.t.length;i++)v.push(V.t[i]===" "||typeTimes[i]==null?null:typeTimes[i]);
+  const ok=v.filter(x=>x!=null);if(!ok.length)return null;const t0=Math.min(...ok);return v.map(x=>x==null?null:Math.round(x-t0))}
+const SW=1080,SH=1920;let stRAF=0,stT0=0,stLoop=0,stSealDone=false,stL=null,stTimes=null,stStars=null;
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function isDark(){const t=document.documentElement.getAttribute("data-theme");if(t)return t==="dark";return !!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)}
+const easeOut=x=>1-Math.pow(1-x,3),easeBack=x=>{const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const rnd=i=>{const s=Math.sin(i*127.1+311.7)*43758.5453;return s-Math.floor(s)};
+function stLayout(ctx,text){let size=76,lines=[],lh=0;const maxW=860,maxH=420;
+  for(;size>=36;size-=2){ctx.font=size+'px "Gowun Batang", serif';lines=[];let cur="";
+    for(const w of text.split(" ")){const t=cur?cur+" "+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t}
+    if(cur)lines.push(cur);lh=size*1.8;if(lines.length*lh<=maxH)break}
+  const chars=[];let idx=0;const top=990+(maxH-lines.length*lh)/2;
+  lines.forEach((ln,li)=>{let x=(SW-ctx.measureText(ln).width)/2;const y=top+li*lh+lh/2;
+    for(const ch of ln){chars.push({ch,x,y,i:idx});x+=ctx.measureText(ch).width;idx++}idx++});
+  return {size,chars,bottom:top+lines.length*lh}}
+const stText=()=>V.hl||V.t;
+function stTs(){const ts=(mem.entries[EK()]||{}).ts;return ts&&V.hl?ts.slice(V.hs,V.he):ts}
+function stBuildTimes(ts,mode){const ST=stText();const n=ST.length,out=new Array(n).fill(null);
+  if(mode==="ink"){for(let i=0;i<n;i++)if(ST[i]!==" ")out[i]=0.5+(i/n)*2.1+rnd(i)*0.35;return out}
+  let src=ts&&ts.some(x=>x!=null)?ts.slice():null;
+  if(!src){src=[];let acc=0;for(let i=0;i<n;i++){if(ST[i]===" "){src.push(null);continue}acc+=120+rnd(i)*160;src.push(acc)}}
+  const idx=[];for(let i=0;i<n;i++)if(src[i]!=null)idx.push(i);idx.sort((a,b)=>src[a]-src[b]);
+  const gaps=idx.map((k,j)=>j?src[k]-src[idx[j-1]]:0).filter(g=>g>0).sort((a,b)=>a-b);const med=gaps[Math.floor(gaps.length/2)]||150;
+  let acc=0;const comp={};idx.forEach((k,j)=>{if(j)acc+=Math.min(src[k]-src[idx[j-1]],med*3);comp[k]=acc});
+  const mx=acc||1;idx.forEach(k=>{out[k]=0.7+comp[k]/mx*3.7});return out}
+function stDrawArt(ctx,t,dark){const w=580,h=Math.round(w*613/560),x=(SW-w)/2,y=240;
+  const fade=Math.min(1,t/0.5),sway=t>0.3?0.03*Math.sin((t-0.3)*2.8)*Math.exp(-(t-0.3)*0.85):0;
+  const q=s=>document.querySelector(".art "+s);
+  const oc=document.createElement("canvas");oc.width=w;oc.height=h;const o=oc.getContext("2d");
+  const img=(el)=>el&&el.complete&&el.naturalWidth?el:null;
+  if(dark){const b=img(q(".dk.dbase"));if(b)o.drawImage(b,0,0,w,h);
+    if(!stStars)stStars=[...document.querySelectorAll(".tw")].map((el,i)=>({x:parseFloat(el.style.left)/100,y:parseFloat(el.style.top)/100,big:el.classList.contains("big"),s:rnd(i+7)}));
+    stStars.forEach(s=>{const a=Math.pow(Math.max(0,Math.sin((t*0.9+s.s*3)*Math.PI)),8);if(a<0.02)return;
+      const g=o.createRadialGradient(s.x*w,s.y*h,0,s.x*w,s.y*h,s.big?16:9);g.addColorStop(0,"rgba(255,246,220,"+a+")");g.addColorStop(1,"rgba(255,246,220,0)");o.fillStyle=g;o.beginPath();o.arc(s.x*w,s.y*h,s.big?16:9,0,7);o.fill()})}
+  const tr=img(q((dark?".dk":".lt")+".tree")),mk=img(q((dark?".dk":".lt")+".monkimg"));
+  if(tr){o.save();o.translate(w*0.18,h*0.83);o.rotate(sway);o.drawImage(tr,-w*0.18,-h*0.83,w,h);o.restore()}
+  if(mk){const br=1+0.012*(0.5+0.5*Math.sin(t*1.2));o.save();o.translate(w/2,h*0.92);o.scale(1,br);o.drawImage(mk,-w/2,-h*0.92,w,h);o.restore()}
+  if(dark){o.globalCompositeOperation="destination-in";const g=o.createRadialGradient(w/2,h*0.48,w*0.3,w/2,h*0.48,w*0.62);g.addColorStop(0,"#000");g.addColorStop(1,"rgba(0,0,0,0)");o.fillStyle=g;o.fillRect(0,0,w,h)}
+  ctx.globalAlpha=fade;ctx.drawImage(oc,x,y-(1-fade)*20);ctx.globalAlpha=1}
+function stDrawSeal(ctx,t,T,cx,cy,seal,paper){const k=(t-T)/0.45;if(k<0)return;const e=easeBack(Math.min(1,k));
+  ctx.save();ctx.translate(cx,cy);ctx.rotate((-14+8*e)*Math.PI/180);const sc=2.2-1.2*e;ctx.scale(sc,sc);ctx.globalAlpha=Math.min(1,k*3);
+  ctx.strokeStyle=seal;ctx.lineWidth=7;const s=150;ctx.beginPath();ctx.roundRect?ctx.roundRect(-s/2,-s/2,s,s,10):ctx.rect(-s/2,-s/2,s,s);ctx.stroke();
+  ctx.fillStyle=seal;ctx.font='700 54px "Gowun Batang", serif';ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("寫",0,-30);ctx.fillText("經",0,32);ctx.restore()}
+function stFrame(now){const cv=$("story-cv"),ctx=cv.getContext("2d"),mode="ink",dark=isDark();
+  const D=mode==="ink"?6.8:7.4,sealT=mode==="ink"?3.9:4.7,footT=sealT+0.5;
+  let t=(now-stT0)/1000;if(t>D){stT0=now;t=0;stLoop++;stSealDone=false}
+  if(RM)t=D-0.3;
+  const paper=cssv("--paper"),paper2=cssv("--paper-2"),ink=cssv("--ink"),ink2=cssv("--ink-2"),ghost=cssv("--ghost"),seal=cssv("--seal");
+  let shake=0;if(t>sealT+0.42&&t<sealT+0.62)shake=(rnd(Math.floor(t*60))-0.5)*14;
+  ctx.setTransform(1,0,0,1,0,shake);
+  const g=ctx.createRadialGradient(SW/2,SH*0.42,SW*0.2,SW/2,SH*0.5,SH*0.75);g.addColorStop(0,paper);g.addColorStop(1,paper2);ctx.fillStyle=g;ctx.fillRect(0,-20,SW,SH+40);
+  stDrawArt(ctx,t,dark);
+  if(!stL){ctx.font='76px "Gowun Batang", serif';stL=stLayout(ctx,stText())}
+  ctx.font=stL.size+'px "Gowun Batang", serif';ctx.textBaseline="middle";ctx.textAlign="left";
+  for(const c of stL.chars){if(c.ch===" ")continue;const T0=stTimes[c.i];
+    if(mode==="type"){ctx.globalAlpha=Math.min(1,t/0.5);ctx.fillStyle=ghost;ctx.fillText(c.ch,c.x,c.y);
+      if(T0!=null&&t>=T0){const p=Math.min(1,(t-T0)/0.14);ctx.globalAlpha=p;ctx.fillStyle=ink;ctx.fillText(c.ch,c.x,c.y)}}
+    else if(T0!=null&&t>=T0){const p=easeOut(Math.min(1,(t-T0)/1.1));ctx.save();ctx.globalAlpha=p;ctx.fillStyle=ink;ctx.shadowColor=ink;ctx.shadowBlur=(1-p)*34;
+      ctx.translate(c.x,c.y);const s=1.12-0.12*p;ctx.scale(s,s);ctx.fillText(c.ch,0,0);ctx.restore()}}
+  ctx.globalAlpha=1;
+  const e=mem.entries[EK()]||{},j=JOURNEYS[e.j]||JOURNEYS[mem.cur];
+  stDrawSeal(ctx,t,sealT,SW-210,stL.bottom+30,seal,paper);
+  if(t>=sealT+0.4&&!stSealDone){stSealDone=true;if(stLoop===0&&!RM){const c=ac();if(c)moktak(c,c.currentTime,0.6,0.85)}}
+  const fp=Math.min(1,Math.max(0,(t-footT)/0.6));
+  if(fp>0){ctx.globalAlpha=fp;ctx.textAlign="center";let y=stL.bottom+150;
+    const refl=$("opt-r").checked?($("reflect").value.trim()||e.r||""):"";
+    if(refl){ctx.font='40px "Gowun Batang", serif';ctx.fillStyle=ink2;let line="",lines=[];
+      for(const ch of refl){if(ctx.measureText(line+ch).width>800){lines.push(line);line=ch;if(lines.length===2)break}else line+=ch}
+      if(lines.length<2&&line)lines.push(line);if(lines.length===2&&refl.length>lines.join("").length)lines[1]=lines[1].slice(0,-1)+"…";
+      lines.forEach((l,i)=>ctx.fillText((i===0?"“":"")+l+(i===lines.length-1?"”":""),SW/2,y+i*56));y+=lines.length*56+40}
+    y=Math.max(y,1530);
+    const ded=$("opt-d").checked?(mem.ded[e.j||mem.cur]||"").trim():"";
+    ctx.font='500 36px "Noto Sans KR", sans-serif';ctx.fillStyle=ink2;
+    ctx.fillText((j?j.name+" · "+j.unit(e.i!=null?e.i:VI):"")+(ded?"  ·  회향 "+ded:""),SW/2,y);
+    const n=streak();ctx.font='400 31px "Noto Sans KR", sans-serif';
+    ctx.fillText(now&&(new Date().getFullYear()+". "+(new Date().getMonth()+1)+". "+new Date().getDate())+(n>0?"  ·  연속 "+n+"일째":""),SW/2,y+50);
+    ctx.font='700 46px "Gowun Batang", serif';ctx.fillStyle=ink;ctx.fillText("한줄 불경",SW/2,y+128);ctx.globalAlpha=1}
+  stRAF=requestAnimationFrame(stFrame)}
+function storyRestart(){stL=null;stLoop=0;stSealDone=false;stTimes=stBuildTimes(stTs(),"ink");stT0=performance.now()}
+async function storyOpen(){ac();$("story").hidden=false;
+  try{await Promise.all([document.fonts.load('76px "Gowun Batang"'),document.fonts.load('700 54px "Gowun Batang"'),document.fonts.load('500 32px "Noto Sans KR"')])}catch(_){}
+  storyRestart();cancelAnimationFrame(stRAF);stRAF=requestAnimationFrame(stFrame);$("story-close").focus()}
+function storyClose(){$("story").hidden=true;cancelAnimationFrame(stRAF)}
+$("story-open").addEventListener("click",storyOpen);
+$("story-close").addEventListener("click",storyClose);
+$("story").addEventListener("click",e=>{if(e.target===$("story"))storyClose()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("story").hidden)storyClose()});
+$("story-replay").addEventListener("click",storyRestart);
+["opt-r","opt-d"].forEach(id=>$(id).addEventListener("change",()=>{}));
+let recBlob=null,recType="";
+function recReset(){recBlob=null;const b=$("story-save");b.disabled=false;b.textContent="영상 만들기";$("story-note").textContent="영상을 만든 뒤 공유 버튼으로 인스타그램 스토리에 올릴 수 있어요."}
+function pickType(){for(const t of["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm"]){try{if(window.MediaRecorder&&MediaRecorder.isTypeSupported(t))return t}catch(_){}}return ""}
+["opt-r","opt-d"].forEach(id=>$(id).addEventListener("change",recReset));
+$("story-open").addEventListener("click",recReset);
+$("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("story-note");
+  if(recBlob){const ext=recType.indexOf("mp4")>=0?"mp4":"webm",f=new File([recBlob],"hanjul-"+TODAY+"."+ext,{type:recBlob.type});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:"한줄 불경"});return}catch(e){if(e.name==="AbortError")return}}
+    const a=document.createElement("a");a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000);n.textContent="영상을 저장했어요. 인스타그램 스토리에서 불러와 올려 보세요.";return}
+  const type=pickType(),cv=$("story-cv");
+  if(!type||!cv.captureStream){n.textContent="이 브라우저는 영상 만들기를 지원하지 않아요. 화면 녹화로 저장해 주세요.";return}
+  b.disabled=true;n.textContent="영상을 만드는 중이에요. 7초만 기다려 주세요.";
+  const chunks=[],rec=new MediaRecorder(cv.captureStream(30),{mimeType:type,videoBitsPerSecond:6000000});
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  rec.onstop=()=>{recBlob=new Blob(chunks,{type:type.split(";")[0]});recType=type;b.disabled=false;
+    b.textContent=navigator.canShare?"인스타그램에 공유하기":"영상 저장하기";n.textContent="영상이 준비됐어요. 버튼을 눌러 저장하거나 공유하세요."};
+  storyRestart();rec.start(250);setTimeout(()=>{try{rec.stop()}catch(_){}},7000)});
+
+
+
+/* ---------- 여정 ---------- */
+function setTrans(open){$("tlist").hidden=!open;$("trans-tgl").setAttribute("aria-expanded",String(open));$("trans-pm").textContent=open?"－":"＋";$("trans-lbl").textContent=open?"우리말 뜻 접기":"우리말 뜻 보기"}
+$("trans-tgl").addEventListener("click",()=>{mem.prefs.trans=$("tlist").hidden;persist();setTrans(mem.prefs.trans)});
+const EK=()=>TODAY+"#"+mem.cur;
+const META={dhamma:{g:"心",lv:2},mantra:{g:"言",lv:1},parents:{g:"恩",lv:1},heart:{g:"經",lv:3},diamond:{g:"金",lv:2},words:{g:"佛",lv:1},bowang:{g:"忍",lv:2},yaksa:{g:"藥",lv:2}};
+const LVW=["","쉬움","보통","어려움"];
+const dots=lv=>"●".repeat(lv)+"○".repeat(3-lv);
+const avgChars=id=>{const it=JOURNEYS[id].items;return Math.round(it.reduce((a,x)=>a+x.t.replace(/ /g,"").length,0)/it.length)};
+function migrate(){Object.keys(mem.entries).forEach(k=>{if(/^\d{4}-\d\d-\d\d$/.test(k)){const e=mem.entries[k];mem.entries[k+"#"+(e.j||"legacy")]=e;delete mem.entries[k]}});
+  if(mem.cur&&!mem.active.includes(mem.cur))mem.active.push(mem.cur)}
+function openSheet(){const h=mem.active.filter(id=>JOURNEYS[id]).map(id=>{const j=JOURNEYS[id],n=j.items.length,p=Math.min(mem.prog[id]||0,n),done=!!mem.entries[TODAY+"#"+id];
+    return '<button class="jrow" data-id="'+id+'" aria-current="'+(id===mem.cur)+'"><span class="glyph">'+META[id].g+'</span><span class="jr"><b>'+j.name+'</b><span>'+p+" / "+n+(p>=n?" · 완주":done?" · 오늘 완료":"")+'</span><span class="bar"><i style="width:'+Math.round(p/n*100)+'%"></i></span></span></button>'}).join("");
+  $("jlist").innerHTML=h||'<p class="emptytxt">진행 중인 여정이 없어요</p>';
+  $("jlist").querySelectorAll(".jrow").forEach(b=>b.addEventListener("click",()=>switchTo(b.dataset.id)));
+  $("sheet").hidden=false;$("sheet-close").focus()}
+function closeSheet(){$("sheet").hidden=true}
+function switchTo(id){closeSheet();mem.cur=id;persist();goToday();setupToday();renderJourney();renderRecord()}
+$("verse-no").addEventListener("click",openSheet);
+$("sheet-close").addEventListener("click",closeSheet);
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))closeSheet()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheet").hidden)closeSheet()});
+$("add-j").addEventListener("click",()=>{closeSheet();showStart()});
+$("more").addEventListener("click",()=>{const m=$("meaning"),c=m.classList.toggle("clamp");$("more").textContent=c?"풀이 더 보기":"접기"});
+
+function setupToday(){const j=JOURNEYS[mem.cur];if(!j)return;
+  const e=mem.entries[EK()];let i,done=false;
+  if(e){i=e.i;done=true}else{i=Math.min(mem.prog[mem.cur]||0,j.items.length-1);done=(mem.prog[mem.cur]||0)>=j.items.length}
+  VI=i;V=j.items[i];verseEl.classList.toggle("long",V.t.length>80);
+  $("trans").hidden=!j.trans;if(j.trans){$("tlist").innerHTML=j.trans.map((k,x)=>'<li'+(x===i?' class="now"':'')+'><span class="tr-o">'+(x===i?"오늘 · ":"")+(j.items[x].hl?"":esc(j.unit(x))+" · ")+esc(j.items[x].hl||j.items[x].t)+'</span><span class="tr-k">'+esc(k)+"</span></li>").join("");setTrans(!!mem.prefs.trans)}
+  $("verse-no").textContent=j.name+" · "+j.unit(i);
+  const d=(mem.ded[mem.cur]||"").trim();$("meta-right").textContent=d?"회향 · "+d:V.hl?"오늘은 밑줄 친 구절을 새겨요":"오늘의 한 줄";
+  typeTimes=[];typer.value="";lastLen=0;$("saved").hidden=true;
+  if(done){finished=true;typer.disabled=true;showDone(false)}
+  else{finished=false;typer.disabled=false;$("seal").hidden=true;$("done").hidden=true;$("monk").classList.remove("gassho");
+    $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint()}}
+function renderJourney(){const j=JOURNEYS[mem.cur];if(!j){$("jcard").innerHTML="<span>아직 고른 여정이 없어요</span>";return}
+  const p=Math.min(mem.prog[mem.cur]||0,j.items.length),d=(mem.ded[mem.cur]||"").trim();
+  $("jcard").innerHTML="<b>"+esc(j.name)+" · "+esc(j.part)+"</b><span>"+p+" / "+j.items.length+" 구절"+(p>=j.items.length?" · 완주":"")+"</span>"+(d?"<span>회향 · "+esc(d)+"</span>":"")}
+let basket=[];
+function addJourney(id){mem.ded[id]=$("ded").value.trim();if(!mem.active.includes(id))mem.active.push(id);
+  if((mem.prog[id]||0)>=JOURNEYS[id].items.length)mem.prog[id]=0;if(!basket.includes(id))basket.push(id);persist()}
+function renderBasket(){$("basket").hidden=!basket.length;$("basket-tx").innerHTML='담은 여정 <b>'+basket.map(id=>esc(JOURNEYS[id].name)).join(", ")+"</b>"}
+let pickId=null;
+function showStart(){basket=[];["today","record","sound"].forEach(v=>$("view-"+v).hidden=true);$("view-start").hidden=false;$("breath").hidden=true;document.querySelector("nav").hidden=!mem.cur;
+  $("pd-back").hidden=!mem.cur;renderMoods();window.scrollTo(0,0)}
+function jMeta(id){const j=JOURNEYS[id],lv=META[id].lv;return j.items.length+'일 · <span class="lv" aria-hidden="true">'+dots(lv)+"</span> "+LVW[lv]}
+function renderMoods(){pickId=null;$("pick-detail").hidden=true;$("st-back").hidden=true;
+  $("st-title").textContent=basket.length?"함께 할 여정을 더 골라 보세요":"어떤 마음으로 쓰고 싶나요?";$("st-sub").textContent=basket.length?"여러 여정을 동시에 이어 쓸 수 있어요.":"하루 한 구절, 처음부터 끝까지 옮겨 써요.";renderBasket();
+  $("picks").innerHTML=MOODS.map((m,x)=>{const on=m.js.filter(id=>mem.active.includes(id)).length;
+    return '<button class="pick" data-m="'+x+'"><span class="glyph" aria-hidden="true">'+m.g+'</span><span class="pk"><b>'+m.t+'</b><span class="pmeta">'+m.js.map(id=>JOURNEYS[id].name).join(" · ")+"</span>"+(on?'<span class="pon">진행 중인 여정 '+on+"개</span>":"")+"</span></button>"}).join("");
+  $("picks").querySelectorAll(".pick").forEach(b=>b.addEventListener("click",()=>renderJourneys(MOODS[+b.dataset.m])))}
+function renderJourneys(m){pickId=null;$("pick-detail").hidden=true;$("basket").hidden=true;$("st-back").hidden=false;
+  $("st-title").textContent=m.t;$("st-sub").textContent="마음에 맞는 경전을 골라 주세요.";
+  $("picks").innerHTML=m.js.map(id=>{const j=JOURNEYS[id],n=j.items.length,p=Math.min(mem.prog[id]||0,n),on=mem.active.includes(id);
+    return '<button class="pick" data-id="'+id+'" aria-pressed="false"><span class="glyph" aria-hidden="true">'+META[id].g+'</span><span class="pk"><b>'+j.name+" · "+j.part+'</b><span class="pmeta">'+jMeta(id)+'</span><span class="pdesc">'+j.desc+"</span>"+(basket.includes(id)?'<span class="pon">담았어요</span>':on?'<span class="pon">진행 중 '+p+" / "+n+"</span>":"")+"</span></button>"}).join("");
+  $("picks").querySelectorAll(".pick").forEach(b=>b.addEventListener("click",()=>choose(b)));window.scrollTo(0,0)}
+function choose(b){pickId=b.dataset.id;
+  $("picks").querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  const j=JOURNEYS[pickId],lv=META[pickId].lv;$("pd-name").textContent=j.name+" · "+j.part;
+  $("pd-meta").textContent=j.items.length+"일 · 하루 약 "+avgChars(pickId)+"자 · 난이도 "+LVW[lv];
+  $("pd-start").textContent=mem.active.includes(pickId)&&(mem.prog[pickId]||0)<j.items.length?"이어 쓰기":"이 여정 시작하기";
+  $("ded").value=mem.ded[pickId]||"";$("pick-detail").hidden=false;
+  $("pd-ded-label").firstChild.textContent=pickId==="parents"?"어느 분께 바칠까요? ":pickId==="yaksa"?"누구의 쾌유를 빌까요? ":"누구를 위해 쓰나요? ";
+  $("pick-detail").scrollIntoView({behavior:"smooth",block:"nearest"})}
+$("st-back").addEventListener("click",renderMoods);
+function goToday(){$("view-start").hidden=true;document.querySelector("nav").hidden=false;$("breath").hidden=mem.prefs.breath==="off";
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="today")));
+  ["today","record","sound"].forEach(v=>$("view-"+v).hidden=v!=="today");window.scrollTo(0,0)}
+function playBegin(ids){const B=$("begin"),t="여정을 시작합니다";
+  $("begin-t").innerHTML=[...t].map((c,i)=>'<span style="animation-delay:'+(0.2+i*0.13).toFixed(2)+'s">'+(c===" "?"&nbsp;":esc(c))+"</span>").join("");
+  const d=ids.length===1?(mem.ded[ids[0]]||"").trim():"",S=$("begin-s");
+  S.textContent=ids.map(id=>JOURNEYS[id].name).join(" · ")+(d?"  ·  회향 "+d:"");S.style.animation="none";void S.offsetWidth;S.style.animation="";
+  B.classList.remove("out");B.hidden=false;let gone=false;
+  const go=()=>{if(gone)return;gone=true;B.classList.add("out");setTimeout(()=>{B.hidden=true},1600)};B.onclick=go;setTimeout(go,RM?700:3800)}
+function startWith(id){const ids=basket.length?basket.slice():[id];mem.cur=id;basket=[];persist();goToday();setupToday();renderJourney();renderRecord();playBegin(ids)}
+$("pd-start").addEventListener("click",()=>{if(!pickId)return;addJourney(pickId);startWith(pickId)});
+$("pd-add").addEventListener("click",()=>{if(!pickId)return;addJourney(pickId);renderMoods();window.scrollTo(0,0)});
+$("pd-moods").addEventListener("click",()=>{renderMoods();window.scrollTo(0,0)});
+$("basket-go").addEventListener("click",()=>{if(basket.length)startWith(basket[0])});
+$("pd-back").addEventListener("click",()=>{goToday()});
+$("change-j").addEventListener("click",openSheet);
+$("finish-next").addEventListener("click",showStart);
+
+let devTaps=0,devT=null;
+$("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
+$("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
+$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.seen=false;persist();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
+
+/* ---------- 시작 ---------- */
+load();
+if(location.hash==="#reset"){mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];persist()}
+migrate();
+$("today-label").textContent=(now.getMonth()+1)+"월 "+now.getDate()+"일 "+DOW[now.getDay()]+"요일";
+const TH=[["system","기기 설정 따르기"],["light","밝게"],["dark","어둡게"]];
+function applyTheme(){const r=document.documentElement,t=mem.prefs.theme;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")}
+chips("theme-chips",TH,"theme");applyTheme();
+chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
+chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
+renderJourney();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
+renderRecord();
+(function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
+  $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 사경 중이에요":"오늘도 한 줄, 천천히";
+  const min=RM?800:first?5600:4800;let gone=false;document.body.classList.add("entering");
+  const go=()=>{if(gone)return;gone=true;SP.classList.add("out");setTimeout(()=>document.body.classList.remove("entering"),900);setTimeout(()=>{SP.hidden=true},2300)};
+  SP.addEventListener("click",go);
+  Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>setTimeout(go,Math.max(0,min-(performance.now()-t0))));
+  if(first){mem.seen=true;persist()}})();
+document.addEventListener("pointerdown",function once(){if(mem.prefs.bg!=="off")startBg(mem.prefs.bg);document.removeEventListener("pointerdown",once)});
+</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</body>
+</html>
