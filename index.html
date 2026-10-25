@@ -145,6 +145,8 @@ body.kb .app{padding-bottom:40vh}
 .acct-on{display:flex;align-items:center;gap:10px;font-size:15px}
 .acct-badge{width:28px;height:28px;border-radius:50%;background:#FEE500;display:flex;align-items:center;justify-content:center}.acct-badge .ksym{width:16px;height:16px}
 .acct-on .link{margin-left:auto;font-size:13px}
+.acct-del{font-size:12px;color:var(--ink-2);margin-top:4px;align-self:flex-start}.acct-del.warn{color:var(--seal)}
+.acct-msg{margin:0;font-size:13px;color:var(--seal)}
 .tag-test{font-size:12px;color:var(--ink-2);font-weight:400}
 .fb-btn{display:inline-block;text-decoration:none;margin-top:4px}
 .login-in{align-items:center;text-align:center;gap:12px}
@@ -526,10 +528,12 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 
     <section id="view-sound" hidden>
       <div class="group" id="acct-group">
-        <h2>내 기록 지키기 <span class="tag-test">테스트</span></h2>
+        <h2>내 기록 지키기 <span class="tag-test" id="acct-test">테스트</span></h2>
         <p id="acct-desc">로그인하면 휴대폰을 바꾸거나 앱을 지워도 사경 기록과 연꽃 등이 그대로 남아요.</p>
         <button class="kakao-btn" id="acct-login"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg><span>카카오 로그인</span></button>
+        <p class="acct-msg" id="acct-msg" hidden></p>
         <div class="acct-on" id="acct-on" hidden><span class="acct-badge"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg></span><span id="acct-name"></span><button class="link" id="acct-out">로그아웃</button></div>
+        <button class="link acct-del" id="acct-del" hidden>계정 삭제</button>
       </div>
       <div class="group">
         <h2>나의 여정</h2>
@@ -580,7 +584,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <div class="list" id="buy-list" style="margin-top:6px"></div>
       </div>
       <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">사찰음식으로 차리는 한 끼, 마음 밥상</span><button class="link" data-noads>광고 없애기</button></div>
-      <p class="note">지금은 기록이 이 기기에 저장돼요. 카카오 로그인 보관은 테스트 중이에요.</p>
+      <p class="note">기록은 이 기기에 저장되고, 카카오로 로그인하면 서버에도 안전하게 보관돼요.</p>
       <p class="note"><a href="https://sutra.dualtimestudio.com/privacy.html" target="_blank" rel="noopener" style="color:inherit">개인정보처리방침</a> · Dual Time Studio</p>
     </section>
   </main>
@@ -616,7 +620,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     <div class="login-seal" aria-hidden="true">記</div>
     <h2 class="sh-t" id="login-title">소중한 나의 기록을 지켜요</h2>
     <p class="login-p" id="login-p">카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 오늘 쓴 사경과 연꽃 등이 그대로 남아요.</p>
-    <p class="pay-test">테스트 로그인이에요. 아직 실제 카카오 계정과 연결되지 않아요.</p>
+    <p class="pay-test" id="login-test">테스트 로그인이에요. 아직 실제 카카오 계정과 연결되지 않아요.</p>
     <button class="kakao-btn" id="login-go"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg><span>카카오 로그인</span></button>
     <button class="link login-later" id="login-later">나중에 할게요</button>
     <div class="pay-mid" id="login-done" hidden><div class="pay-check" aria-hidden="true">✓</div><p>이제 기록이 안전하게 보관돼요</p></div>
@@ -803,7 +807,7 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 const KEY="hanjul.v1";
 let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
 function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}if(typeof schedPush==="function")schedPush()}
 
 const pad=n=>String(n).padStart(2,"0");
 const keyOf=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
@@ -1145,18 +1149,59 @@ function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");a
   shineT1=setTimeout(()=>{void ar.offsetWidth;ar.classList.add("shine");md.hidden=false;void md.offsetWidth;md.classList.add("show")},RM?0:650);
   shineT2=setTimeout(()=>{if($("view-today").hidden)return;const y=$("done").getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:Math.max(0,y),behavior:RM?"auto":"smooth"})},RM?400:4600)}
 /* ---------- 로그인 (테스트) ---------- */
-function renderAcct(){const a=mem.acct;$("acct-login").hidden=!!a;$("acct-on").hidden=!a;$("acct-desc").hidden=!!a;if(a)$("acct-name").textContent=a.name+"님의 기록이 보관되고 있어요"}
+const API="https://api.dualtimestudio.com",REAL=location.origin==="https://sutra.dualtimestudio.com";
+const SYNC_KEYS=["entries","cur","prog","ded","active","lan","credits","freeUsed","noads","buys","seen","prefs"];
+function renderAcct(){const a=mem.acct;$("acct-login").hidden=!!a;$("acct-on").hidden=!a;$("acct-desc").hidden=!!a;$("acct-del").hidden=!a||!a.token;$("acct-del").classList.remove("warn");$("acct-del").textContent="계정 삭제";
+  $("acct-test").hidden=REAL;$("login-test").hidden=REAL;if(a)$("acct-name").textContent=(a.name||"도반")+"님의 기록이 보관되고 있어요"}
+function acctMsg(t){const e=$("acct-msg");e.textContent=t||"";e.hidden=!t}
+async function api(path,opt={}){const a=mem.acct;if(!a||!a.token)throw new Error("noauth");
+  const r=await fetch(API+path,Object.assign({},opt,{headers:Object.assign({"Authorization":"Bearer "+a.token},opt.body?{"Content-Type":"application/json"}:{})}));
+  if(r.status===401){mem.acct=null;localStorage.setItem(KEY,JSON.stringify(mem));renderAcct();acctMsg("로그인이 만료됐어요. 다시 로그인해 주세요.");throw new Error("401")}
+  return r.json()}
+function snapshot(){const o={};SYNC_KEYS.forEach(k=>o[k]=mem[k]);return o}
+function mergeData(L,R){if(!R)return L;const o={};
+  o.entries=Object.assign({},R.entries||{});Object.entries(L.entries||{}).forEach(([k,v])=>{const r=o.entries[k];if(!r||(v.at||0)>=(r.at||0)||(!r.r&&v.r))o.entries[k]=Object.assign({},r||{},v,{r:v.r||(r&&r.r)||""})});
+  const key=x=>x.at?"a"+x.at:"d"+x.d+"|"+(x.j||"")+"|"+(x.w||"");const lm=new Map();(R.lan||[]).forEach(x=>lm.set(key(x),x));(L.lan||[]).forEach(x=>lm.set(key(x),x));
+  o.lan=[...lm.values()].sort((a,b)=>((a.at||Date.parse(a.d)||0)-(b.at||Date.parse(b.d)||0)));
+  o.prog=Object.assign({},R.prog||{});Object.entries(L.prog||{}).forEach(([k,v])=>{o.prog[k]=Math.max(v||0,o.prog[k]||0)});
+  o.ded=Object.assign({},R.ded||{},L.ded||{});
+  o.active=[...new Set([...(L.active||[]),...(R.active||[])])];
+  o.cur=L.cur||R.cur||null;o.credits=Math.max(L.credits||0,R.credits||0);o.freeUsed=!!(L.freeUsed||R.freeUsed);o.noads=!!(L.noads||R.noads);o.seen=!!(L.seen||R.seen);
+  const bs=new Set();o.buys=[...(R.buys||[]),...(L.buys||[])].filter(b=>{const k=JSON.stringify(b);if(bs.has(k))return false;bs.add(k);return true});
+  o.prefs=Object.assign({},R.prefs||{},L.prefs||{});return o}
+let pushT=null,pulling=false;
+function schedPush(){if(!REAL||pulling||!mem.acct||!mem.acct.token)return;clearTimeout(pushT);pushT=setTimeout(pushNow,2500)}
+function pushNow(keep){clearTimeout(pushT);if(!REAL||!mem.acct||!mem.acct.token)return;
+  try{fetch(API+"/data",{method:"PUT",keepalive:!!keep,headers:{"Authorization":"Bearer "+mem.acct.token,"Content-Type":"application/json"},body:JSON.stringify({data:snapshot()})}).catch(()=>{})}catch(e){}}
+async function syncPull(){if(!REAL||!mem.acct||!mem.acct.token)return;pulling=true;
+  try{const r=await api("/data");const before=mem.cur,hadToday=!!mem.entries[EK()];
+    if(r&&r.data){const m=mergeData(snapshot(),r.data);SYNC_KEYS.forEach(k=>{if(k==="prefs")mem.prefs=Object.assign(mem.prefs,m.prefs);else mem[k]=m[k]})}
+    localStorage.setItem(KEY,JSON.stringify(mem));
+    renderJourney();renderRecord();renderPond(false);updWishBtn();renderBuys();renderAds();
+    if(mem.cur&&!$("view-start").hidden&&!before){goToday();setupToday()}else if(mem.cur&&(before!==mem.cur||(!hadToday&&mem.entries[EK()])))setupToday();
+  }catch(e){}finally{pulling=false}
+  pushNow()}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&pushT)pushNow(true)});
+function initAccount(){const h=location.hash;
+  if(h.startsWith("#login=")||h.startsWith("#login_error=")){const p=new URLSearchParams(h.slice(1));history.replaceState(null,"",location.pathname+location.search);
+    if(p.get("login")){mem.acct={name:p.get("nick")||"도반",via:"kakao",token:p.get("login"),at:Date.now()};localStorage.setItem(KEY,JSON.stringify(mem));renderAcct();
+      ["login-go","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;$("login").hidden=false;setTimeout(closeLogin,1800)}
+    else acctMsg(p.get("login_error")==="cancel"||p.get("login_error")==="access_denied"?"로그인을 취소했어요.":"로그인 중 문제가 생겼어요. 잠시 뒤 다시 시도해 주세요.")}
+  renderAcct();syncPull()}
 function recCount(){return Object.keys(mem.entries).length+mem.lan.filter(x=>x.w).length}
 function openLogin(ctx){$("login-p").textContent=ctx==="settings"?"카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 사경 기록과 연꽃 등이 그대로 남아요.":"오늘 남긴 기록, 잃어버리지 않게 보관해 둘까요? 카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 그대로 남아요.";
   ["login-go","login-later"].forEach(id=>$(id).hidden=false);$("login-done").hidden=true;$("login").hidden=false;$("login-go").focus()}
 function closeLogin(){$("login").hidden=true}
 function maybeAskLogin(){if(mem.acct)return;const n=recCount();if((mem.lp===0&&n>=1)||(mem.lp===1&&n>=7)){mem.lp++;persist();openLogin("record")}}
 $("acct-login").addEventListener("click",()=>openLogin("settings"));
-$("acct-out").addEventListener("click",()=>{mem.acct=null;persist();renderAcct()});
+$("acct-out").addEventListener("click",()=>{pushNow(true);mem.acct=null;persist();renderAcct();acctMsg("로그아웃했어요. 이 기기의 기록은 그대로 있어요.")});
+$("acct-del").addEventListener("click",async()=>{const b=$("acct-del");if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="보관된 기록이 모두 지워져요. 삭제하려면 한 번 더 누르세요";return}
+  b.disabled=true;try{await api("/account",{method:"DELETE"});mem.acct=null;persist();renderAcct();acctMsg("계정과 보관된 기록을 삭제했어요. 이 기기의 기록은 남아 있어요.")}catch(e){if(mem.acct)acctMsg("삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.")}finally{b.disabled=false}});
 $("login-close").addEventListener("click",closeLogin);
 $("login-later").addEventListener("click",closeLogin);
 $("login").addEventListener("click",e=>{if(e.target===$("login"))closeLogin()});
-$("login-go").addEventListener("click",()=>{mem.acct={name:"카카오 사용자",via:"kakao",at:Date.now(),test:true};persist();renderAcct();
+$("login-go").addEventListener("click",()=>{if(REAL){persist();location.href=API+"/kakao/login?return="+encodeURIComponent(location.origin+location.pathname);return}
+  mem.acct={name:"카카오 사용자",via:"kakao",at:Date.now(),test:true};persist();renderAcct();
   ["login-go","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;setTimeout(closeLogin,1600)});
 renderAcct();
 /* ---------- 입력창과 키보드 ---------- */
@@ -1333,6 +1378,7 @@ $("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog=
 load();
 if(location.hash==="#reset"){mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];persist()}
 migrate();
+setTimeout(initAccount,0);
 $("today-label").textContent=(now.getMonth()+1)+"월 "+now.getDate()+"일 "+DOW[now.getDay()]+"요일";
 const TH=[["system","기기 설정 따르기"],["light","밝게"],["dark","어둡게"]];
 function applyTheme(){const r=document.documentElement,t=mem.prefs.theme;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")}
