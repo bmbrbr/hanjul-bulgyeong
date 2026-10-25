@@ -25,16 +25,16 @@
 :root{
   --paper:#F3EEE3; --paper-2:#E9E2D3; --ink:#23211E; --ink-2:#615B50; --ghost:#C9C0AE;
   --seal:#B3352B; --seal-bg:#F6E2DC; --line:#DAD1BF; --wrong:#D63A2A; --wrong-bg:#F9D9D2; --sel:#E2D6BE;
-  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --halo:rgba(255,214,140,.8); --halo-2:rgba(255,232,184,.38); --halo-ring:rgba(205,160,80,.5); --art-bg:transparent;
+  --skin:#F2D4B6; --skin-2:#D9A983; --robe:#8F918A; --robe-2:#6E706A; --cushion:#B4554A; --breath:#B9A47A; --breath-ring:#8C7A55; --halo:rgba(255,214,140,.8); --halo-2:rgba(255,232,184,.38); --halo-ring:rgba(205,160,80,.5); --lan-glow:rgba(255,170,90,.32); --art-bg:transparent;
   --f-verse:"Gowun Batang","Noto Serif KR","Nanum Myeongjo",serif;
   --f-ui:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
-  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --art-bg:transparent; color-scheme:dark}}
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --lan-glow:rgba(255,196,110,.6); --art-bg:transparent; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#171E32; --paper-2:#212A40; --ink:#ECE5D4; --ink-2:#9BA1B1; --ghost:#434A5C;
-  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --art-bg:transparent; color-scheme:dark}
+  --seal:#E07A60; --seal-bg:#3A2A2B; --line:#2D3444; --wrong:#FF8B72; --wrong-bg:#4A2A2A; --sel:#353D50; --skin:#E9C7A6; --skin-2:#C99A76; --robe:#7D8190; --robe-2:#5F6372; --cushion:#8A3F37; --breath:#C8B488; --breath-ring:#8E7E5C; --halo:rgba(255,222,160,.6); --halo-2:rgba(255,200,120,.22); --halo-ring:rgba(255,226,170,.55); --lan-glow:rgba(255,196,110,.6); --art-bg:transparent; color-scheme:dark}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.6;word-break:keep-all;
@@ -44,6 +44,17 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .monk{display:flex;justify-content:center;padding-block:0 14px}
 .art{position:relative;width:min(230px,60vw);aspect-ratio:560/613;max-width:100%;background:var(--art-bg);border-radius:16px;box-shadow:0 0 0 8px var(--art-bg)}
 .art img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.art .lanterns{position:absolute;inset:0;z-index:2;pointer-events:none;transform-origin:18% 83%;animation:sway 30s ease-in-out 3s infinite}
+.lan{position:absolute;width:5%;height:6.8%;margin-left:-2.5%;transform-origin:50% -70%;animation:swing 4.5s ease-in-out infinite}
+.lan::before{content:"";position:absolute;left:50%;top:-70%;width:1px;height:70%;background:var(--ink-2);opacity:.55}
+.lan b{position:absolute;inset:0;border-radius:45%/40%;background:radial-gradient(circle at 50% 42%,#FFE6A8 0%,#EE7458 46%,#B3352B 100%);box-shadow:0 0 10px 3px var(--lan-glow)}
+.lan b::before,.lan b::after{content:"";position:absolute;left:24%;right:24%;height:11%;background:#6B2A22;border-radius:2px}
+.lan b::before{top:-7%}.lan b::after{bottom:-7%}
+.lan.new{animation:lanin 2.6s ease-out 1.4s both,swing 4.5s ease-in-out 4s infinite}
+.lan.new b{animation:lanflash 2.6s ease-out 1.4s both}
+@keyframes swing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes lanin{0%{opacity:0;transform:translateY(80%) scale(.5)}55%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes lanflash{0%{box-shadow:0 0 0 0 var(--lan-glow)}50%{box-shadow:0 0 26px 10px var(--lan-glow)}100%{box-shadow:0 0 10px 3px var(--lan-glow)}}
 .art .dbase{z-index:0}.art .stars{z-index:1}.art .halo{z-index:1}.art .tree{z-index:2}.art .monkimg{z-index:3}
 .art .halo{position:absolute;left:48%;top:47%;width:105%;aspect-ratio:1;border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.55);
   background:radial-gradient(circle,var(--halo) 0%,var(--halo-2) 34%,transparent 66%)}
@@ -266,7 +277,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 <div class="app">
   <header>
     <div class="brand" id="brand">한줄 불경</div>
-    <div class="dev" id="dev" hidden><span>테스트용: 모든 기록을 지울까요?</span><button class="btn solid" id="dev-yes">지우기</button><button class="btn" id="dev-no">취소</button></div>
+    <div class="dev" id="dev" hidden><span>테스트용: 모든 기록을 지울까요?</span><button class="btn solid" id="dev-yes">지우기</button><button class="btn" id="dev-fin">완주 직전으로</button><button class="btn" id="dev-no">취소</button></div>
     <div class="date" id="today-label"></div>
   </header>
 
@@ -298,6 +309,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
           <div class="dk stars" id="stars"><i class="tw big" style="left:88.6%;top:29.2%"></i><i class="tw big" style="left:12.4%;top:17.3%"></i><i class="tw big" style="left:75.8%;top:36.7%"></i><i class="tw big" style="left:92.1%;top:56.0%"></i><i class="tw big" style="left:78.1%;top:48.7%"></i><i class="tw big" style="left:75.4%;top:5.3%"></i><i class="tw" style="left:66.1%;top:2.3%"></i><i class="tw" style="left:77.3%;top:41.8%"></i><i class="tw" style="left:90.3%;top:31.9%"></i><i class="tw" style="left:92.2%;top:38.9%"></i><i class="tw" style="left:24.3%;top:13.5%"></i><i class="tw" style="left:4.3%;top:26.3%"></i><i class="tw" style="left:32.1%;top:26.9%"></i><i class="tw" style="left:61.3%;top:35.7%"></i><i class="tw" style="left:78.6%;top:37.8%"></i><i class="tw" style="left:93.2%;top:12.4%"></i><i class="tw" style="left:91.8%;top:34.7%"></i></div>
           <img class="dk tree" alt="" src="img/dtree.webp">
           <img class="dk monkimg" alt="" src="img/dmonk.webp">
+          <div class="lanterns" id="lanterns" aria-hidden="true"></div>
         </div>
       </div>
       <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><span id="meta-right">오늘의 한 줄</span></div>
@@ -585,8 +597,8 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 
 
 const KEY="hanjul.v1";
-let mem={entries:{},cur:null,prog:{},ded:{},active:[],prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
-function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
+function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}}
 
 const pad=n=>String(n).padStart(2,"0");
@@ -716,16 +728,16 @@ function onType(){if(finished)return;
   paint();recordTimes();const A=align(typer.value);if(A.end>=V.t.length&&!A.st.some(k=>k==="g"||k==="w"))complete()}
 function complete(){finished=true;typer.blur();typer.disabled=true;
   const e=mem.entries[EK()]||{},same=e.i===VI;
-  if(!same)mem.prog[mem.cur]=VI+1;
+  let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,d:TODAY});newLan=true}}
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
-  showDone(true);sealSound();renderRecord()}
+  showDone(true);sealSound();renderRecord();renderLanterns(newLan)}
 function showDone(animate){paint();$("monk").classList.add("gassho");if(animate){const ar=document.querySelector(".art");ar.classList.remove("shine");void ar.offsetWidth;ar.classList.add("shine")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
   $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
-    $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 고요히 쌓였어요."}}
+    $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 고요히 쌓여, 보리수에 연등 하나를 밝혔어요."}}
 function reset(){typeTimes=[];finished=false;document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
   $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint();typer.focus()}
 
@@ -921,6 +933,10 @@ $("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("
 
 
 
+/* ---------- 보리수 연등 ---------- */
+const LSLOT=[[34,30],[52,17],[68,25],[83,30],[24,41],[61,36],[44,26],[77,41],[90,22],[29,22]];
+function renderLanterns(fresh){const L=mem.lan.slice(-LSLOT.length);
+  $("lanterns").innerHTML=L.map((x,i)=>'<i class="lan'+(fresh&&i===L.length-1?" new":"")+'" style="left:'+LSLOT[i][0]+'%;top:'+LSLOT[i][1]+'%;animation-duration:'+(4+((i*7)%5)*0.3).toFixed(1)+'s"><b></b></i>').join("")}
 /* ---------- 여정 ---------- */
 function setTrans(open){$("tlist").hidden=!open;$("trans-tgl").setAttribute("aria-expanded",String(open));$("trans-pm").textContent=open?"－":"＋";$("trans-lbl").textContent=open?"우리말 뜻 접기":"우리말 뜻 보기"}
 $("trans-tgl").addEventListener("click",()=>{mem.prefs.trans=$("tlist").hidden;persist();setTrans(mem.prefs.trans)});
@@ -1007,7 +1023,8 @@ $("finish-next").addEventListener("click",showStart);
 let devTaps=0,devT=null;
 $("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
 $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
-$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.seen=false;persist();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
+$("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
+$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.seen=false;persist();renderLanterns();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
 
 /* ---------- 시작 ---------- */
 load();
@@ -1019,7 +1036,7 @@ function applyTheme(){const r=document.documentElement,t=mem.prefs.theme;if(t===
 chips("theme-chips",TH,"theme");applyTheme();
 chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
 chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
-renderJourney();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
+renderJourney();renderLanterns();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
 renderRecord();
 (function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
   $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 사경 중이에요":"오늘도 한 줄, 천천히";
