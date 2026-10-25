@@ -77,7 +77,9 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .item .d .link{font-size:12px;padding:0}
 .pond-empty{top:66%!important;pointer-events:none}
 .pond{margin-bottom:22px}
+.pond-more{position:absolute;left:14px;bottom:10px;font-size:11px;color:#C9C3B4;opacity:.8;pointer-events:none}
 body.kb nav,body.kb .breath{display:none}
+body:has(#view-today[hidden]) .breath{display:none}
 body.kb .app{padding-bottom:40vh}
 .pay-test{margin:0;font-size:12px;color:var(--seal);background:var(--seal-bg);border-radius:8px;padding:6px 10px}
 .pay-step{display:flex;flex-direction:column;gap:10px}
@@ -428,7 +430,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="pond" id="pond">
         <div class="pond-sky"></div><div class="moon"></div><div class="water"></div>
         <div class="lotuses" id="lotuses"></div>
-        <div class="pond-cap" id="pond-cap" hidden></div>
+        <div class="pond-cap" id="pond-cap" hidden></div><div class="pond-more" id="pond-more" hidden></div>
         <p class="pond-empty" id="pond-empty">가운데 ＋를 눌러 첫 바람을 띄워 보세요</p>
       </div>
       
@@ -1078,8 +1080,8 @@ const PSLOT=[[50,93,27],[23,85,21],[77,87,22],[38,75,17],[63,73,17],[14,69,13],[
 function lanLabel(x){const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
   return x.w?{t:"발원 · "+x.w,d:md}:{t:(JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"+(x.to?" · "+x.to:""),d:md}}
 function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)),n=L.length;
-  $("pond-empty").hidden=n>0;
-  const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k+ph]}));if(ph)items.push({add:true,slot:PSLOT[0]});items.sort((a,b)=>a.slot[1]-b.slot[1]);
+  $("pond-empty").hidden=n>0;{const m=mem.lan.length-n,e=$("pond-more");e.hidden=m<=0;e.textContent="지난 연꽃 "+m+"송이는 아래 목록에 있어요"}
+  const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]}));if(ph){const q=PSLOT[n];items.push({add:true,slot:[q[0],q[1]+(q[2]<16?3:0),Math.max(q[2],16)]})}items.sort((a,b)=>a.slot[1]-b.slot[1]);
   $("lotuses").innerHTML=items.map(o=>{const st='left:'+o.slot[0]+'%;top:'+o.slot[1]+'%;width:'+o.slot[2]+'%;';
     if(o.add)return '<button class="lotus add" style="'+st+'" aria-label="새 바람 띄우기"><span class="lo">'+ADD_SVG+'</span></button>';
     const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
