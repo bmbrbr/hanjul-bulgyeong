@@ -558,7 +558,26 @@ D("그릇된 생각의 그물에 걸린 이를 바른 견해로 이끌리라","�
 D("갇히고 묶이고 고난에 처한 이가 모든 근심에서 벗어나게 하리라","억울하게 갇히거나 큰 고난에 처한 이를 구하겠다는 서원입니다. 몸이 아니라 마음이 갇힌 사람에게도 닿는 말입니다.","요즘 내 마음을 묶고 있는 것은 무엇인가요?"),
 D("굶주린 이를 좋은 음식으로 배부르게 하고 법의 맛으로 편안하게 하리라","배고파서 나쁜 일을 저지른 이에게도 먼저 밥을 주고, 그다음에 가르침을 주겠다는 서원입니다. 몸의 허기와 마음의 허기를 함께 채웁니다.","요즘 나는 어떤 허기를 느끼고 있나요?"),
 D("헐벗고 추위와 더위에 시달리는 이에게 좋은 옷과 원하는 것을 주리라","마지막 서원은 가장 구체적인 보살핌입니다. 열두 서원을 마치며 이 사경의 공덕을 아픈 이, 힘든 이에게 돌려 보세요.","열두 서원 중 내가 닮고 싶은 서원은 무엇인가요?")]};
-const MOODS=[{g:"心",t:"마음을 다스리고 싶어요",js:["dhamma","words"]},{g:"忍",t:"힘든 시기를 버티고 싶어요",js:["bowang","mantra"]},{g:"恩",t:"누군가를 위해 쓰고 싶어요",js:["parents","yaksa"]},{g:"經",t:"경전을 깊이 공부하고 싶어요",js:["diamond","heart"]}];
+const MK=(name,part,unit,mood,desc,t,intro,mid,lines,qs)=>({name,part,unit,days:21,mood,desc,items:Array.from({length:21},(_,i)=>D(t,(i===0?intro:mid)+" "+lines[i%7],qs[i%qs.length]))});
+JOURNEYS.gwang=MK("광명진언","빛을 보내는 21일",i=>(i+1)+"일째","누군가를 위해 쓰고 싶어요","떠나간 이와 그리운 이에게 밝은 빛을 보내요",
+ "옴 아모가 바이로차나 마하무드라 마니 파드마 즈바라 프라바릍타야 훔",
+ "광명진언은 비로자나 부처님의 밝은 빛으로 업장을 녹이고 어둠을 밝힌다는 진언으로, 돌아가신 분의 평안을 빌 때 많이 외웁니다. 진언은 뜻보다 소리에 힘이 있다고 보아 옛 소리 그대로 씁니다. 오늘의 발원:",
+ "진언을 쓰며 마음에 밝은 빛을 떠올려 보세요. 오늘의 발원:",
+ ["이 빛이 떠나간 이의 길을 밝히기를","어두운 마음 한구석에 빛이 들기를","지은 잘못이 빛 속에서 녹아내리기를","그리운 이가 편안한 곳에 머물기를","나의 하루가 누군가에게 작은 등불이 되기를","슬픔이 빛이 되어 감사로 바뀌기를","모든 생명이 밝은 빛 안에서 평안하기를"],
+ ["오늘 이 빛을 보내고 싶은 사람은 누구인가요?","마음속 어두운 곳에 빛을 비춘다면 무엇이 보이나요?","떠올리면 고마운 사람이 있나요?"]);
+JOURNEYS.omani=MK("옴 마니 반메 훔","자비의 여섯 글자",i=>(i+1)+"일째","마음을 다스리고 싶어요","관세음보살의 자비를 하루 일곱 번 새겨요",
+ Array(7).fill("옴 마니 반메 훔").join(" "),
+ "옴 마니 반메 훔은 관세음보살의 자비를 담은 여섯 글자 진언입니다. 흔히 '연꽃 속의 보석'이라 풀이하며, 진흙 속에서도 맑게 피는 연꽃처럼 누구에게나 깨끗한 마음이 있다는 뜻으로 읽습니다. 하루 일곱 번 쓰며 마음을 새겨요. 오늘의 마음:",
+ "일곱 번 쓰는 동안 한 번씩 숨을 고르며 써 보세요. 오늘의 마음:",
+ ["나에게 먼저 자비롭게 대한다","오늘 만나는 이에게 따뜻한 눈길을 건넨다","화가 날 때 연꽃 속 보석을 떠올린다","미운 마음 대신 이해하는 마음을 낸다","힘든 이의 이야기를 끝까지 듣는다","작은 생명도 소중히 여긴다","모든 이가 괴로움에서 벗어나기를 바란다"],
+ ["오늘 자비를 가장 먼저 건네고 싶은 사람은 누구인가요?","내 안의 보석 같은 마음은 무엇인가요?","오늘 누군가에게 따뜻했던 순간이 있었나요?"]);
+JOURNEYS.wonsung=MK("원성취진언","바람을 새기는 21일",i=>(i+1)+"일째","바라는 일이 이루어지길 바라요","이루고 싶은 바람 하나를 21일 동안 마음에 새겨요",
+ Array(3).fill("옴 아모까 살바다라 사다야 시베 훔").join(" "),
+ "원성취진언은 '바라는 바를 이루게 하는 진언'으로, 천수경을 마칠 무렵 외웁니다. 진언은 옛 소리 그대로 세 번 쓰고, 이루고 싶은 바람 하나를 정해 21일 동안 마음에 새겨 보세요. 오늘의 다짐:",
+ "진언을 세 번 쓰며 나의 바람을 또렷하게 떠올려 보세요. 오늘의 다짐:",
+ ["나의 바람을 또렷하게 마음에 새긴다","바람을 위해 오늘 할 수 있는 한 걸음을 내딛는다","이루어질 때까지 조급해하지 않는다","나의 바람이 다른 이에게도 이로운지 살핀다","이미 이루어진 것들에 감사한다","남의 바람도 함께 이루어지기를 빈다","결과는 인연에 맡기고 정성은 다한다"],
+ ["지금 가장 이루고 싶은 바람은 무엇인가요?","그 바람을 위해 오늘 한 일은 무엇인가요?","바람이 이루어진 나를 떠올리면 어떤 모습인가요?"]);
+const MOODS=[{g:"心",t:"마음을 다스리고 싶어요",js:["dhamma","words","omani"]},{g:"忍",t:"힘든 시기를 버티고 싶어요",js:["bowang","mantra"]},{g:"恩",t:"누군가를 위해 쓰고 싶어요",js:["parents","yaksa","gwang"]},{g:"願",t:"바라는 일이 이루어지길 바라요",js:["wonsung"]},{g:"經",t:"경전을 깊이 공부하고 싶어요",js:["diamond","heart"]}];
 const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","heart"];
 (function(){const h=JOURNEYS.heart,segs=h.items.map(x=>x.t),full=segs.join(" ");let pos=0;
   h.items=h.items.map((x,i)=>{const hs=pos,he=pos+segs[i].length;pos=he+1;return {t:full,m:x.m,q:x.q,hl:segs[i],hs,he}});
@@ -906,7 +925,7 @@ $("story-save").addEventListener("click",async()=>{const b=$("story-save"),n=$("
 function setTrans(open){$("tlist").hidden=!open;$("trans-tgl").setAttribute("aria-expanded",String(open));$("trans-pm").textContent=open?"－":"＋";$("trans-lbl").textContent=open?"우리말 뜻 접기":"우리말 뜻 보기"}
 $("trans-tgl").addEventListener("click",()=>{mem.prefs.trans=$("tlist").hidden;persist();setTrans(mem.prefs.trans)});
 const EK=()=>TODAY+"#"+mem.cur;
-const META={dhamma:{g:"心",lv:2},mantra:{g:"言",lv:1},parents:{g:"恩",lv:1},heart:{g:"經",lv:3},diamond:{g:"金",lv:2},words:{g:"佛",lv:1},bowang:{g:"忍",lv:2},yaksa:{g:"藥",lv:2}};
+const META={dhamma:{g:"心",lv:2},mantra:{g:"言",lv:1},parents:{g:"恩",lv:1},heart:{g:"經",lv:3},diamond:{g:"金",lv:2},words:{g:"佛",lv:1},bowang:{g:"忍",lv:2},yaksa:{g:"藥",lv:2},gwang:{g:"光",lv:2},omani:{g:"蓮",lv:1},wonsung:{g:"願",lv:1}};
 const LVW=["","쉬움","보통","어려움"];
 const dots=lv=>"●".repeat(lv)+"○".repeat(3-lv);
 const avgChars=id=>{const it=JOURNEYS[id].items;return Math.round(it.reduce((a,x)=>a+x.t.replace(/ /g,"").length,0)/it.length)};
@@ -964,7 +983,7 @@ function choose(b){pickId=b.dataset.id;
   $("pd-meta").textContent=j.items.length+"일 · 하루 약 "+avgChars(pickId)+"자 · 난이도 "+LVW[lv];
   $("pd-start").textContent=mem.active.includes(pickId)&&(mem.prog[pickId]||0)<j.items.length?"이어 쓰기":"이 여정 시작하기";
   $("ded").value=mem.ded[pickId]||"";$("pick-detail").hidden=false;
-  $("pd-ded-label").firstChild.textContent=pickId==="parents"?"어느 분께 바칠까요? ":pickId==="yaksa"?"누구의 쾌유를 빌까요? ":"누구를 위해 쓰나요? ";
+  $("pd-ded-label").firstChild.textContent=pickId==="parents"?"어느 분께 바칠까요? ":pickId==="yaksa"?"누구의 쾌유를 빌까요? ":pickId==="gwang"?"누구에게 이 빛을 보낼까요? ":"누구를 위해 쓰나요? ";
   $("pick-detail").scrollIntoView({behavior:"smooth",block:"nearest"})}
 $("st-back").addEventListener("click",renderMoods);
 function goToday(){$("view-start").hidden=true;document.querySelector("nav").hidden=false;$("breath").hidden=mem.prefs.breath==="off";
