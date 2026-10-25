@@ -87,6 +87,54 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .item .d .link{font-size:12px;padding:0}
 .pond-empty{top:56%!important;pointer-events:none}
 .pond{margin-bottom:22px}
+/* 밝은 화면: 여명의 연못 */
+@media (prefers-color-scheme: light){
+:root:not([data-theme="dark"]) .pond{background:linear-gradient(#F7E6D3 0%,#F2DDCB 18%,#EADBD2 33%,#D6E0DD 35%,#C6D6D3 72%,#B7CAC8 100%)}
+:root:not([data-theme="dark"]) .pond-sky{opacity:0}
+:root:not([data-theme="dark"]) .moon{right:10%;top:10%;width:11%;background:radial-gradient(circle,#FFF8EA 0%,#FBD9B4 55%,rgba(251,217,180,0) 72%);box-shadow:0 0 60px 22px rgba(255,214,170,.35)}
+:root:not([data-theme="dark"]) .hills path:first-of-type{fill:#C9C6C3;opacity:.85}
+:root:not([data-theme="dark"]) .hills path:last-of-type{fill:#B6BDBB}
+:root:not([data-theme="dark"]) .mist{background:radial-gradient(60% 50% at 30% 50%,rgba(255,255,255,.55),transparent 70%),radial-gradient(50% 50% at 75% 50%,rgba(255,250,240,.5),transparent 70%)}
+:root:not([data-theme="dark"]) .water{background:radial-gradient(120% 60% at 84% 0%,rgba(255,230,200,.35),transparent 60%),linear-gradient(rgba(255,255,255,.25),transparent 40%)}
+:root:not([data-theme="dark"]) .water::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.6) 30%,rgba(255,255,255,.7) 80%,transparent)}
+:root:not([data-theme="dark"]) .glint{fill:rgba(255,255,255,.75)}
+:root:not([data-theme="dark"]) .hills #pg stop:first-child{stop-color:#7FA286}
+:root:not([data-theme="dark"]) .hills #pg stop:last-child{stop-color:#5C8068}
+:root:not([data-theme="dark"]) .pad{opacity:.85}
+:root:not([data-theme="dark"]) .lotus:not(.new):not(.sel) img:first-child{animation:none;filter:drop-shadow(0 3px 5px rgba(90,70,55,.18))}
+:root:not([data-theme="dark"]) .lotus.sel img:first-child{filter:drop-shadow(0 0 8px rgba(255,200,150,.8)) drop-shadow(0 2px 4px rgba(90,70,55,.15))}
+:root:not([data-theme="dark"]) .lotus .refl{opacity:.28}
+:root:not([data-theme="dark"]) .lotus .rip{border-color:rgba(70,95,100,.28)}
+:root:not([data-theme="dark"]) .lotus.add svg path:first-child{fill:rgba(255,255,255,.3);stroke:rgba(110,88,66,.6)}
+:root:not([data-theme="dark"]) .lotus.add svg circle{fill:rgba(255,255,255,.55);stroke:rgba(110,88,66,.7)}
+:root:not([data-theme="dark"]) .lotus.add svg path:last-child{stroke:#6E5A46}
+:root:not([data-theme="dark"]) .pond-cap .ink{color:#3A322A;text-shadow:0 0 14px rgba(255,255,255,.7)}
+:root:not([data-theme="dark"]) .pond-cap .hint,:root:not([data-theme="dark"]) .pond-cap .sub,:root:not([data-theme="dark"]) .pond-empty,:root:not([data-theme="dark"]) .pond-more{color:#6B6357}
+:root:not([data-theme="dark"]) .pond-cap .link{color:#9A5536}
+}
+:root[data-theme="light"] .pond{background:linear-gradient(#F7E6D3 0%,#F2DDCB 18%,#EADBD2 33%,#D6E0DD 35%,#C6D6D3 72%,#B7CAC8 100%)}
+:root[data-theme="light"] .pond-sky{opacity:0}
+:root[data-theme="light"] .moon{right:10%;top:10%;width:11%;background:radial-gradient(circle,#FFF8EA 0%,#FBD9B4 55%,rgba(251,217,180,0) 72%);box-shadow:0 0 60px 22px rgba(255,214,170,.35)}
+:root[data-theme="light"] .hills path:first-of-type{fill:#C9C6C3;opacity:.85}
+:root[data-theme="light"] .hills path:last-of-type{fill:#B6BDBB}
+:root[data-theme="light"] .mist{background:radial-gradient(60% 50% at 30% 50%,rgba(255,255,255,.55),transparent 70%),radial-gradient(50% 50% at 75% 50%,rgba(255,250,240,.5),transparent 70%)}
+:root[data-theme="light"] .water{background:radial-gradient(120% 60% at 84% 0%,rgba(255,230,200,.35),transparent 60%),linear-gradient(rgba(255,255,255,.25),transparent 40%)}
+:root[data-theme="light"] .water::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.6) 30%,rgba(255,255,255,.7) 80%,transparent)}
+:root[data-theme="light"] .glint{fill:rgba(255,255,255,.75)}
+:root[data-theme="light"] .hills #pg stop:first-child{stop-color:#7FA286}
+:root[data-theme="light"] .hills #pg stop:last-child{stop-color:#5C8068}
+:root[data-theme="light"] .pad{opacity:.85}
+:root[data-theme="light"] .lotus:not(.new):not(.sel) img:first-child{animation:none;filter:drop-shadow(0 3px 5px rgba(90,70,55,.18))}
+:root[data-theme="light"] .lotus.sel img:first-child{filter:drop-shadow(0 0 8px rgba(255,200,150,.8)) drop-shadow(0 2px 4px rgba(90,70,55,.15))}
+:root[data-theme="light"] .lotus .refl{opacity:.28}
+:root[data-theme="light"] .lotus .rip{border-color:rgba(70,95,100,.28)}
+:root[data-theme="light"] .lotus.add svg path:first-child{fill:rgba(255,255,255,.3);stroke:rgba(110,88,66,.6)}
+:root[data-theme="light"] .lotus.add svg circle{fill:rgba(255,255,255,.55);stroke:rgba(110,88,66,.7)}
+:root[data-theme="light"] .lotus.add svg path:last-child{stroke:#6E5A46}
+:root[data-theme="light"] .pond-cap .ink{color:#3A322A;text-shadow:0 0 14px rgba(255,255,255,.7)}
+:root[data-theme="light"] .pond-cap .hint,:root[data-theme="light"] .pond-cap .sub,:root[data-theme="light"] .pond-empty,:root[data-theme="light"] .pond-more{color:#6B6357}
+:root[data-theme="light"] .pond-cap .link{color:#9A5536}
+
 .pond-more{position:absolute;left:14px;bottom:10px;font-size:11px;color:#C9C3B4;opacity:.8;pointer-events:none}
 body.kb nav,body.kb .breath{display:none}
 body:has(#view-today[hidden]) .breath{display:none}
