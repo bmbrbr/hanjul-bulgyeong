@@ -77,6 +77,8 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .item .d .link{font-size:12px;padding:0}
 .pond-empty{top:66%!important;pointer-events:none}
 .pond{margin-bottom:22px}
+body.kb nav,body.kb .breath{display:none}
+body.kb .app{padding-bottom:40vh}
 .pay-test{margin:0;font-size:12px;color:var(--seal);background:var(--seal-bg);border-radius:8px;padding:6px 10px}
 .pay-step{display:flex;flex-direction:column;gap:10px}
 .pay-opts{display:flex;flex-direction:column;gap:8px}
@@ -1036,6 +1038,12 @@ function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");a
   clearTimeout(shineT1);clearTimeout(shineT2);
   shineT1=setTimeout(()=>{void ar.offsetWidth;ar.classList.add("shine");md.hidden=false;void md.offsetWidth;md.classList.add("show")},RM?0:650);
   shineT2=setTimeout(()=>{if($("view-today").hidden)return;const y=$("done").getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:Math.max(0,y),behavior:RM?"auto":"smooth"})},RM?400:4600)}
+/* ---------- 입력창과 키보드 ---------- */
+const isField=el=>el&&el!==typer&&(el.tagName==="INPUT"||el.tagName==="TEXTAREA");
+function keepInView(el){[60,350,700].forEach(t=>setTimeout(()=>{if(document.activeElement===el)el.scrollIntoView({block:"center",behavior:t===60?"auto":"smooth"})},t))}
+document.addEventListener("focusin",e=>{if(isField(e.target)){document.body.classList.add("kb");keepInView(e.target)}});
+document.addEventListener("focusout",e=>{if(isField(e.target))setTimeout(()=>{if(!isField(document.activeElement))document.body.classList.remove("kb")},120)});
+if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const a=document.activeElement;if(isField(a))a.scrollIntoView({block:"center"})});
 /* ---------- 결제 (테스트) ---------- */
 const PRODUCTS={lotus1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1100,n:1},lotus5:{t:"연꽃 등 5개",s:"20% 할인 · 가족의 바람까지 함께",p:4400,o:5500,n:5},noads:{t:"광고 없애기",s:"한 번 구매로 평생, 광고 없이",p:5000}};
 const METHODS=["간편결제","카드","휴대폰"];let payKind="",payPick="",payMethod="간편결제",payDone=null;
@@ -1081,7 +1089,7 @@ function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)
     c.style.animation="none";void c.offsetWidth;c.style.animation="";
     const it=$("wish-list").querySelector('[data-gi="'+gi+'"]');if(it){it.classList.remove("hl");void it.offsetWidth;it.classList.add("hl")}
     const ce=$("cap-edit");if(ce)ce.addEventListener("click",ev=>{ev.stopPropagation();editIdx=gi;renderWishList();const f=$("wedit-in");if(f){f.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>{f.focus({preventScroll:true});f.setSelectionRange(f.value.length,f.value.length)},350)}})}));
-  const ad=$("lotuses").querySelector(".lotus.add");if(ad)ad.addEventListener("click",()=>{$("wish-in").focus({preventScroll:true});document.querySelector(".wish-form").scrollIntoView({behavior:"smooth",block:"center"})});
+  const ad=$("lotuses").querySelector(".lotus.add");if(ad)ad.addEventListener("click",()=>{const f=$("wish-in");f.focus();keepInView(f)});
   {const c=$("pond-cap");if(n){c.innerHTML="<span>"+(fresh?"새 연꽃 등이 떠올랐어요":"등을 누르면 담긴 바람이 보여요")+"</span>";c.hidden=false}else c.hidden=true}
   renderWishList()}
 let editIdx=-1;
