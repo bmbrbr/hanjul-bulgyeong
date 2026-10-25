@@ -48,12 +48,12 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 @keyframes donein{0%{opacity:0;filter:blur(6px);transform:translateY(6px)}100%{opacity:1;filter:blur(0);transform:none}}
 .art{position:relative;width:min(230px,60vw);aspect-ratio:560/613;max-width:100%;background:var(--art-bg);border-radius:16px;box-shadow:0 0 0 8px var(--art-bg)}
 .art img{position:absolute;inset:0;width:100%;height:100%;display:block}
-.pond{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:16px;overflow:hidden;background:linear-gradient(#10162A 0%,#1A2240 50%,#202B4C 52%,#141B30 78%,#0E1424 100%)}
-.pond-sky{position:absolute;inset:0 0 48% 0;background-image:radial-gradient(1.5px 1.5px at 12% 18%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 28% 9%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 46% 26%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 58% 12%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 88% 30%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 8% 38%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 37% 40%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 66% 34%,#FFF6DC 50%,transparent 51%);opacity:.8}
-.moon{position:absolute;right:15%;top:10%;width:12%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#FFF6DE 0%,#F3E1AE 58%,rgba(243,225,174,0) 72%);box-shadow:0 0 50px 14px rgba(255,236,190,.16)}
-.water{position:absolute;left:0;right:0;top:51%;bottom:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.03) 0 1px,transparent 1px 10px)}
+.pond{position:relative;aspect-ratio:1/1;max-width:100%;border-radius:16px;overflow:hidden;background:linear-gradient(#10162A 0%,#1A2240 33%,#202B4C 35%,#141B30 74%,#0E1424 100%)}
+.pond-sky{position:absolute;inset:0 0 66% 0;background-image:radial-gradient(1.5px 1.5px at 12% 18%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 28% 9%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 46% 26%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 58% 12%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 88% 30%,#FFF6DC 50%,transparent 51%),radial-gradient(1.5px 1.5px at 8% 38%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 37% 40%,#FFF6DC 50%,transparent 51%),radial-gradient(1px 1px at 66% 34%,#FFF6DC 50%,transparent 51%);opacity:.8}
+.moon{position:absolute;right:9%;top:9%;width:9%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#FFF6DE 0%,#F3E1AE 58%,rgba(243,225,174,0) 72%);box-shadow:0 0 50px 14px rgba(255,236,190,.16)}
+.water{position:absolute;left:0;right:0;top:34%;bottom:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.03) 0 1px,transparent 1px 10px)}
 .water::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:rgba(255,236,190,.18)}
-.water::after{content:"";position:absolute;right:17%;top:0;width:10%;height:55%;background:linear-gradient(rgba(255,236,190,.22),transparent);filter:blur(5px);animation:shimmer 6s ease-in-out infinite}
+.water::after{content:"";position:absolute;right:10%;top:0;width:8%;height:55%;background:linear-gradient(rgba(255,236,190,.22),transparent);filter:blur(5px);animation:shimmer 6s ease-in-out infinite}
 @keyframes shimmer{0%,100%{opacity:.7;transform:scaleX(1)}50%{opacity:1;transform:scaleX(1.35)}}
 .lotuses{position:absolute;inset:0}
 .lotus{position:absolute;transform:translate(-50%,-100%);background:none;border:0;padding:0;cursor:pointer}
@@ -75,7 +75,7 @@ header{display:flex;flex-direction:column;gap:2px;padding-block:4px 4px;padding-
 .wedit{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .wedit .field{flex:1 1 180px;min-width:0}
 .item .d .link{font-size:12px;padding:0}
-.pond-empty{top:66%!important;pointer-events:none}
+.pond-empty{top:56%!important;pointer-events:none}
 .pond{margin-bottom:22px}
 .pond-more{position:absolute;left:14px;bottom:10px;font-size:11px;color:#C9C3B4;opacity:.8;pointer-events:none}
 body.kb nav,body.kb .breath{display:none}
@@ -103,8 +103,13 @@ body.kb .app{padding-bottom:40vh}
 .adbar{display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px 14px;border:1px dashed var(--line);border-radius:10px;font-size:13px;color:var(--ink-2)}
 .ad-tag{font-size:11px;border:1px solid var(--line);border-radius:4px;padding:1px 5px;flex:none}
 .ad-tx{flex:1;min-width:0}
-.pond-cap{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;top:36%;max-width:86%;box-sizing:border-box;display:flex;align-items:center;gap:10px;background:rgba(10,14,28,.6);color:#F3E9CF;font-size:13px;padding:7px 14px;border-radius:999px;border:1px solid rgba(243,225,174,.25);animation:capin .5s ease both}
-.pond-cap .link{color:#F3E1AE;font-size:12px;white-space:nowrap}
+.pond-cap{position:absolute;left:0;right:0;top:0;height:34%;padding:0 22%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;pointer-events:none}
+.pond-cap .hint{font-size:12px;color:#C9C3B4;opacity:.7;letter-spacing:.5px;animation:capin .8s ease both}
+.pond-cap .ink{font-family:var(--f-verse);font-size:18px;line-height:1.5;color:#F6ECD2;word-break:keep-all;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 0 14px rgba(255,226,170,.35)}
+.pond-cap .ink span{display:inline-block;animation:inkin 1.6s cubic-bezier(.2,.6,.3,1) both}
+.pond-cap .sub{font-size:11px;color:#C9C3B4;display:flex;gap:10px;align-items:center;animation:capin 1s ease both;animation-delay:var(--sd,1s);pointer-events:auto}
+@keyframes inkin{0%{opacity:0;filter:blur(9px);transform:scale(1.35)}45%{opacity:.75;filter:blur(3px)}100%{opacity:1;filter:blur(0);transform:none}}
+.pond-cap .link{color:#F3E1AE;font-size:11px;white-space:nowrap;padding:4px 2px}
 @keyframes capin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .item.hl{animation:hl 2.2s ease}
 @keyframes hl{0%,40%{background:var(--seal-bg)}100%{background:transparent}}
@@ -1079,20 +1084,23 @@ const canEdit=x=>!!x.w&&(x.at?Date.now()-x.at<EDIT_MS:x.d===TODAY);
 const PSLOT=[[50,93,27],[23,85,21],[77,87,22],[38,75,17],[63,73,17],[14,69,13],[86,71,14],[50,65,12],[30,62,11],[70,62,11],[90,60,10],[10,60,10]];
 function lanLabel(x){const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
   return x.w?{t:"발원 · "+x.w,d:md}:{t:(JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"+(x.to?" · "+x.to:""),d:md}}
+const PY=y=>34+(y-51)*66/49;
+function inkCap(x){const c=$("pond-cap"),t=x.w||((JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"),ch=t.split(/\s+/).filter(Boolean),sd=Math.min(1.3+ch.length*.18,3);
+  const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
+  c.innerHTML='<div class="ink" aria-label="'+esc(t)+'">'+ch.map((q,i)=>'<span style="animation-delay:'+(i*.18).toFixed(2)+'s">'+esc(q)+"</span>").join(" ")+'</div><div class="sub" style="--sd:'+sd.toFixed(1)+'s"><span>'+(x.w?"발원":"회향")+(md?" · "+md:"")+"</span>"+(canEdit(x)?'<button class="link" id="cap-edit">고치기</button>':"")+"</div>";c.hidden=false}
 function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)),n=L.length;
   $("pond-empty").hidden=n>0;{const m=mem.lan.length-n,e=$("pond-more");e.hidden=m<=0;e.textContent="지난 연꽃 "+m+"송이는 아래 목록에 있어요"}
   const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]}));if(ph){const q=PSLOT[n];items.push({add:true,slot:[q[0],q[1]+(q[2]<16?3:0),Math.max(q[2],16)]})}items.sort((a,b)=>a.slot[1]-b.slot[1]);
-  $("lotuses").innerHTML=items.map(o=>{const st='left:'+o.slot[0]+'%;top:'+o.slot[1]+'%;width:'+o.slot[2]+'%;';
+  $("lotuses").innerHTML=items.map(o=>{const st='left:'+o.slot[0]+'%;top:'+PY(o.slot[1]).toFixed(1)+'%;width:'+o.slot[2]+'%;';
     if(o.add)return '<button class="lotus add" style="'+st+'" aria-label="새 바람 띄우기"><span class="lo">'+ADD_SVG+'</span></button>';
     const lb=lanLabel(o.x);return '<button class="lotus'+(fresh&&o.k===n-1?" new":"")+'" data-k="'+o.k+'" style="'+st+'--d:'+(4.2+(o.k*7%5)*0.5).toFixed(1)+'s;--g:'+(3+(o.k*3%4)*0.6).toFixed(1)+'s" aria-label="'+esc(lb.t)+'"><span class="lo"><img src="'+LOTUS+'" alt=""><img class="refl" src="'+LOTUS+'" alt=""></span></button>'}).join("");
   $("lotuses").querySelectorAll(".lotus:not(.add)").forEach(b=>b.addEventListener("click",()=>{$("lotuses").querySelectorAll(".lotus").forEach(x=>x.classList.toggle("sel",x===b));
-    const lb=lanLabel(L[+b.dataset.k]);const k=+b.dataset.k,x=L[k],gi=mem.lan.indexOf(x),c=$("pond-cap");
-    c.innerHTML='<span>'+esc(lb.t)+" · "+esc(lb.d)+"</span>"+(canEdit(x)?'<button class="link" id="cap-edit">고치기</button>':"");c.hidden=false;
-    c.style.animation="none";void c.offsetWidth;c.style.animation="";
+    const k=+b.dataset.k,x=L[k],gi=mem.lan.indexOf(x);inkCap(x);
     const it=$("wish-list").querySelector('[data-gi="'+gi+'"]');if(it){it.classList.remove("hl");void it.offsetWidth;it.classList.add("hl")}
-    const ce=$("cap-edit");if(ce)ce.addEventListener("click",ev=>{ev.stopPropagation();editIdx=gi;renderWishList();const f=$("wedit-in");if(f){f.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>{f.focus({preventScroll:true});f.setSelectionRange(f.value.length,f.value.length)},350)}})}));
+    bindCapEdit(gi)}));
+  function bindCapEdit(gi){const ce=$("cap-edit");if(ce)ce.addEventListener("click",ev=>{ev.stopPropagation();editIdx=gi;renderWishList();const f=$("wedit-in");if(f){f.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>{f.focus({preventScroll:true});f.setSelectionRange(f.value.length,f.value.length)},350)}})}
   const ad=$("lotuses").querySelector(".lotus.add");if(ad)ad.addEventListener("click",()=>{const f=$("wish-in");f.focus();keepInView(f)});
-  {const c=$("pond-cap");if(n){c.innerHTML="<span>"+(fresh?"새 연꽃 등이 떠올랐어요":"등을 누르면 담긴 바람이 보여요")+"</span>";c.hidden=false}else c.hidden=true}
+  {const c=$("pond-cap");if(!n)c.hidden=true;else if(fresh){const x=L[n-1];$("lotuses").querySelector('.lotus[data-k="'+(n-1)+'"]').classList.add("sel");setTimeout(()=>{inkCap(x);bindCapEdit(mem.lan.indexOf(x))},1400)}else{c.innerHTML='<div class="hint">연꽃을 누르면 담긴 바람이 보여요</div>';c.hidden=false}}
   renderWishList()}
 let editIdx=-1;
 function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
