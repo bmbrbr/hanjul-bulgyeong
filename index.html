@@ -106,7 +106,10 @@ body.kb .app{padding-bottom:40vh}
 .pond-cap{position:absolute;left:0;right:0;top:0;height:34%;padding:0 22%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;pointer-events:none}
 .pond-cap .hint{font-size:12px;color:#C9C3B4;opacity:.7;letter-spacing:.5px;animation:capin .8s ease both}
 .pond-cap .ink{font-family:var(--f-verse);font-size:18px;line-height:1.5;color:#F6ECD2;word-break:keep-all;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 0 14px rgba(255,226,170,.35)}
-.pond-cap .ink span{display:inline-block;animation:inkin 1.6s cubic-bezier(.2,.6,.3,1) both}
+.wish-form{position:relative}
+.wcount{display:block;text-align:right;font-size:11px;color:var(--ink-2);margin:4px 2px 0;min-height:1em;font-variant-numeric:tabular-nums}
+.pond-cap .ink.m{font-size:16px}.pond-cap .ink.s{font-size:14px;-webkit-line-clamp:3}
+.pond-cap .ink span{display:inline-block;max-width:100%;overflow-wrap:anywhere;animation:inkin 1.6s cubic-bezier(.2,.6,.3,1) both}
 .pond-cap .sub{font-size:11px;color:#C9C3B4;display:flex;gap:10px;align-items:center;animation:capin 1s ease both;animation-delay:var(--sd,1s);pointer-events:auto}
 @keyframes inkin{0%{opacity:0;filter:blur(9px);transform:scale(1.35)}45%{opacity:.75;filter:blur(3px)}100%{opacity:1;filter:blur(0);transform:none}}
 .pond-cap .link{color:#F3E1AE;font-size:11px;white-space:nowrap;padding:4px 2px}
@@ -443,7 +446,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <h2>발원하기</h2>
         <p>마음에 품은 바람을 적고 연꽃 등을 띄워요. 여정을 마칠 때도 회향 등이 하나씩 떠올라요.</p>
         <label for="wish-in" class="sr">바람</label>
-        <input class="field" id="wish-in" type="text" maxlength="40" placeholder="가족 모두 건강하기를" autocomplete="off">
+        <input class="field" id="wish-in" type="text" maxlength="30" placeholder="가족 모두 건강하기를" autocomplete="off"><span class="wcount" id="wish-count" aria-live="polite"></span>
         <p class="err" id="wish-err" hidden>바람을 한 줄 적어 주세요.</p>
         <div class="row"><button class="btn solid" id="wish-go">연꽃 등 띄우기</button><span class="saved" id="wish-msg" hidden>등을 띄웠어요</span></div>
       </div>
@@ -1087,7 +1090,7 @@ function lanLabel(x){const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"�
 const PY=y=>34+(y-51)*66/49;
 function inkCap(x){const c=$("pond-cap"),t=x.w||((JOURNEYS[x.j]?JOURNEYS[x.j].name:"여정")+" 회향"),ch=t.split(/\s+/).filter(Boolean),sd=Math.min(1.3+ch.length*.18,3);
   const md=x.d?(+x.d.slice(5,7))+"월 "+(+x.d.slice(8,10))+"일":"";
-  c.innerHTML='<div class="ink" aria-label="'+esc(t)+'">'+ch.map((q,i)=>'<span style="animation-delay:'+(i*.18).toFixed(2)+'s">'+esc(q)+"</span>").join(" ")+'</div><div class="sub" style="--sd:'+sd.toFixed(1)+'s"><span>'+(x.w?"발원":"회향")+(md?" · "+md:"")+"</span>"+(canEdit(x)?'<button class="link" id="cap-edit">고치기</button>':"")+"</div>";c.hidden=false}
+  const sz=t.length>20?" s":t.length>12?" m":"";c.innerHTML='<div class="ink'+sz+'" aria-label="'+esc(t)+'">'+ch.map((q,i)=>'<span style="animation-delay:'+(i*.18).toFixed(2)+'s">'+esc(q)+"</span>").join(" ")+'</div><div class="sub" style="--sd:'+sd.toFixed(1)+'s"><span>'+(x.w?"발원":"회향")+(md?" · "+md:"")+"</span>"+(canEdit(x)?'<button class="link" id="cap-edit">고치기</button>':"")+"</div>";c.hidden=false}
 function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)),n=L.length;
   $("pond-empty").hidden=n>0;{const m=mem.lan.length-n,e=$("pond-more");e.hidden=m<=0;e.textContent="지난 연꽃 "+m+"송이는 아래 목록에 있어요"}
   const items=L.map((x,k)=>({x,k,slot:PSLOT[n-1-k]}));if(ph){const q=PSLOT[n];items.push({add:true,slot:[q[0],q[1]+(q[2]<16?3:0),Math.max(q[2],16)]})}items.sort((a,b)=>a.slot[1]-b.slot[1]);
@@ -1105,7 +1108,7 @@ function renderPond(fresh){const ph=!PAID?1:0,L=mem.lan.slice(-(PSLOT.length-ph)
 let editIdx=-1;
 function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
   $("wish-list").innerHTML=all.map(({x,i})=>{const lb=lanLabel(x),ed=canEdit(x);
-    if(i===editIdx&&ed)return '<article class="item"><div class="d"><span>'+esc(lb.d)+'</span><span>발원 고치기</span></div><div class="wedit"><input class="field" id="wedit-in" maxlength="40" value="'+esc(x.w)+'" aria-label="바람 고치기"><button class="btn solid" data-save="'+i+'">저장</button><button class="btn" data-cancel="1">취소</button></div></article>';
+    if(i===editIdx&&ed)return '<article class="item"><div class="d"><span>'+esc(lb.d)+'</span><span>발원 고치기</span></div><div class="wedit"><input class="field" id="wedit-in" maxlength="30" value="'+esc(x.w)+'" aria-label="바람 고치기"><button class="btn solid" data-save="'+i+'">저장</button><button class="btn" data-cancel="1">취소</button></div></article>';
     const left=ed&&x.at?Math.max(1,Math.ceil((EDIT_MS-(Date.now()-x.at))/36e5)):0;
     return '<article class="item" data-gi="'+i+'"><div class="d"><span>'+esc(lb.d)+(ed?' · '+(left?left+"시간 동안 고칠 수 있어요":"오늘까지 고칠 수 있어요"):"")+'</span><span>'+(ed?'<button class="link" data-edit="'+i+'">고치기</button>':(x.w?"발원":"회향"))+'</span></div><p class="v">'+esc(x.w||lb.t)+"</p></article>"}).join("");
   $("wish-list").querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>{editIdx=+b.dataset.edit;renderWishList();const f=$("wedit-in");if(f){f.focus();f.setSelectionRange(f.value.length,f.value.length)}}));
@@ -1114,14 +1117,15 @@ function renderWishList(){const all=mem.lan.map((x,i)=>({x,i})).reverse();
     if(!v||!canEdit(x)){editIdx=-1;renderWishList();return}x.w=v;persist();editIdx=-1;renderPond(false)}))}
 function showWish(fresh){document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.view==="wish")));
   ["today","record","wish","sound"].forEach(v=>$("view-"+v).hidden=v!=="wish");$("view-start").hidden=true;renderPond(fresh);window.scrollTo(0,0)}
-function launchWish(v){mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();updWishBtn();$("wish-in").value="";$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
+function launchWish(v){mem.lan.push({w:v,d:TODAY,at:Date.now()});persist();updWishBtn();$("wish-in").value="";updCount();$("wish-msg").hidden=false;setTimeout(()=>{$("wish-msg").hidden=true},2500);renderPond(true);
   try{const c=ac();if(c)bell(c,528,0.07,4)}catch(_){}$("pond").scrollIntoView({behavior:"smooth",block:"start"})}
-function updWishBtn(){const b=$("wish-go");b.textContent=!mem.freeUsed?"연꽃 등 띄우기 · 첫 등은 무료":mem.credits>0?"연꽃 등 띄우기 · 남은 등 "+mem.credits+"개":"연꽃 등 띄우기 · 1,100원"}
+function updCount(){const v=$("wish-in").value.length,e=$("wish-count");e.textContent=v?v+" / 30":""}
+function updWishBtn(){updCount();const b=$("wish-go");b.textContent=!mem.freeUsed?"연꽃 등 띄우기 · 첫 등은 무료":mem.credits>0?"연꽃 등 띄우기 · 남은 등 "+mem.credits+"개":"연꽃 등 띄우기 · 1,100원"}
 $("wish-go").addEventListener("click",()=>{const v=$("wish-in").value.trim();if(!v){$("wish-err").hidden=false;$("wish-in").focus();return}
   if(!mem.freeUsed){mem.freeUsed=true;launchWish(v);return}
   if(mem.credits>0){mem.credits--;launchWish(v);return}
   openPay("lotus",()=>{mem.credits--;launchWish(v)})});
-$("wish-in").addEventListener("input",()=>{$("wish-err").hidden=true});
+$("wish-in").addEventListener("input",()=>{$("wish-err").hidden=true;updCount()});
 $("finish-pond").addEventListener("click",()=>showWish(false));
 
 /* ---------- 여정 ---------- */
