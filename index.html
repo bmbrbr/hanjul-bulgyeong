@@ -270,11 +270,20 @@ body.kb .app{padding-bottom:40vh}
 .read-ui[hidden]{display:none}
 .mic{width:64px;height:64px;border-radius:50%;border:0;background:var(--seal);color:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(180,85,74,.3)}
 .mic svg{width:28px;height:28px}
+.mic{position:relative;transition:transform .2s ease}
+.mic:active{transform:scale(.94)}
 .mic.on{animation:micpulse 1.6s ease-in-out infinite}
+.mic.invite{animation:micbob 2.4s ease-in-out infinite}
+.mic.invite::before,.mic.invite::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--seal);opacity:0;animation:micring 2.4s ease-out infinite;pointer-events:none}
+.mic.invite::after{animation-delay:.8s}
+@keyframes micbob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.05)}}
+@keyframes micring{0%{opacity:.55;transform:scale(1)}100%{opacity:0;transform:scale(1.7)}}
+.read-tip{font-size:12px;color:var(--seal);background:var(--seal-bg);padding:4px 10px;border-radius:999px;animation:fadein .6s ease both}
+.read-tip[hidden]{display:none}
 @keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(180,85,74,.45)}50%{box-shadow:0 0 0 14px rgba(180,85,74,0)}}
 .read-st{margin:0;font-size:13px;color:var(--ink-2);text-align:center;min-height:1.4em}
 .read-done{font-size:13px}
-.paper.reading{cursor:default}
+.paper.reading{cursor:default;min-height:0;padding-bottom:32px}
 .item .md{font-size:11px;color:var(--seal);border:1px solid var(--seal);border-radius:4px;padding:0 5px;margin-left:6px}
 .under{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-2);padding-block:10px 0;font-variant-numeric:tabular-nums}
 .btn{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
@@ -513,6 +522,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
       <div class="read-ui" id="read-ui" hidden>
         <button class="mic" id="mic" aria-label="소리 내어 읽기 시작"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <span class="read-tip" id="read-tip" hidden>여기를 눌러 읽기를 시작해요</span>
         <p class="read-st" id="read-st" role="status">마이크를 누르고 소리 내어 읽어 보세요</p>
         <button class="link read-done" id="read-done" hidden>다 읽었어요</button>
       </div>
@@ -1304,13 +1314,14 @@ function applyMode(){const r=readMode()&&!finished;
   $("read-ui").hidden=!r;$("paper").classList.toggle("reading",r);
   if(r){typer.blur();typer.disabled=true;readP=0;readSim=0;heard="";heardInterim="";readTries=0;$("read-done").hidden=true;typeTimes=[];
     $("hint").textContent="소리 내어 읽으면 글자가 물들어요";
-    readStatus(SR?"마이크를 누르고 소리 내어 읽어 보세요":"이 브라우저에서는 음성 인식을 쓸 수 없어요. 크롬에서 열어 주세요.");$("mic").disabled=!SR}
+    readStatus(SR?"마이크를 누르고 소리 내어 읽어 보세요":"이 브라우저에서는 음성 인식을 쓸 수 없어요. 크롬에서 열어 주세요.");$("mic").disabled=!SR;
+    $("mic").classList.toggle("invite",!!SR);$("read-tip").hidden=!SR;if(SR)readStatus("")}
   else{stopRec(true);if(!finished)typer.disabled=false}}
 function onHeard(){const said=heard+" "+heardInterim,r=readProgress(said),now2=performance.now();
   if(r.sim>=0.55&&r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
   const tot=V.t.length;if(readP>=tot*0.97&&readSim>=0.7){readStatus("잘 읽었어요");complete();return}
   if(readP>=tot*0.5||performance.now()-readT0>20000)$("read-done").hidden=false}
-function startRec(){if(!SR||finished)return;
+function startRec(){if(!SR||finished)return;$("mic").classList.remove("invite");$("read-tip").hidden=true;
   try{rec=new SR();rec.lang="ko-KR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1}catch(e){readStatus("음성 인식을 시작하지 못했어요");return}
   rec.onresult=ev=>{let fin="",tmp="";for(let i=ev.resultIndex;i<ev.results.length;i++){const t=ev.results[i][0].transcript;if(ev.results[i].isFinal)fin+=t+" ";else tmp+=t}
     if(fin)heard+=" "+fin;heardInterim=tmp;onHeard()};
@@ -1329,7 +1340,7 @@ function stopRec(silent){recWant=false;if(rec&&recOn){try{rec.stop()}catch(e){}}
 $("mic").addEventListener("click",()=>{if(recOn)stopRec();else startRec()});
 $("read-done").addEventListener("click",()=>{if(finished)return;for(let i=0;i<V.t.length;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=performance.now();readP=V.t.length;paintRead();complete()});
 $("mode-sw").querySelectorAll("button").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();if(finished)return;const m=b.dataset.mode;if(mem.prefs.mode===m||(!mem.prefs.mode&&m==="type"))return;
-  mem.prefs.mode=m;persist();typer.value="";lastLen=0;typeTimes=[];applyMode();paint();if(m==="type")typer.focus()}));
+  mem.prefs.mode=m;persist();typer.value="";lastLen=0;typeTimes=[];applyMode();paint();if(m==="type")typer.focus();else setTimeout(()=>{const r=$("mic").getBoundingClientRect(),nb=document.querySelector("nav").getBoundingClientRect().height||0;if(r.bottom>innerHeight-nb-16||r.top<0)window.scrollTo({top:scrollY+r.bottom-(innerHeight-nb)+90,behavior:RM?"auto":"smooth"})},80)}));
 /* ---------- 입력창과 키보드 ---------- */
 const isField=el=>el&&el!==typer&&(el.tagName==="INPUT"||el.tagName==="TEXTAREA");
 function keepInView(el){[60,350,700].forEach(t=>setTimeout(()=>{if(document.activeElement===el)el.scrollIntoView({block:"center",behavior:t===60?"auto":"smooth"})},t))}
