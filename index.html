@@ -389,6 +389,18 @@ nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(
 .jcard span{font-size:13px;color:var(--ink-2)}
 .finish{border:1.5px solid var(--seal);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .finish .question{color:var(--seal)}
+.intro{position:fixed;inset:0;z-index:48;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:24px max(24px,env(safe-area-inset-left,0px)) calc(32px + env(safe-area-inset-bottom,0px));cursor:pointer}
+.intro[hidden]{display:none}
+.intro.out{opacity:0;transition:opacity .8s ease;pointer-events:none}
+.intro-skip{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:20px;font-size:13px;color:var(--ink-2)}
+.intro-slides{max-width:340px;min-height:240px;display:flex;align-items:center}
+.islide{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.islide[hidden]{display:none}
+.i-seal{width:64px;height:64px;border-radius:12px;background:var(--seal);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-size:32px;font-weight:700;transform:rotate(-4deg);animation:stamp .7s cubic-bezier(.2,1.4,.4,1) both}
+.i-t{margin:0;font-family:var(--f-verse);font-size:22px;line-height:1.5;word-break:keep-all;animation:inkin 1.6s ease .2s both}
+.i-s{margin:0;font-size:15px;line-height:1.75;color:var(--ink-2);word-break:keep-all;animation:fadein 1.2s ease .9s both}
+.intro-dots{display:flex;gap:8px}.intro-dots i{width:7px;height:7px;border-radius:50%;background:var(--ghost)}.intro-dots i.on{background:var(--seal)}
+.intro-go{min-width:200px;padding:12px 20px}
 .splash{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;
   padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:opacity 1.6s cubic-bezier(.4,0,.2,1) .5s}
 .splash.out{opacity:0;pointer-events:none}
@@ -423,6 +435,17 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 </head>
 <body>
 
+
+<div class="intro" id="intro" hidden role="dialog" aria-modal="true" aria-label="한줄 불경 소개">
+  <button class="link intro-skip" id="intro-skip">건너뛰기</button>
+  <div class="intro-slides" id="intro-slides">
+    <section class="islide"><div class="i-seal">經</div><h2 class="i-t">불경은 부처님의 말씀이에요</h2><p class="i-s">2,500년 전부터 전해 온, 마음을 다루는 오래된 지혜예요. 종교가 없어도 괜찮아요.</p></section>
+    <section class="islide" hidden><div class="i-seal">寫</div><h2 class="i-t">사경은 한 글자씩 옮겨 쓰는 수행이에요</h2><p class="i-s">잘 쓰는 것보다 한 글자에 마음을 모으는 게 중요해요. 소리 내어 읽는 독송도 함께할 수 있어요.</p></section>
+    <section class="islide" hidden><div class="i-seal">一</div><h2 class="i-t">하루 한 줄이면 충분해요</h2><p class="i-s">짧은 한 줄을 쓰고, 오늘의 마음을 한 줄 남겨요. 그렇게 하루가 조금 고요해져요.</p></section>
+  </div>
+  <div class="intro-dots" id="intro-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+  <button class="btn solid intro-go" id="intro-go">다음</button>
+</div>
 
 <div class="splash" id="splash" role="status" aria-label="한줄 불경을 여는 중">
   <div class="sp-in">
@@ -841,8 +864,8 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 
 
 const KEY="hanjul.v1";
-let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
-function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,intro:false,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
+function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.intro=!!d.intro;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}if(typeof schedPush==="function")schedPush()}
 
 const pad=n=>String(n).padStart(2,"0");
@@ -1264,9 +1287,9 @@ function applyMode(){const r=readMode()&&!finished;
     readStatus(SR?"마이크를 누르고 소리 내어 읽어 보세요":"이 브라우저에서는 음성 인식을 쓸 수 없어요. 크롬에서 열어 주세요.");$("mic").disabled=!SR}
   else{stopRec(true);if(!finished)typer.disabled=false}}
 function onHeard(){const said=heard+" "+heardInterim,r=readProgress(said),now2=performance.now();
-  if(r.sim>=0.35&&r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
-  const tot=V.t.length;if(readP>=tot*0.9&&readSim>=0.5){readStatus("잘 읽었어요");complete();return}
-  if(readP>=tot*0.3||performance.now()-readT0>12000)$("read-done").hidden=false}
+  if(r.sim>=0.55&&r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
+  const tot=V.t.length;if(readP>=tot*0.97&&readSim>=0.7){readStatus("잘 읽었어요");complete();return}
+  if(readP>=tot*0.5||performance.now()-readT0>20000)$("read-done").hidden=false}
 function startRec(){if(!SR||finished)return;
   try{rec=new SR();rec.lang="ko-KR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1}catch(e){readStatus("음성 인식을 시작하지 못했어요");return}
   rec.onresult=ev=>{let fin="",tmp="";for(let i=ev.resultIndex;i<ev.results.length;i++){const t=ev.results[i][0].transcript;if(ev.results[i].isFinal)fin+=t+" ";else tmp+=t}
@@ -1278,9 +1301,9 @@ function startRec(){if(!SR||finished)return;
     if(finished)return;
     if(recWant&&performance.now()-readT0<90000){try{rec.start();recOn=true;$("mic").classList.add("on");return}catch(e){}}
     recWant=false;readTries++;
-    if(readP>=V.t.length*0.6){readStatus("잘 읽었어요");complete();return}
+    if(readP>=V.t.length*0.85&&readSim>=0.65){readStatus("잘 읽었어요");complete();return}
     $("mic").setAttribute("aria-label","이어서 읽기");readStatus(readP>0?"이어서 읽으려면 마이크를 다시 눌러 주세요":"마이크를 누르고 소리 내어 읽어 보세요");
-    if(readP>0||readTries>=1)$("read-done").hidden=false};
+    if(readP>=V.t.length*0.5||readTries>=2)$("read-done").hidden=false};
   try{rec.start();recOn=true;recWant=true;if(!readT0||readP===0)readT0=performance.now();ac();$("mic").classList.add("on");$("mic").setAttribute("aria-label","읽기 멈추기");readStatus("듣고 있어요… 천천히 읽어 주세요")}catch(e){readStatus("음성 인식을 시작하지 못했어요")}}
 function stopRec(silent){recWant=false;if(rec&&recOn){try{rec.stop()}catch(e){}}recOn=false;$("mic").classList.remove("on");if(!silent&&!finished)readStatus("멈췄어요. 다시 누르면 이어서 읽어요")}
 $("mic").addEventListener("click",()=>{if(recOn)stopRec();else startRec()});
@@ -1472,7 +1495,7 @@ let devTaps=0,devT=null;
 $("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
 $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
 $("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
-$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.acct=null;mem.lp=0;mem.seen=false;renderAcct();persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart()});
+$("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.acct=null;mem.lp=0;mem.intro=false;mem.seen=false;renderAcct();persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart();if(window.dev_introReplay)dev_introReplay()});
 
 /* ---------- 시작 ---------- */
 load();
@@ -1487,6 +1510,14 @@ chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
 chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
 renderJourney();updWishBtn();renderAds();renderBuys();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
 renderRecord();
+(function(){if(mem.intro||mem.cur||Object.keys(mem.entries).length)return;
+  const I=$("intro"),sl=[...I.querySelectorAll(".islide")],dots=[...I.querySelectorAll(".intro-dots i")];let k=0;I.hidden=false;
+  const close=()=>{mem.intro=true;persist();I.classList.add("out");setTimeout(()=>{I.hidden=true},800)};
+  const show=n=>{k=n;sl.forEach((x,i)=>x.hidden=i!==k);dots.forEach((d,i)=>d.classList.toggle("on",i===k));$("intro-go").textContent=k===sl.length-1?"시작하기":"다음"};
+  const next=()=>{if(k<sl.length-1)show(k+1);else close()};
+  I.addEventListener("click",e=>{if(e.target.id==="intro-skip"){close();return}next()});
+  window.dev_introReplay=()=>{mem.intro=false;I.classList.remove("out");I.hidden=false;show(0)};
+})();
 (function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
   $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 사경 중이에요":"오늘도 한 줄, 천천히";
   const min=RM?800:first?5600:4800;let gone=false;document.body.classList.add("entering");
