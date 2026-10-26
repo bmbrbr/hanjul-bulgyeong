@@ -256,6 +256,20 @@ body.kb .app{padding-bottom:40vh}
   writing-mode:vertical-rl;letter-spacing:2px;transform:rotate(-6deg)}
 .seal.stamp{animation:stamp .5s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes stamp{0%{opacity:0;transform:scale(2.2) rotate(-14deg)}100%{opacity:1;transform:scale(1) rotate(-6deg)}}
+.mode-sw{position:absolute;top:8px;right:10px;display:flex;background:var(--paper);border-radius:999px;padding:2px;gap:2px;z-index:2}
+.mode-sw button{font:inherit;font-size:12px;border:0;background:none;color:var(--ink-2);padding:4px 11px;border-radius:999px;cursor:pointer}
+.mode-sw button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.mode-sw[hidden]{display:none}
+.read-ui{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:16px}
+.read-ui[hidden]{display:none}
+.mic{width:64px;height:64px;border-radius:50%;border:0;background:var(--seal);color:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(180,85,74,.3)}
+.mic svg{width:28px;height:28px}
+.mic.on{animation:micpulse 1.6s ease-in-out infinite}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(180,85,74,.45)}50%{box-shadow:0 0 0 14px rgba(180,85,74,0)}}
+.read-st{margin:0;font-size:13px;color:var(--ink-2);text-align:center;min-height:1.4em}
+.read-done{font-size:13px}
+.paper.reading{cursor:default}
+.item .md{font-size:11px;color:var(--seal);border:1px solid var(--seal);border-radius:4px;padding:0 5px;margin-left:6px}
 .under{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-2);padding-block:10px 0;font-variant-numeric:tabular-nums}
 .btn{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
 .btn:hover{border-color:var(--ink-2)}
@@ -463,9 +477,15 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
       <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><button class="today-prog" id="today-prog" hidden></button><span id="meta-right">오늘의 한 줄</span></div>
       <div class="paper" id="paper">
+        <div class="mode-sw" id="mode-sw" role="group" aria-label="사경 방법"><button data-mode="type" aria-pressed="true">쓰기</button><button data-mode="read" aria-pressed="false">읽기</button></div>
         <p class="verse" id="verse" aria-live="off"></p>
         <textarea id="typer" aria-label="구절 따라 쓰기" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         <div class="seal" id="seal" hidden>寫經</div>
+      </div>
+      <div class="read-ui" id="read-ui" hidden>
+        <button class="mic" id="mic" aria-label="소리 내어 읽기 시작"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <p class="read-st" id="read-st" role="status">마이크를 누르고 소리 내어 읽어 보세요</p>
+        <button class="link read-done" id="read-done" hidden>다 읽었어요</button>
       </div>
       <div class="under">
         <span id="hint" title="띄어쓰기는 안 쳐도 돼요">종이를 눌러 한 글자씩 따라 써 보세요</span>
@@ -928,7 +948,7 @@ function align(typed){const T=V.t,st=new Array(T.length).fill("g"),tpos=[],inv={
     if(ti>=T.length){tpos[ui]=T.length;continue}
     st[ti]=u===T[ti]?"i":"w";inv[ti]=ui;tpos[ui]=ti;ti++}
   return {st,tpos,inv,end:ti}}
-function paint(){const target=V.t,typed=finished?target:typer.value;let html="";
+function paint(){if(readMode()&&!finished)return paintRead();const target=V.t,typed=finished?target:typer.value;let html="";
   const A=align(typed);
   const focused=!finished&&document.activeElement===typer;
   const s=typer.selectionStart||0,e=typer.selectionEnd||0;
@@ -950,20 +970,20 @@ function onType(){if(finished)return;
     if(v!==typer.value)typer.value=v}
   if(typer.value.length!==lastLen){keySound();lastLen=typer.value.length}
   paint();recordTimes();const A=align(typer.value);if(A.end>=V.t.length&&!A.st.some(k=>k==="g"||k==="w"))complete()}
-function complete(){finished=true;typer.blur();typer.disabled=true;
+function complete(){finished=true;typer.blur();typer.disabled=true;$("read-ui").hidden=true;$("mode-sw").hidden=true;
   const e=mem.entries[EK()]||{},same=e.i===VI;
   let newLan=false;if(!same){mem.prog[mem.cur]=VI+1;if(mem.prog[mem.cur]>=JOURNEYS[mem.cur].items.length){mem.lan.push({j:mem.cur,to:(mem.ded[mem.cur]||"").trim(),d:TODAY});newLan=true}}
-  mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes()};persist();renderJourney();
+  mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes(),md:same&&e.md?e.md:(readMode()?"read":"type")};persist();renderJourney();stopRec(true);
   showDone(true);sealSound();renderRecord();renderPond(newLan);setTimeout(()=>{if(!$("view-today").hidden&&!todayTargets().some(id=>!mem.entries[TODAY+"#"+id]))maybeAskLogin()},RM?600:6200)}
 function showDone(animate){paint();$("monk").classList.add("gassho");if(animate)playShine();else{$("monk-done").hidden=false;$("monk-done").classList.remove("show")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
-  $("hint").textContent="오늘의 사경을 마쳤어요";$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
+  const isRead=(mem.entries[EK()]||{}).md==="read";$("hint").textContent=isRead?"오늘의 독송을 마쳤어요":"오늘의 사경을 마쳤어요";$("monk-done").textContent=isRead?"오늘의 독송을 마쳤어요":"오늘의 사경을 마쳤어요";$("seal").textContent=isRead?"讀誦":"寫經";$("again").textContent=isRead?"다시 읽기":"다시 쓰기";$("read-ui").hidden=true;$("mode-sw").hidden=true;$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";renderNext(animate);renderTodayProg();
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
     $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 쌓여, 발원 연못에 회향 연꽃 등 하나가 떠올랐어요."}}
 function reset(){typeTimes=[];finished=false;$("monk-done").hidden=true;clearTimeout(shineT1);clearTimeout(shineT2);document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
-  $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint();typer.focus()}
+  $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";$("mode-sw").hidden=false;applyMode();if(readMode())paint();else{paint();typer.focus()}}
 
 typer.addEventListener("compositionstart",()=>{composing=true});
 typer.addEventListener("compositionend",()=>{composing=false;onType()});
@@ -974,8 +994,8 @@ typer.addEventListener("focus",()=>{ac();paint()});
 typer.addEventListener("blur",paint);
 ["keyup","select","selectionchange"].forEach(ev=>typer.addEventListener(ev,()=>{if(!finished)paint()}));
 document.addEventListener("selectionchange",()=>{if(!finished&&document.activeElement===typer)paint()});
-$("paper").addEventListener("mousedown",e=>{if(!finished&&document.activeElement===typer)e.preventDefault()});
-$("paper").addEventListener("click",e=>{if(finished)return;const sp=e.target.closest&&e.target.closest(".verse span[data-i]");
+$("paper").addEventListener("mousedown",e=>{if(e.target.closest&&e.target.closest(".mode-sw"))return;if(!finished&&document.activeElement===typer)e.preventDefault()});
+$("paper").addEventListener("click",e=>{if(finished||readMode())return;if(e.target.closest&&e.target.closest(".mode-sw"))return;const sp=e.target.closest&&e.target.closest(".verse span[data-i]");
   const len=typer.value.length;let a=len,b=len;
   if(sp){const i=+sp.dataset.i,A=align(typer.value),u=A.inv[i];if(u!=null){a=u;b=A.st[i]==="w"?u+1:u}}
   typer.focus({preventScroll:true});try{typer.setSelectionRange(a,b)}catch(_){}paint()});
@@ -999,7 +1019,7 @@ function renderRecord(){const keys=Object.keys(mem.entries).sort().reverse(),DS=
   if(!keys.length){$("list").innerHTML='<p class="emptytxt">아직 남긴 사경이 없어요. 오늘의 한 줄부터 시작해 보세요.</p>';return}
   $("list").innerHTML=keys.map(k=>{const e=mem.entries[k],p=k.slice(0,10).split("-"),dd=new Date(+p[0],+p[1]-1,+p[2]);
     const lab=e.j&&JOURNEYS[e.j]?JOURNEYS[e.j].name+" "+JOURNEYS[e.j].unit(e.i):"법구경 제"+e.n+"게";
-    return '<article class="item"><div class="d"><span>'+(+p[1])+"월 "+(+p[2])+"일 "+DOW[dd.getDay()]+"요일</span><span>"+lab+'</span></div><p class="v">'+esc(e.t)+'</p><p class="r">'+(e.r?esc(e.r):"느낀 점을 남기지 않았어요")+"</p></article>"}).join("")}
+    return '<article class="item"><div class="d"><span>'+(+p[1])+"월 "+(+p[2])+"일 "+DOW[dd.getDay()]+"요일</span><span>"+lab+(e.md==="read"?'<span class="md">독송</span>':"")+'</span></div><p class="v">'+esc(e.t)+'</p><p class="r">'+(e.r?esc(e.r):"느낀 점을 남기지 않았어요")+"</p></article>"}).join("")}
 $("prev").addEventListener("click",()=>{viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()-1,1);renderRecord()});
 $("next").addEventListener("click",()=>{viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()+1,1);renderRecord()});
 
@@ -1220,6 +1240,53 @@ $("login-go").addEventListener("click",()=>{if(REAL){persist();location.href=API
   mem.acct={name:"카카오 사용자",via:"kakao",at:Date.now(),test:true};persist();renderAcct();
   ["login-go","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;setTimeout(closeLogin,1600)});
 renderAcct();
+/* ---------- 읽기(독송) 모드 ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function readMode(){return mem.prefs.mode==="read"}
+let rec=null,recOn=false,recWant=false,heard="",heardInterim="",readP=0,readSim=0,readT0=0,readTries=0,readTimer=null;
+function jamo(str){const out=[],idx=[];[...str].forEach((ch,ci)=>{const c=ch.charCodeAt(0);
+  if(c>=0xAC00&&c<=0xD7A3){const x=c-0xAC00;out.push("L"+Math.floor(x/588),"V"+Math.floor(x%588/28));idx.push(ci,ci);if(x%28){out.push("T"+x%28);idx.push(ci)}}
+  else if(/[0-9a-zA-Z\u3131-\u318E]/.test(ch)){out.push(ch.toLowerCase());idx.push(ci)}});return {out,idx}}
+function readProgress(said){const T=V.t,A=jamo(T),B=jamo(said).out,m=A.out.length,n=B.length;if(!n||!m)return {p:0,sim:0};
+  let prev=new Array(n+1);for(let k=0;k<=n;k++)prev[k]=k;let best=prev[n],bj=0;
+  for(let j=1;j<=m;j++){const cur=new Array(n+1);cur[0]=j;const a=A.out[j-1];
+    for(let k=1;k<=n;k++){cur[k]=Math.min(prev[k]+1,cur[k-1]+1,prev[k-1]+(a===B[k-1]?0:1))}
+    if(cur[n]<=best){best=cur[n];bj=j}prev=cur}
+  const sim=bj?1-best/Math.max(bj,n):0;const p=bj?A.idx[bj-1]+1:0;return {p,sim}}
+function paintRead(){const T=V.t;let html="";for(let i=0;i<T.length;i++){let cls=i<readP?"c-ink":"c-ghost";if(V.hl&&i>=V.hs&&i<V.he)cls+=" c-hl";html+='<span data-i="'+i+'" class="'+cls+'">'+(T[i]===" "?" ":esc(T[i]))+"</span>"}
+  verseEl.innerHTML=html;const tot=[...T].filter(c=>c!==" ").length,ok=[...T.slice(0,readP)].filter(c=>c!==" ").length;$("count").textContent=ok+" / "+tot}
+function readStatus(t){$("read-st").textContent=t}
+function applyMode(){const r=readMode()&&!finished;
+  $("mode-sw").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===(readMode()?"read":"type"))));
+  $("read-ui").hidden=!r;$("paper").classList.toggle("reading",r);
+  if(r){typer.blur();typer.disabled=true;readP=0;readSim=0;heard="";heardInterim="";readTries=0;$("read-done").hidden=true;typeTimes=[];
+    $("hint").textContent="소리 내어 읽으면 글자가 물들어요";
+    readStatus(SR?"마이크를 누르고 소리 내어 읽어 보세요":"이 브라우저에서는 음성 인식을 쓸 수 없어요. 크롬에서 열어 주세요.");$("mic").disabled=!SR}
+  else{stopRec(true);if(!finished)typer.disabled=false}}
+function onHeard(){const said=heard+" "+heardInterim,r=readProgress(said),now2=performance.now();
+  if(r.sim>=0.35&&r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
+  const tot=V.t.length;if(readP>=tot*0.9&&readSim>=0.5){readStatus("잘 읽었어요");complete();return}
+  if(readP>=tot*0.3||performance.now()-readT0>12000)$("read-done").hidden=false}
+function startRec(){if(!SR||finished)return;
+  try{rec=new SR();rec.lang="ko-KR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1}catch(e){readStatus("음성 인식을 시작하지 못했어요");return}
+  rec.onresult=ev=>{let fin="",tmp="";for(let i=ev.resultIndex;i<ev.results.length;i++){const t=ev.results[i][0].transcript;if(ev.results[i].isFinal)fin+=t+" ";else tmp+=t}
+    if(fin)heard+=" "+fin;heardInterim=tmp;onHeard()};
+  rec.onerror=ev=>{if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){recWant=false;readStatus("마이크 권한이 필요해요. 브라우저 설정에서 마이크를 허용해 주세요.")}
+    else if(ev.error==="network"){recWant=false;readStatus("인터넷 연결이 필요해요")}
+    else if(ev.error==="no-speech")readStatus("잘 들리지 않았어요. 조금 더 크게 읽어 보세요")};
+  rec.onend=()=>{recOn=false;$("mic").classList.remove("on");heard+=" "+heardInterim;heardInterim="";
+    if(finished)return;
+    if(recWant&&performance.now()-readT0<90000){try{rec.start();recOn=true;$("mic").classList.add("on");return}catch(e){}}
+    recWant=false;readTries++;
+    if(readP>=V.t.length*0.6){readStatus("잘 읽었어요");complete();return}
+    $("mic").setAttribute("aria-label","이어서 읽기");readStatus(readP>0?"이어서 읽으려면 마이크를 다시 눌러 주세요":"마이크를 누르고 소리 내어 읽어 보세요");
+    if(readP>0||readTries>=1)$("read-done").hidden=false};
+  try{rec.start();recOn=true;recWant=true;if(!readT0||readP===0)readT0=performance.now();ac();$("mic").classList.add("on");$("mic").setAttribute("aria-label","읽기 멈추기");readStatus("듣고 있어요… 천천히 읽어 주세요")}catch(e){readStatus("음성 인식을 시작하지 못했어요")}}
+function stopRec(silent){recWant=false;if(rec&&recOn){try{rec.stop()}catch(e){}}recOn=false;$("mic").classList.remove("on");if(!silent&&!finished)readStatus("멈췄어요. 다시 누르면 이어서 읽어요")}
+$("mic").addEventListener("click",()=>{if(recOn)stopRec();else startRec()});
+$("read-done").addEventListener("click",()=>{if(finished)return;for(let i=0;i<V.t.length;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=performance.now();readP=V.t.length;paintRead();complete()});
+$("mode-sw").querySelectorAll("button").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();if(finished)return;const m=b.dataset.mode;if(mem.prefs.mode===m||(!mem.prefs.mode&&m==="type"))return;
+  mem.prefs.mode=m;persist();typer.value="";lastLen=0;typeTimes=[];applyMode();paint();if(m==="type")typer.focus()}));
 /* ---------- 입력창과 키보드 ---------- */
 const isField=el=>el&&el!==typer&&(el.tagName==="INPUT"||el.tagName==="TEXTAREA");
 function keepInView(el){[60,350,700].forEach(t=>setTimeout(()=>{if(document.activeElement===el)el.scrollIntoView({block:"center",behavior:t===60?"auto":"smooth"})},t))}
@@ -1352,7 +1419,7 @@ function setupToday(){const j=JOURNEYS[mem.cur];if(!j)return;renderTodayProg();
   typeTimes=[];typer.value="";lastLen=0;$("saved").hidden=true;
   if(done){finished=true;typer.disabled=true;showDone(false)}
   else{finished=false;typer.disabled=false;$("seal").hidden=true;$("done").hidden=true;$("monk").classList.remove("gassho");
-    $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";paint()}}
+    $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";$("mode-sw").hidden=false;applyMode();paint()}}
 function renderJourney(){const j=JOURNEYS[mem.cur];if(!j){$("jcard").innerHTML="<span>아직 고른 여정이 없어요</span>";return}
   const p=Math.min(mem.prog[mem.cur]||0,j.items.length),d=(mem.ded[mem.cur]||"").trim();
   $("jcard").innerHTML="<b>"+esc(j.name)+" · "+esc(j.part)+"</b><span>"+p+" / "+j.items.length+" 구절"+(p>=j.items.length?" · 완주":"")+"</span>"+(d?"<span>회향 · "+esc(d)+"</span>":"")}
