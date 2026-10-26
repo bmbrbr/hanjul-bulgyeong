@@ -145,6 +145,7 @@ body.kb .app{padding-bottom:40vh}
 .acct-on{display:flex;align-items:center;gap:10px;font-size:15px}
 .acct-badge{width:28px;height:28px;border-radius:50%;background:#FEE500;display:flex;align-items:center;justify-content:center}.acct-badge .ksym{width:16px;height:16px}
 .acct-on .link{margin-left:auto;font-size:13px}
+.acct-on .link.warn{color:var(--seal)}
 .acct-del{font-size:12px;color:var(--ink-2);margin-top:4px;align-self:flex-start}.acct-del.warn{color:var(--seal)}
 .acct-msg{margin:0;font-size:13px;color:var(--seal)}
 .tag-test{font-size:12px;color:var(--ink-2);font-weight:400}
@@ -1210,7 +1211,7 @@ function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");a
 /* ---------- 로그인 (테스트) ---------- */
 const API="https://api.dualtimestudio.com",REAL=location.origin==="https://sutra.dualtimestudio.com";
 const SYNC_KEYS=["entries","cur","prog","ded","active","lan","credits","freeUsed","noads","buys","seen","prefs"];
-function renderAcct(){const a=mem.acct;$("acct-login").hidden=!!a;$("acct-on").hidden=!a;$("acct-desc").hidden=!!a;$("acct-del").hidden=!a||!a.token;$("acct-del").classList.remove("warn");$("acct-del").textContent="계정 삭제";
+function renderAcct(){const a=mem.acct;$("acct-login").hidden=!!a;$("acct-on").hidden=!a;$("acct-desc").hidden=!!a;$("acct-del").hidden=!a;$("acct-out").classList.remove("warn");$("acct-out").textContent="로그아웃";$("acct-del").classList.remove("warn");$("acct-del").textContent="계정 삭제";
   $("acct-test").hidden=REAL;$("login-test").hidden=REAL;if(a)$("acct-name").textContent=(a.name||"도반")+"님의 기록이 보관되고 있어요"}
 function acctMsg(t){const e=$("acct-msg");e.textContent=t||"";e.hidden=!t}
 async function api(path,opt={}){const a=mem.acct;if(!a||!a.token)throw new Error("noauth");
@@ -1253,9 +1254,17 @@ function openLogin(ctx){$("login-p").textContent=ctx==="settings"?"카카오로 
 function closeLogin(){$("login").hidden=true}
 function maybeAskLogin(){if(mem.acct)return;const n=recCount();if((mem.lp===0&&n>=1)||(mem.lp===1&&n>=7)){mem.lp++;persist();openLogin("record")}}
 $("acct-login").addEventListener("click",()=>openLogin("settings"));
-$("acct-out").addEventListener("click",()=>{pushNow(true);mem.acct=null;persist();renderAcct();acctMsg("로그아웃했어요. 이 기기의 기록은 그대로 있어요.")});
-$("acct-del").addEventListener("click",async()=>{const b=$("acct-del");if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="보관된 기록이 모두 지워져요. 삭제하려면 한 번 더 누르세요";return}
-  b.disabled=true;try{await api("/account",{method:"DELETE"});mem.acct=null;persist();renderAcct();acctMsg("계정과 보관된 기록을 삭제했어요. 이 기기의 기록은 남아 있어요.")}catch(e){if(mem.acct)acctMsg("삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.")}finally{b.disabled=false}});
+function wipeLocal(){clearTimeout(pushT);try{localStorage.removeItem(KEY)}catch(e){}location.replace(location.pathname+location.search)}
+async function saveNow(){if(!REAL||!mem.acct||!mem.acct.token)return true;clearTimeout(pushT);
+  try{const r=await fetch(API+"/data",{method:"PUT",headers:{"Authorization":"Bearer "+mem.acct.token,"Content-Type":"application/json"},body:JSON.stringify({data:snapshot()})});return r.ok}catch(e){return false}}
+$("acct-out").addEventListener("click",async()=>{const b=$("acct-out");
+  if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="한 번 더 누르면 로그아웃";acctMsg("로그아웃하면 이 기기의 기록이 지워지고 처음 상태로 돌아가요. 기록은 서버에 안전하게 보관되어, 다시 로그인하면 그대로 돌아와요.");return}
+  b.disabled=true;acctMsg("기록을 저장하는 중이에요…");
+  const ok=await saveNow();b.disabled=false;
+  if(!ok){b.classList.remove("warn");b.textContent="로그아웃";acctMsg("기록을 서버에 저장하지 못해 로그아웃을 멈췄어요. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.");return}
+  wipeLocal()});
+$("acct-del").addEventListener("click",async()=>{const b=$("acct-del");if(!b.classList.contains("warn")){b.classList.add("warn");b.textContent="서버와 이 기기의 기록이 모두 지워져요. 삭제하려면 한 번 더 누르세요";return}
+  b.disabled=true;try{if(REAL)await api("/account",{method:"DELETE"});wipeLocal()}catch(e){if(mem.acct)acctMsg("삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.")}finally{b.disabled=false}});
 $("login-close").addEventListener("click",closeLogin);
 $("login-later").addEventListener("click",closeLogin);
 $("login").addEventListener("click",e=>{if(e.target===$("login"))closeLogin()});
