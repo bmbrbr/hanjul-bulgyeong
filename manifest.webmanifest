@@ -2,7 +2,7 @@
   "id": "./",
   "name": "한줄 불경",
   "short_name": "한줄 불경",
-  "description": "하루 한 줄, 마음에 새기는 사경",
+  "description": "하루 한 줄, 쓰고 읽으며 마음에 새기는 불경",
   "lang": "ko",
   "dir": "ltr",
   "start_url": "./",
@@ -18,7 +18,7 @@
     {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ],
   "screenshots": [
-    {"src": "img/shots/shot1.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "하루 한 줄, 마음에 새기는 사경"},
+    {"src": "img/shots/shot1.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "하루 한 줄, 쓰고 읽으며 마음에 새기는 불경"},
     {"src": "img/shots/shot3.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "오늘 마음에 맞는 경전을 골라요"},
     {"src": "img/shots/shot4.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "바람을 적어 연꽃 등을 띄워요"}
   ]

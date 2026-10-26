@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>한줄 불경</title>
-<meta name="description" content="하루 한 줄, 마음에 새기는 사경">
+<meta name="description" content="하루 한 줄, 쓰고 읽으며 마음에 새기는 불경">
 <meta name="theme-color" content="#F3EEE3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#171E32" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-title" content="한줄 불경">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta property="og:title" content="한줄 불경">
-<meta property="og:description" content="하루 한 줄, 마음에 새기는 사경">
+<meta property="og:description" content="하루 한 줄, 쓰고 읽으며 마음에 새기는 불경">
 <meta property="og:image" content="icons/icon-512.png">
 <style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}img{max-width:100%}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -464,8 +464,8 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
   <button class="link intro-skip" id="intro-skip">건너뛰기</button>
   <div class="intro-slides" id="intro-slides">
     <section class="islide"><div class="i-seal">經</div><h2 class="i-t">불경은 부처님의 말씀이에요</h2><p class="i-s">2,500년 전부터 전해 온, 마음을 다루는 오래된 지혜예요. 종교가 없어도 괜찮아요.</p></section>
-    <section class="islide" hidden><div class="i-seal">寫</div><h2 class="i-t">사경은 한 글자씩 옮겨 쓰는 수행이에요</h2><p class="i-s">잘 쓰는 것보다 한 글자에 마음을 모으는 게 중요해요. 소리 내어 읽는 독송도 함께할 수 있어요.</p></section>
-    <section class="islide" hidden><div class="i-seal">一</div><h2 class="i-t">하루 한 줄이면 충분해요</h2><p class="i-s">짧은 한 줄을 쓰고, 오늘의 마음을 한 줄 남겨요. 그렇게 하루가 조금 고요해져요.</p></section>
+    <section class="islide" hidden><div class="i-seal">寫</div><h2 class="i-t">쓰며 새기는 사경,<br>읽으며 새기는 독송</h2><p class="i-s">경전을 한 글자씩 옮겨 쓰는 사경도, 소리 내어 읽는 독송도 오래된 수행이에요. 잘하는 것보다 한 글자에 마음을 모으는 게 중요해요.</p></section>
+    <section class="islide" hidden><div class="i-seal">一</div><h2 class="i-t">하루 한 줄이면 충분해요</h2><p class="i-s">짧은 한 줄을 쓰거나 읽고, 오늘의 마음을 한 줄 남겨요. 그날 기분에 따라 골라도 돼요.</p></section>
   </div>
   <div class="intro-dots" id="intro-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
   <button class="btn solid intro-go" id="intro-go">다음</button>
@@ -474,8 +474,8 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 <div class="splash" id="splash" role="status" aria-label="한줄 불경을 여는 중">
   <div class="sp-in">
     <div class="sp-name">한줄 불경</div>
-    <div class="sp-seal">寫經</div>
-    <div class="sp-tag">하루 한 줄, 마음에 새기는 사경</div>
+    <div class="sp-seal">一行</div>
+    <div class="sp-tag">하루 한 줄, 쓰고 읽으며 마음에 새기는 불경</div>
     <div class="sp-streak" id="sp-streak"></div>
   </div>
 </div>
@@ -525,7 +525,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
       <div class="meta"><button class="jbtn" id="verse-no" aria-haspopup="dialog">법구경</button><button class="today-prog" id="today-prog" hidden></button><span id="meta-right">오늘의 한 줄</span></div>
       <div class="paper" id="paper">
-        <div class="mode-sw" id="mode-sw" role="group" aria-label="사경 방법"><button data-mode="type" aria-pressed="true">쓰기</button><button data-mode="read" aria-pressed="false">읽기</button></div>
+        <div class="mode-sw" id="mode-sw" role="group" aria-label="새기는 방법"><button data-mode="type" aria-pressed="true" title="사경: 따라 쓰기">쓰기</button><button data-mode="read" aria-pressed="false" title="독송: 소리 내어 읽기">읽기</button></div>
         <p class="verse" id="verse" aria-live="off"></p>
         <textarea id="typer" aria-label="구절 따라 쓰기" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         <div class="seal" id="seal" hidden>寫經</div>
@@ -542,7 +542,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
 
       <div class="done" id="done" hidden>
-        <button class="share" id="story-open"><span class="share-seal" aria-hidden="true">寫</span><span class="share-tx"><b>오늘의 사경, 스토리로 공유하기</b><span>먹이 번지는 짧은 영상으로 만들어 드려요</span></span><span class="share-go" aria-hidden="true">›</span></button>
+        <button class="share" id="story-open"><span class="share-seal" aria-hidden="true">寫</span><span class="share-tx"><b>오늘의 한 줄, 스토리로 공유하기</b><span>먹이 번지는 짧은 영상으로 만들어 드려요</span></span><span class="share-go" aria-hidden="true">›</span></button>
         <div>
           <p class="meaning clamp" id="meaning"></p>
           <button class="link" id="more">풀이 더 보기</button>
@@ -579,7 +579,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="stats">
         <div class="stat"><b id="st-streak">0</b><span>연속 일수</span></div>
         <div class="stat"><b id="st-month">0</b><span id="st-month-l">여정 진도</span></div>
-        <div class="stat"><b id="st-total">0</b><span>전체 사경</span></div>
+        <div class="stat"><b id="st-total">0</b><span>전체 기록</span></div>
       </div>
       <div class="calhead">
         <button class="iconbtn" id="prev" aria-label="지난 달">‹</button>
@@ -587,7 +587,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <button class="iconbtn" id="next" aria-label="다음 달">›</button>
       </div>
       <div class="cal" id="cal"></div>
-      <div class="legend"><span><i class="lo"></i>사경한 날</span><span><i class="lt"></i>오늘</span></div>
+      <div class="legend"><span><i class="lo"></i>새긴 날</span><span><i class="lt"></i>오늘</span></div>
       <div class="list" id="list"></div>
       <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">고요한 산사에서 보내는 주말, 템플스테이</span><button class="link" data-noads>광고 없애기</button></div>
     </section>
@@ -614,7 +614,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     <section id="view-sound" hidden>
       <div class="group" id="acct-group">
         <h2>내 기록 지키기 <span class="tag-test" id="acct-test">테스트</span></h2>
-        <p id="acct-desc">카카오나 Google로 로그인하면 휴대폰을 바꾸거나 앱을 지워도 사경 기록과 연꽃 등이 그대로 남아요.</p>
+        <p id="acct-desc">카카오나 Google로 로그인하면 휴대폰을 바꾸거나 앱을 지워도 쓰고 읽은 기록과 연꽃 등이 그대로 남아요.</p>
         <button class="kakao-btn" id="acct-login"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg><span>카카오 로그인</span></button>
         <button class="google-btn" id="acct-glogin"><svg class="gsym" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Google로 로그인</span></button>
         <p class="acct-msg" id="acct-msg" hidden></p>
@@ -627,17 +627,21 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <button class="btn" id="change-j">여정 바꾸기 · 추가</button>
       </div>
       <div class="group guide">
-        <h2>사경이란?</h2>
+        <h2>사경과 독송</h2>
         <details open><summary>사경은 무엇인가요</summary>
           <p>경전을 한 글자씩 옮겨 쓰며 마음을 모으는 오래된 수행이에요. 인쇄술이 없던 시절 경전을 널리 전하려고 시작되었고, 지금은 마음을 가다듬는 수행으로 이어지고 있어요. 잘 쓰는 것보다 한 글자에 집중하는 것이 중요해요.</p></details>
+        <details><summary>독송은 무엇인가요</summary>
+          <p>경전을 소리 내어 읽고 외우는 수행이에요. 내 목소리로 읽은 말씀이 다시 내 귀로 들어와 마음에 새겨져요. 진언처럼 원래 소리로 외우던 경전은 독송이 더 잘 어울려요. 오늘 탭 종이 오른쪽 위의 '읽기'를 누르면 시작할 수 있어요.</p></details>
+        <details><summary>쓰기와 읽기, 무엇을 고를까요?</summary>
+          <p>둘 다 같은 한 줄을 마음에 새기는 방법이라 기록과 연속 일수는 똑같이 쌓여요. 조용한 곳에서는 쓰기, 집에서 소리 낼 수 있을 때는 읽기처럼 그날 상황에 맞게 골라도 좋아요.</p></details>
         <details><summary>하루의 순서</summary>
-          <ol><li>오른쪽 위 호흡 공을 따라 숨을 고르며 마음을 가라앉혀요.</li><li>오늘의 구절을 한 글자씩 따라 써요.</li><li>풀이와 오늘의 질문을 천천히 읽어요.</li><li>떠오른 마음을 느낀 점으로 남겨요.</li></ol></details>
+          <ol><li>오른쪽 위 호흡 공을 따라 숨을 고르며 마음을 가라앉혀요.</li><li>오늘의 구절을 한 글자씩 따라 쓰거나, 소리 내어 읽어요.</li><li>풀이와 오늘의 질문을 천천히 읽어요.</li><li>떠오른 마음을 느낀 점으로 남겨요.</li></ol></details>
         <details><summary>완주까지</summary>
-          <p>하루에 한 구절씩 처음부터 끝까지 순서대로 써요. 하루를 빠져도 건너뛰지 않고 멈춘 곳에서 이어 쓰면 돼요. 마지막 구절을 쓰는 날, 회향으로 여정을 마무리해요.</p></details>
+          <p>하루에 한 구절씩 처음부터 끝까지 순서대로 새겨요. 하루를 빠져도 건너뛰지 않고 멈춘 곳에서 이어 가면 돼요. 마지막 구절을 쓰는 날, 회향으로 여정을 마무리해요.</p></details>
         <details><summary>회향이란?</summary>
-          <p>내가 쓴 사경의 좋은 기운을 다른 이에게 돌려 바치는 일이에요. 돌아가신 분, 아픈 가족, 힘든 친구, 혹은 세상의 모든 이를 위해 회향할 수 있어요.</p></details>
+          <p>내가 쓰고 읽으며 쌓은 좋은 기운을 다른 이에게 돌려 바치는 일이에요. 돌아가신 분, 아픈 가족, 힘든 친구, 혹은 세상의 모든 이를 위해 회향할 수 있어요.</p></details>
         <details><summary>진언은 왜 번역하지 않나요?</summary>
-          <p>진언은 뜻보다 소리 자체에 힘이 있다고 보아, 옛 소리를 그대로 외우고 써요. 대신 풀이에서 뜻과 오늘의 확언을 함께 보여드려요.</p></details>
+          <p>진언은 뜻보다 소리 자체에 힘이 있다고 보아, 옛 소리를 그대로 쓰고 외워요. 대신 풀이에서 뜻과 오늘의 확언을 함께 보여드려요.</p></details>
       </div>
       <div class="group">
         <h2>화면</h2>
@@ -651,7 +655,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       </div>
       <div class="group">
         <h2>배경 소리</h2>
-        <p>사경하는 동안 들을 자연의 소리를 골라요.</p>
+        <p>쓰거나 읽는 동안 들을 자연의 소리를 골라요.</p>
         <div class="chips" id="bg-chips"></div>
       </div>
       <div class="group">
@@ -705,7 +709,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
     <div class="story-top"><span></span><button class="iconbtn" id="login-close" aria-label="닫기">✕</button></div>
     <div class="login-seal" aria-hidden="true">記</div>
     <h2 class="sh-t" id="login-title">소중한 나의 기록을 지켜요</h2>
-    <p class="login-p" id="login-p">카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 오늘 쓴 사경과 연꽃 등이 그대로 남아요.</p>
+    <p class="login-p" id="login-p">카카오로 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 오늘 새긴 한 줄과 연꽃 등이 그대로 남아요.</p>
     <p class="pay-test" id="login-test">테스트 로그인이에요. 미리보기에서는 실제 계정과 연결되지 않아요.</p>
     <button class="kakao-btn" id="login-go" data-via="kakao"><svg class="ksym" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5C6.75 3.5 2.5 6.86 2.5 11c0 2.66 1.76 5 4.4 6.33l-.9 3.3c-.08.3.26.54.52.37l3.93-2.6c.5.06 1.02.1 1.55.1 5.25 0 9.5-3.36 9.5-7.5S17.25 3.5 12 3.5z" fill="#000"/></svg><span>카카오 로그인</span></button>
     <button class="google-btn" id="login-ggo" data-via="google"><svg class="gsym" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Google로 로그인</span></button>
@@ -798,7 +802,7 @@ D("삼세제불 의반야바라밀다고 득아뇩다라삼먁삼보리","과거
 D("고지반야바라밀다 시대신주 시대명주","그러므로 알라, 이 지혜는 크게 신령한 주문이며 크게 밝은 주문이라는 뜻입니다. 경전이 이제 지혜를 마음에 새기는 주문으로 바뀝니다.","내 마음을 밝혀 주는 한마디는 무엇인가요?"),
 D("시무상주 시무등등주 능제일체고 진실불허","위없는 주문이며 견줄 것 없는 주문이니, 모든 괴로움을 없애고 진실하여 헛되지 않다는 뜻입니다.","오늘 내려놓고 싶은 괴로움은 무엇인가요?"),
 D("고설반야바라밀다주 즉설주왈","그러므로 이 지혜의 주문을 말하니 주문은 이러하다는 뜻입니다. 내일 쓸 마지막 구절이 바로 그 주문입니다.","반야심경을 쓰며 가장 마음에 남은 구절은 무엇인가요?"),
-D("아제아제 바라아제 바라승아제 모지 사바하","가자 가자, 저 언덕으로 가자, 모두 함께 저 언덕으로 가자, 깨달음이여 이루어지이다. 진언이라 소리 그대로 외우는 것이 전통입니다.","반야심경을 마치며 이 사경을 누구에게 회향하고 싶나요?")]}
+D("아제아제 바라아제 바라승아제 모지 사바하","가자 가자, 저 언덕으로 가자, 모두 함께 저 언덕으로 가자, 깨달음이여 이루어지이다. 진언이라 소리 그대로 외우는 것이 전통입니다.","반야심경을 마치며 이 공덕을 누구에게 회향하고 싶나요?")]}
 };
 JOURNEYS.diamond={name:"금강경",part:"핵심 일곱 구절",unit:i=>"제"+[3,5,6,10,18,26,32][i]+"분",days:7,mood:"집착을 내려놓고 싶어요",desc:"금강경의 핵심 일곱 구절을 새겨요",items:[
 D("약보살 유아상 인상 중생상 수자상 즉비보살","보살이 '나', '남', '중생', '오래 사는 존재'라는 생각에 매여 있다면 보살이 아니라는 뜻입니다. 남을 돕는 일에도 '내가 했다'는 생각이 붙으면 집착이 된다는 금강경의 첫 가르침입니다.","'내가 해줬다'는 생각이 마음에 남아 있는 일이 있나요?"),
@@ -865,13 +869,13 @@ D("약인산란심 입어탑묘중 일칭나무불 개이성불도","어떤 이�
 D("원이차공덕 보급어일체 아등여중생 개공성불도","이 공덕이 모든 이에게 두루 미쳐, 나와 모든 중생이 함께 부처의 길을 이루기를 바란다는 뜻입니다. 법회를 마칠 때 널리 외우는 회향게로, 법화경 화성유품에서 나왔습니다.","열흘의 공덕을 누구와 가장 먼저 나누고 싶나요?")]};
 JOURNEYS.lotus.trans=["모든 부처님은 오직 하나의 큰 인연 때문에 세상에 오셨다","오직 부처와 부처만이 모든 것의 참모습을 다 알 수 있다","세상은 편안함이 없어 불타는 집과 같고, 괴로움이 가득해 매우 두렵다","한 구름이 내린 비로 저마다 제 성품대로 자라난다","나는 당신들을 깊이 공경하여 감히 가벼이 여기지 않으니, 당신들은 모두 보살의 길을 걸어 부처가 될 것이다","내가 부처가 된 지 헤아릴 수 없이 오랜 세월이 흘렀다","큰 신통력과 지혜로운 방편으로 온 세상 어디에나 모습을 드러낸다","자비로운 눈으로 중생을 보시니 복이 바다처럼 끝없다, 그러므로 머리 숙여 예경하라","어지러운 마음으로 탑에 들어 한 번 '나무불' 불러도 모두 이미 부처의 길에 들었다","이 공덕이 모든 이에게 미쳐, 나와 모든 중생이 함께 부처의 길을 이루기를"];
 JOURNEYS.jijang={name:"지장경",part:"지장보살의 큰 서원",unit:i=>["귀의","서원","찬탄","찬탄","바라문 딸의 서원","멸정업진언","회향"][i],days:7,mood:"떠난 이와 고통받는 이를 위해 기도하고 싶어요",desc:"돌아가신 분과 고통받는 이를 위해 지장보살의 서원을 새겨요",items:[
-D("나무 대원본존 지장보살 나무 대원본존 지장보살 나무 대원본존 지장보살","큰 서원의 근본이신 지장보살께 귀의한다는 뜻입니다. 지장경은 돌아가신 부모와 조상, 고통받는 모든 이를 위한 경전이라 '불교의 효경'이라고도 불립니다. 세 번 부르며 마음을 모아 보세요.","오늘 이 사경을 바치고 싶은 분은 누구인가요?"),
+D("나무 대원본존 지장보살 나무 대원본존 지장보살 나무 대원본존 지장보살","큰 서원의 근본이신 지장보살께 귀의한다는 뜻입니다. 지장경은 돌아가신 부모와 조상, 고통받는 모든 이를 위한 경전이라 '불교의 효경'이라고도 불립니다. 세 번 부르며 마음을 모아 보세요.","오늘 이 한 줄을 바치고 싶은 분은 누구인가요?"),
 D("지옥미공 서불성불 중생도진 방증보리","지옥이 비지 않으면 결코 성불하지 않겠고, 중생을 모두 건진 뒤에야 깨달음을 이루겠다는 지장보살의 서원입니다. 가장 낮고 어두운 곳에 마지막까지 남겠다는 약속입니다.","나는 누구의 어두운 곳에 끝까지 함께 있어 줄 수 있을까요?"),
 D("지장대성위신력 항하사겁설난진","지장보살의 위신력은 갠지스강 모래알만큼 오랜 세월 동안 말해도 다할 수 없다는 뜻입니다. 지장보살을 찬탄하는 게송의 앞 구절로, 법회에서 널리 외웁니다.","말로 다 할 수 없이 고마운 분이 있나요?"),
 D("견문첨례일념간 이익인천무량사","지장보살을 보고 듣고 우러러 예경하는 한 생각 사이에도 사람과 하늘에 헤아릴 수 없는 이익이 생긴다는 뜻입니다. 앞의 찬탄 게송을 잇는 구절로, 한 번의 정성도 크다는 가르침입니다.","오늘 한 생각으로 누군가에게 건넬 수 있는 이익은 무엇일까요?"),
 D("원아진미래겁 응유죄고중생 광설방편 사령해탈","오는 모든 세월이 다하도록, 죄와 괴로움 속에 있는 중생을 위해 온갖 방편을 베풀어 벗어나게 하겠다는 뜻입니다. 돌아가신 어머니를 위해 기도하던 바라문의 딸이 세운 서원으로, 지장보살의 전생 이야기입니다.","떠난 이를 위해 내가 오늘 할 수 있는 선한 일은 무엇일까요?"),
 D("옴 바라 마니 다니 사바하 옴 바라 마니 다니 사바하 옴 바라 마니 다니 사바하","지장보살 멸정업진언으로, 지은 업장을 맑게 녹인다는 진언입니다. 뜻보다 소리에 마음을 실어 세 번 새겨 보세요.","오늘 내려놓고 싶은 마음의 짐이 있나요?"),
-D("원이차공덕 보급어일체 아등여중생 개공성불도","이 공덕이 모든 이에게 두루 미쳐, 나와 모든 중생이 함께 부처의 길을 이루기를 바란다는 회향게입니다. 일곱 날의 사경을 떠난 이와 고통받는 모든 이에게 돌려 드립니다.","일곱 날 동안 마음에 가장 오래 남은 분은 누구인가요?")]};
+D("원이차공덕 보급어일체 아등여중생 개공성불도","이 공덕이 모든 이에게 두루 미쳐, 나와 모든 중생이 함께 부처의 길을 이루기를 바란다는 회향게입니다. 일곱 날의 정성을 떠난 이와 고통받는 모든 이에게 돌려 드립니다.","일곱 날 동안 마음에 가장 오래 남은 분은 누구인가요?")]};
 JOURNEYS.jijang.trans=["큰 서원의 근본이신 지장보살께 귀의합니다","지옥이 비지 않으면 성불하지 않겠고, 중생을 다 건진 뒤에 깨달음을 이루리라","지장보살의 위신력은 오랜 세월 말해도 다할 수 없네","보고 듣고 예경하는 한 생각 사이에도 사람과 하늘에 이익이 끝없네","오는 모든 세월 동안 괴로운 중생을 위해 방편을 베풀어 벗어나게 하리라","(지장보살 멸정업진언) 지은 업장을 맑게 녹입니다","이 공덕이 모든 이에게 미쳐, 나와 모든 중생이 함께 부처의 길을 이루기를"];
 JOURNEYS.yaksa={name:"약사경",part:"열두 가지 큰 서원",unit:i=>"제"+(i+1)+"대원",days:12,mood:"아픈 이가 낫기를 바라요",desc:"아픈 이를 위해 약사여래의 열두 서원을 새겨요",items:[
 D("내 몸의 광명이 온 세상을 비추어 모든 이가 나와 같아지게 하리라","약사경은 약사유리광여래가 보살이었을 때 세운 열두 가지 큰 서원을 담은 경전입니다. 첫 서원은 깨달음의 빛을 혼자 갖지 않고 모든 이가 나처럼 밝아지기를 바라는 마음입니다.","내가 가진 밝은 것 중 나누고 싶은 것은 무엇인가요?"),
@@ -885,7 +889,7 @@ D("몸으로 인해 큰 괴로움을 겪는 이가 그 괴로움에서 벗어나
 D("그릇된 생각의 그물에 걸린 이를 바른 견해로 이끌리라","잘못된 믿음이나 생각에 갇히면 스스로 빠져나오기 어렵습니다. 그 그물을 풀어 바른 견해로 이끌겠다는 서원입니다.","나를 가두고 있는 생각의 그물은 무엇인가요?"),
 D("갇히고 묶이고 고난에 처한 이가 모든 근심에서 벗어나게 하리라","억울하게 갇히거나 큰 고난에 처한 이를 구하겠다는 서원입니다. 몸이 아니라 마음이 갇힌 사람에게도 닿는 말입니다.","요즘 내 마음을 묶고 있는 것은 무엇인가요?"),
 D("굶주린 이를 좋은 음식으로 배부르게 하고 법의 맛으로 편안하게 하리라","배고파서 나쁜 일을 저지른 이에게도 먼저 밥을 주고, 그다음에 가르침을 주겠다는 서원입니다. 몸의 허기와 마음의 허기를 함께 채웁니다.","요즘 나는 어떤 허기를 느끼고 있나요?"),
-D("헐벗고 추위와 더위에 시달리는 이에게 좋은 옷과 원하는 것을 주리라","마지막 서원은 가장 구체적인 보살핌입니다. 열두 서원을 마치며 이 사경의 공덕을 아픈 이, 힘든 이에게 돌려 보세요.","열두 서원 중 내가 닮고 싶은 서원은 무엇인가요?")]};
+D("헐벗고 추위와 더위에 시달리는 이에게 좋은 옷과 원하는 것을 주리라","마지막 서원은 가장 구체적인 보살핌입니다. 열두 서원을 마치며 이 공덕을 아픈 이, 힘든 이에게 돌려 보세요.","열두 서원 중 내가 닮고 싶은 서원은 무엇인가요?")]};
 const MK=(name,part,unit,mood,desc,t,intro,mid,lines,qs)=>({name,part,unit,days:21,mood,desc,items:Array.from({length:21},(_,i)=>D(t,(i===0?intro:mid)+" "+lines[i%7],qs[i%qs.length]))});
 JOURNEYS.gwang=MK("광명진언","빛을 보내는 21일",i=>(i+1)+"일째","누군가를 위해 쓰고 싶어요","떠나간 이와 그리운 이에게 밝은 빛을 보내요",
  "옴 아모가 바이로차나 마하무드라 마니 파드마 즈바라 프라바릍타야 훔",
@@ -909,7 +913,7 @@ const MOODS=[{g:"心",t:"마음을 다스리고 싶어요",js:["dhamma","words",
 const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","heart"];
 (function(){const h=JOURNEYS.heart,segs=h.items.map(x=>x.t),full=segs.join(" ");let pos=0;
   h.items=h.items.map((x,i)=>{const hs=pos,he=pos+segs[i].length;pos=he+1;return {t:full,m:x.m,q:x.q,hl:segs[i],hs,he}});
-  h.trans=["큰 지혜로 저 언덕에 건너가는 마음의 경", "관자재보살께서 깊은 지혜를 닦으실 때", "몸과 마음을 이루는 다섯 가지가 모두 비어 있음을 비추어 보시고 모든 괴로움에서 벗어나셨다", "사리자여, 모양은 공과 다르지 않고 공은 모양과 다르지 않다", "모양이 곧 공이요 공이 곧 모양이니, 느낌과 생각과 의지와 앎도 그러하다", "사리자여, 모든 것은 공한 모습이라 생겨나지도 사라지지도 않고, 더럽지도 깨끗하지도 않으며, 늘지도 줄지도 않는다", "그러므로 공 가운데에는 모양도 없고, 느낌과 생각과 의지와 앎도 없다", "눈, 귀, 코, 혀, 몸, 마음도 없고 빛깔, 소리, 냄새, 맛, 감촉, 생각의 대상도 없다", "눈으로 보는 세계도 없고 의식의 세계까지도 없다", "어리석음도 없고 어리석음이 다함도 없으며, 늙고 죽음도 없고 늙고 죽음이 다함도 없다", "괴로움과 그 원인, 괴로움의 그침과 그 길도 없으며, 지혜도 얻음도 없으니 얻을 것이 없기 때문이다", "보살은 이 지혜에 의지하므로 마음에 걸림이 없고", "걸림이 없으므로 두려움이 없어, 뒤바뀐 헛된 생각을 멀리 떠나 마침내 평안에 이른다", "과거, 현재, 미래의 모든 부처님도 이 지혜에 의지하여 가장 높고 바른 깨달음을 얻으셨다", "그러므로 알라, 이 지혜는 크게 신비로운 주문이요 크게 밝은 주문이며", "위없는 주문이요 견줄 데 없는 주문이니, 모든 괴로움을 없애고 참되어 헛되지 않다", "그러므로 이 지혜의 주문을 말하니, 주문은 이러하다", "가자, 가자, 저 언덕으로 가자, 모두 함께 저 언덕으로 가자, 깨달음이여 이루어지이다"];h.part="전체 사경";h.unit=i=>(i+1)+"일째";h.desc="매일 전체를 쓰고 한 구절씩 깊이 새겨요"})();
+  h.trans=["큰 지혜로 저 언덕에 건너가는 마음의 경", "관자재보살께서 깊은 지혜를 닦으실 때", "몸과 마음을 이루는 다섯 가지가 모두 비어 있음을 비추어 보시고 모든 괴로움에서 벗어나셨다", "사리자여, 모양은 공과 다르지 않고 공은 모양과 다르지 않다", "모양이 곧 공이요 공이 곧 모양이니, 느낌과 생각과 의지와 앎도 그러하다", "사리자여, 모든 것은 공한 모습이라 생겨나지도 사라지지도 않고, 더럽지도 깨끗하지도 않으며, 늘지도 줄지도 않는다", "그러므로 공 가운데에는 모양도 없고, 느낌과 생각과 의지와 앎도 없다", "눈, 귀, 코, 혀, 몸, 마음도 없고 빛깔, 소리, 냄새, 맛, 감촉, 생각의 대상도 없다", "눈으로 보는 세계도 없고 의식의 세계까지도 없다", "어리석음도 없고 어리석음이 다함도 없으며, 늙고 죽음도 없고 늙고 죽음이 다함도 없다", "괴로움과 그 원인, 괴로움의 그침과 그 길도 없으며, 지혜도 얻음도 없으니 얻을 것이 없기 때문이다", "보살은 이 지혜에 의지하므로 마음에 걸림이 없고", "걸림이 없으므로 두려움이 없어, 뒤바뀐 헛된 생각을 멀리 떠나 마침내 평안에 이른다", "과거, 현재, 미래의 모든 부처님도 이 지혜에 의지하여 가장 높고 바른 깨달음을 얻으셨다", "그러므로 알라, 이 지혜는 크게 신비로운 주문이요 크게 밝은 주문이며", "위없는 주문이요 견줄 데 없는 주문이니, 모든 괴로움을 없애고 참되어 헛되지 않다", "그러므로 이 지혜의 주문을 말하니, 주문은 이러하다", "가자, 가자, 저 언덕으로 가자, 모두 함께 저 언덕으로 가자, 깨달음이여 이루어지이다"];h.part="전체 기록";h.unit=i=>(i+1)+"일째";h.desc="매일 전체를 쓰고 한 구절씩 깊이 새겨요"})();
 
 
 const KEY="hanjul.v1";
@@ -1048,12 +1052,12 @@ function complete(){finished=true;typer.blur();typer.disabled=true;$("read-ui").
   mem.entries[EK()]={j:mem.cur,i:VI,t:V.hl||V.t,r:same?(e.r||""):"",at:same?(e.at||Date.now()):Date.now(),ts:same&&e.ts?e.ts:packTimes(),md:same&&e.md?e.md:(readMode()?"read":"type")};persist();renderJourney();stopRec(true);
   showDone(true);sealSound();renderRecord();renderPond(newLan);setTimeout(()=>{if(!$("view-today").hidden&&!todayTargets().some(id=>!mem.entries[TODAY+"#"+id]))maybeAskLogin()},RM?600:6200)}
 function showDone(animate){paint();$("monk").classList.add("gassho");if(animate)playShine();else{$("monk-done").hidden=false;$("monk-done").classList.remove("show")}const s=$("seal");s.hidden=false;s.classList.toggle("stamp",!!animate);
-  const isRead=(mem.entries[EK()]||{}).md==="read";$("hint").textContent=isRead?"오늘의 독송을 마쳤어요":"오늘의 사경을 마쳤어요";$("monk-done").textContent=isRead?"오늘의 독송을 마쳤어요":"오늘의 사경을 마쳤어요";$("seal").textContent=isRead?"讀誦":"寫經";$("again").textContent=isRead?"다시 읽기":"다시 쓰기";$("read-ui").hidden=true;$("mode-sw").hidden=true;$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
+  const isRead=(mem.entries[EK()]||{}).md==="read";$("hint").textContent=isRead?"오늘의 한 줄을 읽어 새겼어요":"오늘의 한 줄을 써서 새겼어요";$("monk-done").textContent=isRead?"오늘의 독송을 마쳤어요":"오늘의 사경을 마쳤어요";$("seal").textContent=isRead?"讀誦":"寫經";{const ss=document.querySelector(".share-seal");if(ss)ss.textContent=isRead?"誦":"寫"}$("again").textContent=isRead?"다시 읽기":"다시 쓰기";$("read-ui").hidden=true;$("mode-sw").hidden=true;$("done").hidden=false;$("meaning").textContent=(V.hl?"오늘 새길 구절 「"+V.hl+"」 ":"")+V.m;$("question").textContent=V.q;$("meaning").classList.add("clamp");$("more").textContent="풀이 더 보기";requestAnimationFrame(()=>{const m=$("meaning");$("more").hidden=m.scrollHeight<=m.clientHeight+2});
   $("reflect").value=(mem.entries[EK()]||{}).r||"";renderNext(animate);renderTodayProg();
   const j=JOURNEYS[mem.cur],over=j&&(mem.prog[mem.cur]||0)>=j.items.length&&VI===j.items.length-1;
   $("finish").hidden=!over;
   if(over){const d=(mem.ded[mem.cur]||"").trim();$("finish-title").textContent=j.name+" 여정을 모두 마쳤어요";
-    $("finish-text").textContent="이 사경의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 쌓여, 발원 연못에 회향 연꽃 등 하나가 떠올랐어요."}}
+    $("finish-text").textContent="쓰고 읽은 이 여정의 공덕을 "+(d?d+(mem.cur==="parents"?"께":"에게"):"나와 세상의 모든 이에게")+" 회향합니다. "+j.days+"번의 정성이 쌓여, 발원 연못에 회향 연꽃 등 하나가 떠올랐어요."}}
 function reset(){typeTimes=[];finished=false;$("monk-done").hidden=true;clearTimeout(shineT1);clearTimeout(shineT2);document.querySelector(".art").classList.remove("shine");$("monk").classList.remove("gassho");typer.disabled=false;typer.value="";lastLen=0;$("seal").hidden=true;$("done").hidden=true;$("saved").hidden=true;
   $("hint").textContent=(window.matchMedia&&matchMedia("(pointer:fine)").matches)?"종이를 클릭한 뒤 키보드로 따라 써 보세요":"종이를 눌러 한 글자씩 따라 써 보세요";$("mode-sw").hidden=false;applyMode();if(readMode())paint();else{paint();typer.focus()}}
 
@@ -1086,9 +1090,9 @@ function renderRecord(){const keys=Object.keys(mem.entries).sort().reverse(),DS=
   let h=DOW.map(d=>'<div class="dow">'+d+"</div>").join("");const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();
   for(let i=0;i<first;i++)h+='<div class="day empty"></div>';
   for(let d=1;d<=last;d++){const k=y+"-"+pad(m+1)+"-"+pad(d);let c="day";if(DS.has(k))c+=" on";if(k===TODAY)c+=" today";else if(k<TODAY)c+=" past";
-    h+='<div class="'+c+'" aria-label="'+(m+1)+"월 "+d+"일"+(DS.has(k)?" 사경 완료":"")+'">'+d+"</div>"}
+    h+='<div class="'+c+'" aria-label="'+(m+1)+"월 "+d+"일"+(DS.has(k)?" 완료":"")+'">'+d+"</div>"}
   $("cal").innerHTML=h;
-  if(!keys.length){$("list").innerHTML='<p class="emptytxt">아직 남긴 사경이 없어요. 오늘의 한 줄부터 시작해 보세요.</p>';return}
+  if(!keys.length){$("list").innerHTML='<p class="emptytxt">아직 남긴 기록이 없어요. 오늘의 한 줄부터 시작해 보세요.</p>';return}
   $("list").innerHTML=keys.map(k=>{const e=mem.entries[k],p=k.slice(0,10).split("-"),dd=new Date(+p[0],+p[1]-1,+p[2]);
     const lab=e.j&&JOURNEYS[e.j]?JOURNEYS[e.j].name+" "+JOURNEYS[e.j].unit(e.i):"법구경 제"+e.n+"게";
     return '<article class="item"><div class="d"><span>'+(+p[1])+"월 "+(+p[2])+"일 "+DOW[dd.getDay()]+"요일</span><span>"+lab+(e.md==="read"?'<span class="md">독송</span>':"")+'</span></div><p class="v">'+esc(e.t)+'</p><p class="r">'+(e.r?esc(e.r):"느낀 점을 남기지 않았어요")+"</p></article>"}).join("")}
@@ -1180,7 +1184,7 @@ function stDrawArt(ctx,t,dark,glow){const w=580,h=Math.round(w*613/560),x=(SW-w)
 function stDrawSeal(ctx,t,T,cx,cy,seal,paper){const k=(t-T)/0.45;if(k<0)return;const e=easeBack(Math.min(1,k));
   ctx.save();ctx.translate(cx,cy);ctx.rotate((-14+8*e)*Math.PI/180);const sc=2.2-1.2*e;ctx.scale(sc,sc);ctx.globalAlpha=Math.min(1,k*3);
   ctx.strokeStyle=seal;ctx.lineWidth=7;const s=150;ctx.beginPath();ctx.roundRect?ctx.roundRect(-s/2,-s/2,s,s,10):ctx.rect(-s/2,-s/2,s,s);ctx.stroke();
-  ctx.fillStyle=seal;ctx.font='700 54px "Gowun Batang", serif';ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("寫",0,-30);ctx.fillText("經",0,32);ctx.restore()}
+  ctx.fillStyle=seal;ctx.font='700 54px "Gowun Batang", serif';ctx.textAlign="center";ctx.textBaseline="middle";{const rd=(mem.entries[EK()]||{}).md==="read";ctx.fillText(rd?"讀":"寫",0,-30);ctx.fillText(rd?"誦":"經",0,32)}ctx.restore()}
 function stFrame(now){const cv=$("story-cv"),ctx=cv.getContext("2d"),mode="ink",dark=isDark();
   const D=mode==="ink"?8:7.4,sealT=mode==="ink"?3.9:4.7,footT=sealT+0.5;
   let t=(now-stT0)/1000;if(t>D){stT0=now;t=0;stLoop++;stSealDone=false}
@@ -1298,7 +1302,7 @@ function initAccount(){const h=location.hash;
     else acctMsg(p.get("login_error")==="cancel"||p.get("login_error")==="access_denied"?"로그인을 취소했어요.":"로그인 중 문제가 생겼어요. 잠시 뒤 다시 시도해 주세요.")}
   renderAcct();syncPull()}
 function recCount(){return Object.keys(mem.entries).length+mem.lan.filter(x=>x.w).length}
-function openLogin(ctx){$("login-p").textContent=ctx==="settings"?"로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 사경 기록과 연꽃 등이 그대로 남아요.":"오늘 남긴 기록, 잃어버리지 않게 보관해 둘까요? 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 그대로 남아요.";
+function openLogin(ctx){$("login-p").textContent=ctx==="settings"?"로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 쓰고 읽은 기록과 연꽃 등이 그대로 남아요.":"오늘 남긴 기록, 잃어버리지 않게 보관해 둘까요? 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 그대로 남아요.";
   ["login-go","login-ggo","login-later"].forEach(id=>$(id).hidden=false);$("login-done").hidden=true;$("login").hidden=false;$("login-go").focus()}
 function closeLogin(){$("login").hidden=true}
 function maybeAskLogin(){if(mem.acct)return;const n=recCount();if((mem.lp===0&&n>=1)||(mem.lp===1&&n>=7)){mem.lp++;persist();openLogin("record")}}
@@ -1481,8 +1485,8 @@ $("more").addEventListener("click",()=>{const m=$("meaning"),c=m.classList.toggl
 
 function todayTargets(){return mem.active.filter(id=>JOURNEYS[id]&&(((mem.prog[id]||0)<JOURNEYS[id].items.length)||mem.entries[TODAY+"#"+id]))}
 function renderTodayProg(){const t=todayTargets(),b=$("today-prog");if(t.length<2){b.hidden=true;return}
-  const d=t.filter(id=>mem.entries[TODAY+"#"+id]).length;b.hidden=false;b.textContent=d>=t.length?"오늘 모두 완료 ✓":"오늘 "+d+"/"+t.length;b.setAttribute("aria-label","오늘의 사경 "+t.length+"개 중 "+d+"개 완료, 눌러서 여정 보기")}
-const NC={one:["거의 다 왔어요!","대단해요, 한 걸음 남았어요","오늘의 사경, 하나만 더"],more:["좋은 흐름이에요","마음이 한결 고요해졌죠?","한 줄씩, 잘하고 있어요"],all:["오늘의 사경을 모두 마쳤어요","대단해요, 오늘 몫을 다 채웠어요","오늘도 마음에 새겼어요"]};
+  const d=t.filter(id=>mem.entries[TODAY+"#"+id]).length;b.hidden=false;b.textContent=d>=t.length?"오늘 모두 완료 ✓":"오늘 "+d+"/"+t.length;b.setAttribute("aria-label","오늘의 한 줄 "+t.length+"개 중 "+d+"개 완료, 눌러서 여정 보기")}
+const NC={one:["거의 다 왔어요!","대단해요, 한 걸음 남았어요","오늘의 한 줄, 하나만 더"],more:["좋은 흐름이에요","마음이 한결 고요해졌죠?","한 줄씩, 잘하고 있어요"],all:["오늘의 한 줄을 모두 새겼어요","대단해요, 오늘 몫을 다 채웠어요","오늘도 마음에 새겼어요"]};
 function renderNext(animate){const c=$("next-card"),t=todayTargets();if(t.length<2){c.hidden=true;return 0}
   const doneIds=t.filter(id=>mem.entries[TODAY+"#"+id]),d=doneIds.length,n=t.length,rest=t.filter(id=>!mem.entries[TODAY+"#"+id]);
   const ci=t.indexOf(mem.cur),nx=rest.find(id=>t.indexOf(id)>ci)||rest[0],seed=now.getDate()+d;
@@ -1490,8 +1494,8 @@ function renderNext(animate){const c=$("next-card"),t=todayTargets();if(t.length
   c.classList.toggle("all",!nx);
   if(!nx){const a=NC.all;$("nc-t").textContent=a[seed%a.length];$("nc-s").textContent="오늘 "+n+"개의 경전을 모두 새겼어요. 내일 또 만나요.";$("nc-go").hidden=true}
   else{const name=JOURNEYS[nx].name.split(" · ")[0],a=rest.length===1?NC.one:NC.more;$("nc-t").textContent=a[seed%a.length];
-    $("nc-s").textContent=rest.length===1?d+"개를 마쳤어요. "+name+"까지 쓰면 오늘의 사경이 모두 채워져요.":"오늘 "+n+"개 중 "+d+"개를 마쳤어요. 다음은 "+name+(((name.charCodeAt(name.length-1)-0xAC00)%28)?"이에요.":"예요.");
-    $("nc-go").hidden=false;$("nc-go").textContent="다음 사경 · "+name+" →";$("nc-go").dataset.id=nx}
+    $("nc-s").textContent=rest.length===1?d+"개를 마쳤어요. "+name+"까지 마치면 오늘의 한 줄이 모두 채워져요.":"오늘 "+n+"개 중 "+d+"개를 마쳤어요. 다음은 "+name+(((name.charCodeAt(name.length-1)-0xAC00)%28)?"이에요.":"예요.");
+    $("nc-go").hidden=false;$("nc-go").textContent="다음 한 줄 · "+name+" →";$("nc-go").dataset.id=nx}
   c.hidden=false;c.classList.remove("in");if(animate){void c.offsetWidth;c.classList.add("in")}
   return rest.length}
 function setupToday(){const j=JOURNEYS[mem.cur];if(!j)return;renderTodayProg();
@@ -1587,7 +1591,7 @@ renderRecord();
   window.dev_introReplay=()=>{mem.intro=false;I.classList.remove("out");I.hidden=false;show(0)};
 })();
 (function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
-  $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 사경 중이에요":"오늘도 한 줄, 천천히";
+  $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 새기는 중이에요":"오늘도 한 줄, 천천히";
   const min=RM?800:first?5600:4800;let gone=false;document.body.classList.add("entering");
   const go=()=>{if(gone)return;gone=true;SP.classList.add("out");setTimeout(()=>document.body.classList.remove("entering"),900);setTimeout(()=>{SP.hidden=true},2300)};
   SP.addEventListener("click",go);
