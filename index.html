@@ -262,6 +262,7 @@ body.kb .app{padding-bottom:40vh}
   writing-mode:vertical-rl;letter-spacing:2px;transform:rotate(-6deg)}
 .seal.stamp{animation:stamp .5s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes stamp{0%{opacity:0;transform:scale(2.2) rotate(-14deg)}100%{opacity:1;transform:scale(1) rotate(-6deg)}}
+.story-why p{font-family:var(--f-verse);font-size:15px;line-height:1.9;color:var(--ink)}
 .mode-sw{position:absolute;top:8px;right:10px;display:flex;background:var(--paper);border-radius:999px;padding:2px;gap:2px;z-index:2}
 .mode-sw button{font:inherit;font-size:12px;border:0;background:none;color:var(--ink-2);padding:4px 11px;border-radius:999px;cursor:pointer}
 .mode-sw button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -625,6 +626,12 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <h2>나의 여정</h2>
         <div class="jcard" id="jcard"></div>
         <button class="btn" id="change-j">여정 바꾸기 · 추가</button>
+      </div>
+      <div class="group story-why">
+        <h2>한줄 불경을 만든 이유</h2>
+        <p>엄마는 매일 사경을 쓰세요. 나를 위해 기도하신다고요.<br>어느 날 문득, 그 마음이 고마우면서도 궁금해졌어요. 대체 사경이 뭐길래.</p>
+        <p>따라 써 보니 알겠더라고요. 한 글자씩 옮기는 동안은 잡생각이 멈추고, 마지막 글자를 쓰고 나면 누군가를 위해 무언가를 한 기분이 들어요.</p>
+        <p>그래서 만들었어요. 바쁜 하루에도 한 줄이면 충분한, 엄마의 사경을 내 방식으로 이어 가는 앱. 한줄 불경이에요.</p>
       </div>
       <div class="group guide">
         <h2>사경과 독송</h2>
