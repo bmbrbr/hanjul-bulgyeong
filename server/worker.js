@@ -3,6 +3,7 @@
 const APP_ORIGIN = "https://sutra.dualtimestudio.com";
 const API_ORIGIN = "https://api.dualtimestudio.com";
 const REDIRECT = API_ORIGIN + "/kakao/callback";
+const G_REDIRECT = API_ORIGIN + "/google/callback";
 const MAX_BYTES = 512 * 1024;
 const SESSION_DAYS = 365;
 
@@ -52,6 +53,16 @@ function safeReturn(r) {
   return APP_ORIGIN + "/";
 }
 
+async function finishLogin(env, ret, uid, nick, via) {
+  const prev = (await env.KV.get("u:" + uid, "json")) || {};
+  await env.KV.put("u:" + uid, JSON.stringify({ nick, via, created: prev.created || Date.now(), last: Date.now() }));
+  const token = await makeToken(env, uid);
+  return Response.redirect(ret + "#login=" + encodeURIComponent(token) + "&nick=" + encodeURIComponent(nick) + "&via=" + via, 302);
+}
+async function logErr(env, step, status, body) {
+  await env.KV.put("err:last", JSON.stringify({ at: Date.now(), step, status, body }), { expirationTtl: 86400 * 7 });
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -97,10 +108,43 @@ export default {
       }
       const uid = String(me.id);
       const nick = (me.kakao_account && me.kakao_account.profile && me.kakao_account.profile.nickname) || (me.properties && me.properties.nickname) || "도반";
-      const prev = (await env.KV.get("u:" + uid, "json")) || {};
-      await env.KV.put("u:" + uid, JSON.stringify({ nick, created: prev.created || Date.now(), last: Date.now() }));
-      const token = await makeToken(env, uid);
-      return back("login=" + encodeURIComponent(token) + "&nick=" + encodeURIComponent(nick));
+      return finishLogin(env, ret, uid, nick, "kakao");
+    }
+
+    // Google 로그인 시작
+    if (path === "/google/login") {
+      const ret = safeReturn(url.searchParams.get("return"));
+      const state = crypto.randomUUID();
+      await env.KV.put("s:" + state, ret, { expirationTtl: 600 });
+      const g = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+      g.searchParams.set("client_id", env.GOOGLE_CLIENT_ID);
+      g.searchParams.set("redirect_uri", G_REDIRECT);
+      g.searchParams.set("response_type", "code");
+      g.searchParams.set("scope", "openid profile");
+      g.searchParams.set("state", state);
+      g.searchParams.set("prompt", "select_account");
+      return Response.redirect(g.toString(), 302);
+    }
+
+    // Google에서 돌아옴
+    if (path === "/google/callback") {
+      const state = url.searchParams.get("state") || "";
+      const ret = (await env.KV.get("s:" + state)) || APP_ORIGIN + "/";
+      if (state) await env.KV.delete("s:" + state);
+      const back = (frag) => Response.redirect(ret + "#" + frag, 302);
+      const code = url.searchParams.get("code");
+      if (!code) return back("login_error=" + encodeURIComponent(url.searchParams.get("error") || "cancel"));
+      const tr = await fetch("https://oauth2.googleapis.com/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: G_REDIRECT, grant_type: "authorization_code" }),
+      });
+      const tk = await tr.json();
+      if (!tk.access_token) { await logErr(env, "g-token", tr.status, tk); return back("login_error=token&code=" + encodeURIComponent(tk.error || tr.status)); }
+      const ur = await fetch("https://openidconnect.googleapis.com/v1/userinfo", { headers: { Authorization: "Bearer " + tk.access_token } });
+      const me = await ur.json();
+      if (!me.sub) { await logErr(env, "g-profile", ur.status, me); return back("login_error=profile"); }
+      return finishLogin(env, ret, "g_" + me.sub, me.name || me.given_name || "도반", "google");
     }
 
     // 3) 로그인한 사용자 API
@@ -128,7 +172,7 @@ export default {
         await env.KV.delete("d:" + user.uid);
         await env.KV.delete("u:" + user.uid);
         let unlinked = false;
-        if (env.KAKAO_ADMIN_KEY) {
+        if (env.KAKAO_ADMIN_KEY && !user.uid.startsWith("g_")) {
           const r = await fetch("https://kapi.kakao.com/v1/user/unlink", {
             method: "POST",
             headers: { Authorization: "KakaoAK " + env.KAKAO_ADMIN_KEY, "Content-Type": "application/x-www-form-urlencoded" },
