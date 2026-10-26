@@ -350,7 +350,13 @@ nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(
 .pick{text-align:left;border:1px solid var(--line);background:var(--paper-2);border-radius:12px;padding:14px 16px;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:row;align-items:center;gap:14px}
 .pick b{font-family:var(--f-verse);font-size:17px;font-weight:700}
 .pick .pk{display:flex;flex-direction:column;gap:4px;min-width:0}
-.pk .pmeta{font-size:13px;color:var(--ink-2)}
+.pk .pmeta{font-size:13px;color:var(--ink-2);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.ltag{font-size:11px;font-weight:500;padding:1px 7px;border-radius:999px;border:1px solid currentColor;letter-spacing:0;white-space:nowrap}
+.ltag.ko{color:var(--ink-2)}.ltag.han{color:var(--seal)}.ltag.mantra{color:#A57A2A}
+.pd-lang{background:var(--paper);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.pdl-t{margin:0;font-size:13px;color:var(--ink-2);line-height:1.6}
+.pdl-ex{margin:0;font-family:var(--f-verse);font-size:16px;line-height:1.6}
+.pdl-tr{margin:0;font-size:13px;color:var(--ink-2);line-height:1.6}
 .pk .pon{font-size:12px;color:var(--seal)}
 .pk .pdesc{font-size:13px;color:var(--ink-2)}
 #st-back{align-self:flex-start}
@@ -492,6 +498,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="detail" id="pick-detail" hidden>
         <h2 id="pd-name"></h2>
         <p id="pd-meta"></p>
+        <div class="pd-lang" id="pd-lang"><p class="pdl-t" id="pdl-t"></p><p class="pdl-ex" id="pdl-ex"></p><p class="pdl-tr" id="pdl-tr" hidden></p></div>
         <label for="ded" id="pd-ded-label" style="font-size:14px">누구를 위해 쓰나요? <span style="color:var(--ink-2)">(선택)</span></label>
         <input class="field" id="ded" type="text" maxlength="20" placeholder="어머니, 친구, 나 자신" autocomplete="off">
         <p style="font-size:12px">완주하는 날, 이분께 회향해요.</p>
@@ -1493,13 +1500,18 @@ function renderMoods(){pickId=null;$("pick-detail").hidden=true;$("st-back").hid
 function renderJourneys(m){pickId=null;$("pick-detail").hidden=true;$("basket").hidden=true;$("st-back").hidden=false;
   $("st-title").textContent=m.t;$("st-sub").textContent="마음에 맞는 경전을 골라 주세요.";
   $("picks").innerHTML=m.js.map(id=>{const j=JOURNEYS[id],n=j.items.length,p=Math.min(mem.prog[id]||0,n),on=mem.active.includes(id);
-    return '<button class="pick" data-id="'+id+'" aria-pressed="false"><span class="glyph" aria-hidden="true">'+META[id].g+'</span><span class="pk"><b>'+j.name+" · "+j.part+'</b><span class="pmeta">'+jMeta(id)+'</span><span class="pdesc">'+j.desc+"</span>"+(basket.includes(id)?'<span class="pon">담았어요</span>':on?'<span class="pon">진행 중 '+p+" / "+n+"</span>":"")+"</span></button>"}).join("");
+    return '<button class="pick" data-id="'+id+'" aria-pressed="false"><span class="glyph" aria-hidden="true">'+META[id].g+'</span><span class="pk"><b>'+j.name+" · "+j.part+'</b><span class="pmeta">'+langTag(id)+"<span>"+jMeta(id)+"</span>"+'</span><span class="pdesc">'+j.desc+"</span>"+(basket.includes(id)?'<span class="pon">담았어요</span>':on?'<span class="pon">진행 중 '+p+" / "+n+"</span>":"")+"</span></button>"}).join("");
   $("picks").querySelectorAll(".pick").forEach(b=>b.addEventListener("click",()=>choose(b)));window.scrollTo(0,0)}
+const LANG={dhamma:"ko",parents:"ko",bowang:"ko",words:"ko",yaksa:"ko",heart:"han",diamond:"han",mantra:"mantra",gwang:"mantra",omani:"mantra",wonsung:"mantra"};
+const LANGT={ko:["우리말","우리말로 옮긴 구절을 써요. 읽자마자 뜻이 와닿아요."],han:["한문 소리","한문 경전을 소리 나는 대로 써요. 우리말 뜻이 함께 나와요."],mantra:["진언","뜻보다 소리를 새기는 짧은 주문이에요. 풀이로 뜻을 알려 드려요."]};
+function langTag(id){const k=LANG[id]||"ko";return '<span class="ltag '+k+'">'+LANGT[k][0]+"</span>"}
 function choose(b){pickId=b.dataset.id;
   $("picks").querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
   const j=JOURNEYS[pickId],lv=META[pickId].lv;$("pd-name").textContent=j.name+" · "+j.part;
   $("pd-meta").textContent=j.items.length+"일 · 하루 약 "+avgChars(pickId)+"자 · 난이도 "+LVW[lv];
   $("pd-start").textContent=mem.active.includes(pickId)&&(mem.prog[pickId]||0)<j.items.length?"이어 쓰기":"이 여정 시작하기";
+  {const k=LANG[pickId]||"ko",it=j.items[0],ex=(it.hl||it.t),cut=ex.length>34?ex.slice(0,34)+"…":ex;$("pdl-t").innerHTML=langTag(pickId)+" "+LANGT[k][1];$("pdl-ex").textContent="예) "+cut;
+    const tr=j.trans&&j.trans[0];$("pdl-tr").hidden=!tr;if(tr)$("pdl-tr").textContent="뜻: "+(tr.length>60?tr.slice(0,60)+"…":tr);else if(k==="mantra"&&it.m){$("pdl-tr").hidden=false;$("pdl-tr").textContent="뜻: "+(it.m.length>60?it.m.slice(0,60)+"…":it.m)}}
   $("ded").value=mem.ded[pickId]||"";$("pick-detail").hidden=false;
   $("pd-ded-label").firstChild.textContent=pickId==="parents"?"어느 분께 바칠까요? ":pickId==="yaksa"?"누구의 쾌유를 빌까요? ":pickId==="gwang"?"누구에게 이 빛을 보낼까요? ":"누구를 위해 쓰나요? ";
   $("pick-detail").scrollIntoView({behavior:"smooth",block:"nearest"})}
