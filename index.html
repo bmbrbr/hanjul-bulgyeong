@@ -263,6 +263,8 @@ body.kb .app{padding-bottom:40vh}
 .seal.stamp{animation:stamp .5s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes stamp{0%{opacity:0;transform:scale(2.2) rotate(-14deg)}100%{opacity:1;transform:scale(1) rotate(-6deg)}}
 .story-why p{font-family:var(--f-verse);font-size:15px;line-height:1.9;color:var(--ink)}
+.app,nav .in,.sheet-in,.pd-actions,.intro{zoom:var(--z,1)}
+.fs-sample{font-family:var(--f-verse);font-size:18px;color:var(--ink);margin:4px 0 8px}
 .mode-sw{position:absolute;top:8px;right:10px;display:flex;background:var(--paper);border-radius:999px;padding:2px;gap:2px;z-index:2}
 .mode-sw button{font:inherit;font-size:12px;border:0;background:none;color:var(--ink-2);padding:4px 11px;border-radius:999px;cursor:pointer}
 .mode-sw button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -651,6 +653,11 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
           <p>진언은 뜻보다 소리 자체에 힘이 있다고 보아, 옛 소리를 그대로 쓰고 외워요. 대신 풀이에서 뜻과 오늘의 확언을 함께 보여드려요.</p></details>
       </div>
       <div class="group">
+        <h2>글자 크기</h2>
+        <p class="fs-sample">마음이 모든 일에 앞서고 마음이 주인이 되어</p>
+        <div class="chips" id="fs-chips"></div>
+      </div>
+      <div class="group">
         <h2>화면</h2>
         <p>밝은 한지 화면과 어두운 새벽 화면 중에 골라요.</p>
         <div class="chips" id="theme-chips"></div>
@@ -924,7 +931,7 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 
 
 const KEY="hanjul.v1";
-let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,intro:false,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type"}};
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,intro:false,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type",fs:"m"}};
 function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.intro=!!d.intro;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}if(typeof schedPush==="function")schedPush()}
 
@@ -1111,7 +1118,7 @@ const BG=[["off","끄기"],["stream","시냇물"],["rain","빗소리"],["birds",
 const KS=[["off","끄기"],["brush","붓"],["wood","목탁"]];
 function chips(el,list,pref){$(el).innerHTML=list.map(([v,l])=>'<button class="chip" data-v="'+v+'" aria-pressed="'+(mem.prefs[pref]===v)+'">'+l+"</button>").join("");
   $(el).querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{mem.prefs[pref]=b.dataset.v;persist();chips(el,list,pref);
-    if(pref==="bg")startBg(b.dataset.v);else if(pref==="breath")applyBreath();else if(pref==="theme")applyTheme();else if(pref==="story")storyRestart();else keySound()}))}
+    if(pref==="bg")startBg(b.dataset.v);else if(pref==="breath")applyBreath();else if(pref==="theme")applyTheme();else if(pref==="fs")applyFs();else if(pref==="story")storyRestart();else keySound()}))}
 
 
 /* 별: 30초마다 몇 개씩 차례로 반짝 */
@@ -1585,6 +1592,9 @@ $("today-label").textContent=(now.getMonth()+1)+"월 "+now.getDate()+"일 "+DOW[
 const TH=[["system","기기 설정 따르기"],["light","밝게"],["dark","어둡게"]];
 function applyTheme(){const r=document.documentElement,t=mem.prefs.theme;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme")}
 chips("theme-chips",TH,"theme");applyTheme();
+const FS=[["m","보통"],["l","크게"],["xl","아주 크게"]],FSZ={m:1,l:1.15,xl:1.3};
+function applyFs(){document.documentElement.style.setProperty("--z",FSZ[mem.prefs.fs]||1);if(typeof placeBreath==="function")placeBreath()}
+chips("fs-chips",FS,"fs");applyFs();
 chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
 chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
 renderJourney();updWishBtn();renderAds();renderBuys();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
