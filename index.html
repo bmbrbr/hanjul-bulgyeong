@@ -431,6 +431,8 @@ nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(
 .splash{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;align-items:center;justify-content:center;cursor:pointer;
   padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:opacity 1.6s cubic-bezier(.4,0,.2,1) .5s}
 .splash.out{opacity:0;pointer-events:none}
+.splash.quick{transition-duration:1s;transition-delay:.2s}.splash.quick .sp-name{animation-duration:1.4s;animation-delay:.1s}.splash.quick .sp-seal{animation-delay:1s}.splash.quick .sp-tag{animation-delay:1.3s;animation-duration:1s}.splash.quick .sp-streak{animation-delay:1.6s;animation-duration:1s}
+.note.biz{font-size:11.5px;line-height:1.6;opacity:.75;margin-top:6px}
 .sp-in{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;transition:opacity 1.1s ease,transform 1.8s ease}
 .splash.out .sp-in{opacity:0;transform:translateY(-8px)}
 .app,nav,.breath{transition:opacity 1.8s ease}
@@ -688,8 +690,9 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <div class="list" id="buy-list" style="margin-top:6px"></div>
       </div>
       <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">사찰음식으로 차리는 한 끼, 마음 밥상</span><button class="link" data-noads>광고 없애기</button></div>
-      <p class="note">기록은 이 기기에 저장되고, 카카오로 로그인하면 서버에도 안전하게 보관돼요.</p>
-      <p class="note"><a href="https://sutra.dualtimestudio.com/privacy.html" target="_blank" rel="noopener" style="color:inherit">개인정보처리방침</a> · Dual Time Studio</p>
+      <p class="note">기록은 이 기기에 저장되고, 카카오나 Google로 로그인하면 서버에도 안전하게 보관돼요.</p>
+      <p class="note"><a href="https://sutra.dualtimestudio.com/privacy.html" target="_blank" rel="noopener" style="color:inherit">개인정보처리방침</a> · <a href="https://sutra.dualtimestudio.com/terms.html" target="_blank" rel="noopener" style="color:inherit">이용약관</a></p>
+      <p class="note biz">듀얼타임스튜디오(Dual Time Studio) · 대표 정범윤<br>사업자등록번호 277-74-00727<br>경기도 안성시 보개면 성공길 30, 2층 a호<br>hello@dualtimestudio.com</p>
     </section>
   </main>
 </div>
@@ -1583,6 +1586,25 @@ $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
 $("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
 $("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.acct=null;mem.lp=0;mem.intro=false;mem.seen=false;renderAcct();persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart();if(window.dev_introReplay)dev_introReplay()});
 
+/* ---------- 뒤로가기 (안드로이드) ---------- */
+(function(){const arm=()=>{try{history.pushState({hj:1},"")}catch(e){}},vis=id=>{const e=$(id);return!!e&&!e.hidden};
+  function back(){
+    if(vis("story")){storyClose();return true}
+    if(vis("pay")){closePay();return true}
+    if(vis("login")){closeLogin();return true}
+    if(vis("sheet")){closeSheet();return true}
+    if(vis("dev")){$("dev").hidden=true;return true}
+    if(vis("intro")||vis("splash"))return true;
+    if(vis("view-start")){
+      if(vis("pick-detail")){$("pick-detail").hidden=true;$("picks").querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed","false"));return true}
+      if(vis("st-back")){renderMoods();window.scrollTo(0,0);return true}
+      if(mem.cur){goToday();return true}
+      return false}
+    const t=document.querySelector('.tab[aria-selected="true"]');
+    if(t&&t.dataset.view!=="today"){document.querySelector('.tab[data-view="today"]').click();return true}
+    return false}
+  arm();addEventListener("popstate",()=>{if(back())arm();else history.back()})})();
+
 /* ---------- 시작 ---------- */
 load();
 if(location.hash==="#reset"){mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];persist()}
@@ -1609,7 +1631,7 @@ renderRecord();
 })();
 (function(){const SP=$("splash"),first=!mem.seen,n=streak(),t0=performance.now();
   $("sp-streak").textContent=first?"처음 오신 걸 환영해요":n>0?"연속 "+n+"일째 새기는 중이에요":"오늘도 한 줄, 천천히";
-  const min=RM?800:first?5600:4800;let gone=false;document.body.classList.add("entering");
+  if(!first)SP.classList.add("quick");const min=RM?800:first?5200:2700;let gone=false;document.body.classList.add("entering");
   const go=()=>{if(gone)return;gone=true;SP.classList.add("out");setTimeout(()=>document.body.classList.remove("entering"),900);setTimeout(()=>{SP.hidden=true},2300)};
   SP.addEventListener("click",go);
   Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>setTimeout(go,Math.max(0,min-(performance.now()-t0))));
