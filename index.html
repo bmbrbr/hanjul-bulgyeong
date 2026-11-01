@@ -1364,7 +1364,7 @@ function readProgress(segs){const A=jamo(V.t);let S=0;while(S<A.idx.length&&A.id
 function paintRead(){const T=V.t;let html="";for(let i=0;i<T.length;i++){let cls=i<readP?"c-ink":"c-ghost";if(V.hl&&i>=V.hs&&i<V.he)cls+=" c-hl";html+='<span data-i="'+i+'" class="'+cls+'">'+(T[i]===" "?" ":esc(T[i]))+"</span>"}
   verseEl.innerHTML=html;const tot=[...T].filter(c=>c!==" ").length,ok=[...T.slice(0,readP)].filter(c=>c!==" ").length;$("count").textContent=ok+" / "+tot}
 function readStatus(t){$("read-st").textContent=t}
-function applyMode(){const r=readMode()&&!finished;
+function applyMode(){if(readFinT){clearTimeout(readFinT);readFinT=null}const r=readMode()&&!finished;
   $("mode-sw").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===(readMode()?"read":"type"))));
   $("read-ui").hidden=!r;$("paper").classList.toggle("reading",r);
   if(r){typer.blur();typer.disabled=true;readP=0;readSim=0;heard=[];heardInterim="";readTries=0;$("read-done").hidden=true;typeTimes=[];
@@ -1374,7 +1374,7 @@ function applyMode(){const r=readMode()&&!finished;
   else{stopRec(true);if(!finished)typer.disabled=false}}
 function onHeard(){const r=readProgress(heard.concat([heardInterim])),now2=performance.now();
   if(r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
-  const tot=V.t.length;if(readP>=tot*0.97&&!finished){readStatus("잘 읽었어요");stopRec(true);complete();return}
+  const tot=V.t.length;if(readP>=tot*0.97&&!finished){readFinish();return}
   if(readP>=tot*0.5||performance.now()-readT0>20000)$("read-done").hidden=false}
 function startRec(){if(!SR||finished)return;$("mic").classList.remove("invite");$("read-tip").hidden=true;
   try{rec=new SR();rec.lang="ko-KR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1}catch(e){readStatus("음성 인식을 시작하지 못했어요");return}
@@ -1387,12 +1387,15 @@ function startRec(){if(!SR||finished)return;$("mic").classList.remove("invite");
     if(finished)return;
     if(recWant&&performance.now()-readT0<90000){try{rec.start();recOn=true;$("mic").classList.add("on");return}catch(e){}}
     recWant=false;readTries++;
-    if(readP>=V.t.length*0.85){readStatus("잘 읽었어요");complete();return}
+    if(readP>=V.t.length*0.85){readFinish();return}
     $("mic").setAttribute("aria-label","이어서 읽기");readStatus(readP>0?"이어서 읽으려면 마이크를 다시 눌러 주세요":"마이크를 누르고 소리 내어 읽어 보세요");
     if(readP>=V.t.length*0.5||readTries>=2)$("read-done").hidden=false};
   try{rec.start();recOn=true;recWant=true;if(!readT0||readP===0)readT0=performance.now();ac();$("mic").classList.add("on");$("mic").setAttribute("aria-label","읽기 멈추기");readStatus("듣고 있어요… 천천히 읽어 주세요")}catch(e){readStatus("음성 인식을 시작하지 못했어요")}}
+let readFinT=null;
+function readFinish(){if(readFinT||finished)return;recWant=false;stopRec(true);$("read-done").hidden=true;readStatus("잘 읽었어요 🙏");
+  readFinT=setTimeout(()=>{readFinT=null;if(!finished&&readMode())complete()},RM?300:1600)}
 function stopRec(silent){recWant=false;if(rec&&recOn){try{rec.stop()}catch(e){}}recOn=false;$("mic").classList.remove("on");if(!silent&&!finished)readStatus("멈췄어요. 다시 누르면 이어서 읽어요")}
-$("mic").addEventListener("click",()=>{if(recOn)stopRec();else startRec()});
+$("mic").addEventListener("click",()=>{if(readFinT)return;if(recOn)stopRec();else startRec()});
 $("read-done").addEventListener("click",()=>{if(finished)return;for(let i=0;i<V.t.length;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=performance.now();readP=V.t.length;paintRead();complete()});
 $("mode-sw").querySelectorAll("button").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();if(finished)return;const m=b.dataset.mode;if(mem.prefs.mode===m||(!mem.prefs.mode&&m==="type"))return;
   mem.prefs.mode=m;persist();typer.value="";lastLen=0;typeTimes=[];applyMode();paint();if(m==="type")typer.focus();else setTimeout(()=>{const r=$("mic").getBoundingClientRect(),nb=document.querySelector("nav").getBoundingClientRect().height||0;if(r.bottom>innerHeight-nb-16||r.top<0)window.scrollTo({top:scrollY+r.bottom-(innerHeight-nb)+90,behavior:RM?"auto":"smooth"})},80)}));
