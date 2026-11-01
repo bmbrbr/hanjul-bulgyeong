@@ -1374,7 +1374,7 @@ function applyMode(){const r=readMode()&&!finished;
   else{stopRec(true);if(!finished)typer.disabled=false}}
 function onHeard(){const r=readProgress(heard.concat([heardInterim])),now2=performance.now();
   if(r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
-  const tot=V.t.length;if(readP>=tot*0.97&&readSim>=0.7){readStatus("잘 읽었어요");complete();return}
+  const tot=V.t.length;if(readP>=tot*0.97&&!finished){readStatus("잘 읽었어요");stopRec(true);complete();return}
   if(readP>=tot*0.5||performance.now()-readT0>20000)$("read-done").hidden=false}
 function startRec(){if(!SR||finished)return;$("mic").classList.remove("invite");$("read-tip").hidden=true;
   try{rec=new SR();rec.lang="ko-KR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1}catch(e){readStatus("음성 인식을 시작하지 못했어요");return}
@@ -1387,7 +1387,7 @@ function startRec(){if(!SR||finished)return;$("mic").classList.remove("invite");
     if(finished)return;
     if(recWant&&performance.now()-readT0<90000){try{rec.start();recOn=true;$("mic").classList.add("on");return}catch(e){}}
     recWant=false;readTries++;
-    if(readP>=V.t.length*0.85&&readSim>=0.65){readStatus("잘 읽었어요");complete();return}
+    if(readP>=V.t.length*0.85){readStatus("잘 읽었어요");complete();return}
     $("mic").setAttribute("aria-label","이어서 읽기");readStatus(readP>0?"이어서 읽으려면 마이크를 다시 눌러 주세요":"마이크를 누르고 소리 내어 읽어 보세요");
     if(readP>=V.t.length*0.5||readTries>=2)$("read-done").hidden=false};
   try{rec.start();recOn=true;recWant=true;if(!readT0||readP===0)readT0=performance.now();ac();$("mic").classList.add("on");$("mic").setAttribute("aria-label","읽기 멈추기");readStatus("듣고 있어요… 천천히 읽어 주세요")}catch(e){readStatus("음성 인식을 시작하지 못했어요")}}
