@@ -141,6 +141,9 @@ body:has(#view-today[hidden]) .breath{display:none}
 body.kb .app{padding-bottom:40vh}
 .kakao-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:360px;height:48px;border:0;border-radius:12px;background:#FEE500;color:rgba(0,0,0,.85);font:inherit;font-size:15px;font-weight:500;cursor:pointer}
 .kakao-btn .ksym{width:20px;height:20px}
+.kakao-btn,.google-btn{position:relative}
+.last-tip{position:absolute;top:-12px;right:12px;font-size:11px;font-weight:500;line-height:1;padding:5px 9px;border-radius:10px;background:var(--ink);color:var(--paper);white-space:nowrap;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.last-tip::after{content:"";position:absolute;bottom:-4px;right:16px;border:4px solid transparent;border-top-color:var(--ink);border-bottom:0}
 .google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:360px;height:48px;border:1px solid #DADCE0;border-radius:12px;background:#fff;color:#1F1F1F;font:inherit;font-size:15px;font-weight:500;cursor:pointer}
 .google-btn .gsym{width:18px;height:18px}
 #acct-glogin{margin-top:8px}
@@ -1314,17 +1317,22 @@ async function syncPull(){if(!REAL||!mem.acct||!mem.acct.token)return;pulling=tr
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&pushT)pushNow(true)});
 function initAccount(){const h=location.hash;
   if(h.startsWith("#login=")||h.startsWith("#login_error=")){const p=new URLSearchParams(h.slice(1));history.replaceState(null,"",location.pathname+location.search);
-    if(p.get("login")){mem.acct={name:p.get("nick")||"도반",via:p.get("via")||"kakao",token:p.get("login"),at:Date.now()};localStorage.setItem(KEY,JSON.stringify(mem));renderAcct();
+    if(p.get("login")){mem.acct={name:p.get("nick")||"도반",via:p.get("via")||"kakao",token:p.get("login"),at:Date.now()};setLastVia(mem.acct.via);localStorage.setItem(KEY,JSON.stringify(mem));renderAcct();
       ["login-go","login-ggo","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;$("login").hidden=false;setTimeout(closeLogin,1800)}
     else acctMsg(p.get("login_error")==="cancel"||p.get("login_error")==="access_denied"?"로그인을 취소했어요.":"로그인 중 문제가 생겼어요. 잠시 뒤 다시 시도해 주세요.")}
-  renderAcct();syncPull()}
+  renderAcct();markLast();syncPull()}
+const LASTK="hanjul.lastvia";
+function setLastVia(v){try{localStorage.setItem(LASTK,v)}catch(e){}markLast()}
+function markLast(){let v=null;try{v=localStorage.getItem(LASTK)}catch(e){}
+  [["acct-login","kakao"],["login-go","kakao"],["acct-glogin","google"],["login-ggo","google"]].forEach(([id,via])=>{const b=$(id);if(!b)return;let t=b.querySelector(".last-tip");
+    if(v===via){if(!t){t=document.createElement("span");t.className="last-tip";t.textContent="가장 최근 로그인이에요";b.appendChild(t)}}else if(t)t.remove()})}
 function recCount(){return Object.keys(mem.entries).length+mem.lan.filter(x=>x.w).length}
 function openLogin(ctx){$("login-p").textContent=ctx==="settings"?"로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 쓰고 읽은 기록과 연꽃 등이 그대로 남아요.":"오늘 남긴 기록, 잃어버리지 않게 보관해 둘까요? 로그인해 두면 휴대폰을 바꾸거나 앱을 지워도 그대로 남아요.";
   ["login-go","login-ggo","login-later"].forEach(id=>$(id).hidden=false);$("login-done").hidden=true;$("login").hidden=false;$("login-go").focus()}
 function closeLogin(){$("login").hidden=true}
 function maybeAskLogin(){if(mem.acct)return;const n=recCount();if((mem.lp===0&&n>=1)||(mem.lp===1&&n>=7)){mem.lp++;persist();openLogin("record")}}
 function goLogin(via){if(REAL){persist();location.href=API+"/"+via+"/login?return="+encodeURIComponent(location.origin+location.pathname);return}
-  mem.acct={name:via==="google"?"구글 사용자":"카카오 사용자",via,at:Date.now(),test:true};persist();renderAcct();
+  mem.acct={name:via==="google"?"구글 사용자":"카카오 사용자",via,at:Date.now(),test:true};setLastVia(via);persist();renderAcct();
   ["login-go","login-ggo","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;$("login").hidden=false;setTimeout(closeLogin,1600)}
 $("acct-login").addEventListener("click",()=>goLogin("kakao"));
 $("acct-glogin").addEventListener("click",()=>goLogin("google"));
