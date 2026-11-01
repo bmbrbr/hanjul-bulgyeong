@@ -1348,39 +1348,42 @@ renderAcct();
 /* ---------- 읽기(독송) 모드 ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 function readMode(){return mem.prefs.mode==="read"}
-let rec=null,recOn=false,recWant=false,heard="",heardInterim="",readP=0,readSim=0,readT0=0,readTries=0,readTimer=null;
+let rec=null,recOn=false,recWant=false,heard=[],heardInterim="",readP=0,readSim=0,readT0=0,readTries=0,readTimer=null;
 function jamo(str){const out=[],idx=[];[...str].forEach((ch,ci)=>{const c=ch.charCodeAt(0);
   if(c>=0xAC00&&c<=0xD7A3){const x=c-0xAC00;out.push("L"+Math.floor(x/588),"V"+Math.floor(x%588/28));idx.push(ci,ci);if(x%28){out.push("T"+x%28);idx.push(ci)}}
   else if(/[0-9a-zA-Z\u3131-\u318E]/.test(ch)){out.push(ch.toLowerCase());idx.push(ci)}});return {out,idx}}
-function readProgress(said){const T=V.t,A=jamo(T),B=jamo(said).out,m=A.out.length,n=B.length;if(!n||!m)return {p:0,sim:0};
-  let prev=new Array(n+1);for(let k=0;k<=n;k++)prev[k]=k;let best=prev[n],bj=0;
-  for(let j=1;j<=m;j++){const cur=new Array(n+1);cur[0]=j;const a=A.out[j-1];
+function alignFrom(said,A,S){const B=jamo(said).out,m=A.out.length,n=B.length;if(n<3||!m)return {p:0,sim:0};
+  let prev=new Array(n+1);for(let k=0;k<=n;k++)prev[k]=k;let best=Infinity,bj=0;
+  for(let j=1;j<=m;j++){const cur=new Array(n+1);cur[0]=j<=S?0:j-S;const a=A.out[j-1];
     for(let k=1;k<=n;k++){cur[k]=Math.min(prev[k]+1,cur[k-1]+1,prev[k-1]+(a===B[k-1]?0:1))}
     if(cur[n]<=best){best=cur[n];bj=j}prev=cur}
-  const sim=bj?1-best/Math.max(bj,n):0;const p=bj?A.idx[bj-1]+1:0;return {p,sim}}
+  const sim=bj?1-best/n:0;return {p:bj?A.idx[bj-1]+1:0,sim,n}}
+function readProgress(segs){const A=jamo(V.t);let S=0;while(S<A.idx.length&&A.idx[S]<readP)S++;
+  const c=segs.filter(x=>x&&x.trim()),cand=new Set(c);if(c.length>1){cand.add(c.join(" "));cand.add(c.slice(-2).join(" "))}
+  let out={p:0,sim:0};cand.forEach(x=>{const r=alignFrom(x,A,S),thr=r.n<8?0.75:0.55;if(r.sim>=thr&&(r.p>out.p||(r.p===out.p&&r.sim>out.sim)))out=r});return out}
 function paintRead(){const T=V.t;let html="";for(let i=0;i<T.length;i++){let cls=i<readP?"c-ink":"c-ghost";if(V.hl&&i>=V.hs&&i<V.he)cls+=" c-hl";html+='<span data-i="'+i+'" class="'+cls+'">'+(T[i]===" "?" ":esc(T[i]))+"</span>"}
   verseEl.innerHTML=html;const tot=[...T].filter(c=>c!==" ").length,ok=[...T.slice(0,readP)].filter(c=>c!==" ").length;$("count").textContent=ok+" / "+tot}
 function readStatus(t){$("read-st").textContent=t}
 function applyMode(){const r=readMode()&&!finished;
   $("mode-sw").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===(readMode()?"read":"type"))));
   $("read-ui").hidden=!r;$("paper").classList.toggle("reading",r);
-  if(r){typer.blur();typer.disabled=true;readP=0;readSim=0;heard="";heardInterim="";readTries=0;$("read-done").hidden=true;typeTimes=[];
+  if(r){typer.blur();typer.disabled=true;readP=0;readSim=0;heard=[];heardInterim="";readTries=0;$("read-done").hidden=true;typeTimes=[];
     $("hint").textContent="소리 내어 읽으면 글자가 물들어요";
     readStatus(SR?"마이크를 누르고 소리 내어 읽어 보세요":"이 브라우저에서는 음성 인식을 쓸 수 없어요. 크롬에서 열어 주세요.");$("mic").disabled=!SR;
     $("mic").classList.toggle("invite",!!SR);$("read-tip").hidden=!SR;if(SR)readStatus("")}
   else{stopRec(true);if(!finished)typer.disabled=false}}
-function onHeard(){const said=heard+" "+heardInterim,r=readProgress(said),now2=performance.now();
-  if(r.sim>=0.55&&r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
+function onHeard(){const r=readProgress(heard.concat([heardInterim])),now2=performance.now();
+  if(r.p>readP){for(let i=readP;i<r.p;i++)if(V.t[i]!==" "&&typeTimes[i]==null)typeTimes[i]=now2;readP=r.p;readSim=r.sim;paintRead()}
   const tot=V.t.length;if(readP>=tot*0.97&&readSim>=0.7){readStatus("잘 읽었어요");complete();return}
   if(readP>=tot*0.5||performance.now()-readT0>20000)$("read-done").hidden=false}
 function startRec(){if(!SR||finished)return;$("mic").classList.remove("invite");$("read-tip").hidden=true;
   try{rec=new SR();rec.lang="ko-KR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1}catch(e){readStatus("음성 인식을 시작하지 못했어요");return}
-  rec.onresult=ev=>{let fin="",tmp="";for(let i=ev.resultIndex;i<ev.results.length;i++){const t=ev.results[i][0].transcript;if(ev.results[i].isFinal)fin+=t+" ";else tmp+=t}
-    if(fin)heard+=" "+fin;heardInterim=tmp;onHeard()};
+  rec.onresult=ev=>{let tmp="";for(let i=ev.resultIndex;i<ev.results.length;i++){const t=ev.results[i][0].transcript;if(ev.results[i].isFinal){if(t.trim()&&heard[heard.length-1]!==t)heard.push(t)}else tmp+=t}
+    if(heard.length>12)heard=heard.slice(-12);heardInterim=tmp;onHeard()};
   rec.onerror=ev=>{if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){recWant=false;readStatus("마이크 권한이 필요해요. 브라우저 설정에서 마이크를 허용해 주세요.")}
     else if(ev.error==="network"){recWant=false;readStatus("인터넷 연결이 필요해요")}
     else if(ev.error==="no-speech")readStatus("잘 들리지 않았어요. 조금 더 크게 읽어 보세요")};
-  rec.onend=()=>{recOn=false;$("mic").classList.remove("on");heard+=" "+heardInterim;heardInterim="";
+  rec.onend=()=>{recOn=false;$("mic").classList.remove("on");if(heardInterim.trim())heard.push(heardInterim);heardInterim="";
     if(finished)return;
     if(recWant&&performance.now()-readT0<90000){try{rec.start();recOn=true;$("mic").classList.add("on");return}catch(e){}}
     recWant=false;readTries++;
