@@ -1320,6 +1320,7 @@ function initAccount(){const h=location.hash;
     if(p.get("login")){mem.acct={name:p.get("nick")||"도반",via:p.get("via")||"kakao",token:p.get("login"),at:Date.now()};setLastVia(mem.acct.via);localStorage.setItem(KEY,JSON.stringify(mem));renderAcct();
       ["login-go","login-ggo","login-later"].forEach(id=>$(id).hidden=true);$("login-done").hidden=false;$("login").hidden=false;setTimeout(closeLogin,1800)}
     else acctMsg(p.get("login_error")==="cancel"||p.get("login_error")==="access_denied"?"로그인을 취소했어요.":"로그인 중 문제가 생겼어요. 잠시 뒤 다시 시도해 주세요.")}
+  if(mem.acct&&mem.acct.via){let v=null;try{v=localStorage.getItem(LASTK)}catch(e){}if(v!==mem.acct.via)setLastVia(mem.acct.via)}
   renderAcct();markLast();syncPull()}
 const LASTK="hanjul.lastvia";
 function setLastVia(v){try{localStorage.setItem(LASTK,v)}catch(e){}markLast()}
