@@ -1653,6 +1653,6 @@ renderRecord();
   if(first){mem.seen=true;persist()}})();
 document.addEventListener("pointerdown",function once(){if(mem.prefs.bg!=="off")startBg(mem.prefs.bg);document.removeEventListener("pointerdown",once)});
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(()=>navigator.serviceWorker.ready).then(r=>{const c=navigator.connection;if(c&&(c.saveData||/2g/.test(c.effectiveType||"")))return;setTimeout(()=>{r.active&&r.active.postMessage("warm-fonts")},8000)}).catch(()=>{}));</script>
 </body>
 </html>
