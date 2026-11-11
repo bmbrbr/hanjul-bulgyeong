@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.dualtimestudio.sutra",
+        "sha256_cert_fingerprints": ["78:43:2C:B1:D2:21:D9:C4:85:87:DC:BD:93:12:90:E5:8C:C1:7D:F6:8B:9D:0F:AD:61:0F:D1:04:E1:11:EF:EE"]
+      }
+    }]
