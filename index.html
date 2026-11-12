@@ -597,7 +597,6 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <div class="cal" id="cal"></div>
       <div class="legend"><span><i class="lo"></i>새긴 날</span><span><i class="lt"></i>오늘</span></div>
       <div class="list" id="list"></div>
-      <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">고요한 산사에서 보내는 주말, 템플스테이</span><button class="link" data-noads>광고 없애기</button></div>
     </section>
 
     <section id="view-wish" hidden>
@@ -692,7 +691,6 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
         <p id="buy-sum"></p>
         <div class="list" id="buy-list" style="margin-top:6px"></div>
       </div>
-      <div class="adbar" data-ad hidden><span class="ad-tag">광고</span><span class="ad-tx">사찰음식으로 차리는 한 끼, 마음 밥상</span><button class="link" data-noads>광고 없애기</button></div>
       <p class="note">기록은 이 기기에 저장되고, 카카오나 Google로 로그인하면 서버에도 안전하게 보관돼요.</p>
       <p class="note"><a href="https://sutra.dualtimestudio.com/privacy.html" target="_blank" rel="noopener" style="color:inherit">개인정보처리방침</a> · <a href="https://sutra.dualtimestudio.com/terms.html" target="_blank" rel="noopener" style="color:inherit">이용약관</a></p>
       <p class="note biz">듀얼타임스튜디오(Dual Time Studio) · 대표 정범윤<br>사업자등록번호 277-74-00727<br>hello@dualtimestudio.com</p>
@@ -712,10 +710,10 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 <div class="sheet" id="pay" hidden>
   <div class="sheet-in" role="dialog" aria-modal="true" aria-labelledby="pay-title">
     <div class="story-top"><h2 class="sh-t" id="pay-title">연꽃 등 준비하기</h2><button class="iconbtn" id="pay-close" aria-label="닫기">✕</button></div>
-    <p class="pay-test">테스트 결제예요. 실제로 돈이 나가지 않아요.</p>
+    <p class="pay-test" id="pay-note" hidden></p>
     <div id="pay-s1" class="pay-step">
       <div class="pay-opts" id="pay-opts"></div>
-      <p class="lbl">결제 수단</p>
+      <p class="lbl" id="pay-mlbl">결제 수단</p>
       <div class="chips" id="pay-method"></div>
       <button class="btn solid pay-go" id="pay-go">결제하기</button>
     </div>
@@ -1300,7 +1298,7 @@ function mergeData(L,R){if(!R)return L;const o={};
   o.ded=Object.assign({},R.ded||{},L.ded||{});
   o.active=[...new Set([...(L.active||[]),...(R.active||[])])];
   o.cur=L.cur||R.cur||null;o.credits=Math.max(L.credits||0,R.credits||0);o.freeUsed=!!(L.freeUsed||R.freeUsed);o.noads=!!(L.noads||R.noads);o.seen=!!(L.seen||R.seen);
-  const bs=new Set();o.buys=[...(R.buys||[]),...(L.buys||[])].filter(b=>{const k=JSON.stringify(b);if(bs.has(k))return false;bs.add(k);return true});
+  const bs=new Set();o.buys=[...(R.buys||[]),...(L.buys||[])].filter(b=>{const k=b.tok||JSON.stringify(b);if(bs.has(k))return false;bs.add(k);return true});
   o.prefs=Object.assign({},R.prefs||{},L.prefs||{});return o}
 let pushT=null,pulling=false;
 function schedPush(){if(!REAL||pulling||!mem.acct||!mem.acct.token)return;clearTimeout(pushT);pushT=setTimeout(pushNow,2500)}
@@ -1414,29 +1412,50 @@ function keepInView(el){[60,350,700].forEach(t=>setTimeout(()=>{if(document.acti
 document.addEventListener("focusin",e=>{if(isField(e.target)){document.body.classList.add("kb");keepInView(e.target)}});
 document.addEventListener("focusout",e=>{if(isField(e.target))setTimeout(()=>{if(!isField(document.activeElement))document.body.classList.remove("kb")},120)});
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const a=document.activeElement;if(isField(a))a.scrollIntoView({block:"center"})});
-/* ---------- 결제 (테스트) ---------- */
-const PRODUCTS={lotus1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1500,n:1},lotus5:{t:"연꽃 등 5개",s:"개당 1,100원 · 가족의 바람까지 함께",p:5500,n:5},lotus30:{t:"연꽃 등 30개",s:"개당 330원 · 한 달 동안 매일 하나씩",p:9900,n:30},noads:{t:"광고 없애기",s:"한 번 구매로 평생, 광고 없이",p:5000}};
-const METHODS=["간편결제","카드","휴대폰"];let payKind="",payPick="",payMethod="간편결제",payDone=null;
+/* ---------- 결제 (Google Play) ---------- */
+const PRODUCTS={lotus_1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1500,n:1},lotus_5:{t:"연꽃 등 5개",s:"개당 1,100원 · 가족의 바람까지 함께",p:5500,n:5},lotus_30:{t:"연꽃 등 30개",s:"개당 330원 · 한 달 동안 매일 하나씩",p:9900,n:30}};
+const PIDS=Object.keys(PRODUCTS),PLAY_BILLING="https://play.google.com/billing",PLAY_URL="https://play.google.com/store/apps/details?id=com.dualtimestudio.sutra";
+const METHODS=["간편결제","카드","휴대폰"];let payPick=PIDS[0],payMethod="간편결제",payDone=null,dgs=null,dgsP=null,playPrice={};
 const won=n=>n.toLocaleString("ko-KR")+"원";
+function getDGS(){if(!dgsP)dgsP=(async()=>{try{if("getDigitalGoodsService" in window)dgs=await window.getDigitalGoodsService(PLAY_BILLING)}catch(e){dgs=null}
+  if(dgs){try{(await dgs.getDetails(PIDS)).forEach(d=>{if(d&&d.price){const v=Number(d.price.value);playPrice[d.itemId]=d.price.currency==="KRW"?won(v):new Intl.NumberFormat("ko-KR",{style:"currency",currency:d.price.currency}).format(v)}})}catch(e){}}
+  return dgs})();return dgsP}
+function payMode(){return dgs?"play":REAL?"web":"demo"}
+function priceOf(id){return playPrice[id]||won(PRODUCTS[id].p)}
 function payStep(n){["pay-s1","pay-s2","pay-s3"].forEach((id,i)=>$(id).hidden=i!==n-1)}
-function openPay(kind,done){payKind=kind;payDone=done||null;const ids=kind==="noads"?["noads"]:["lotus1","lotus5","lotus30"];payPick=ids[0];
-  $("pay-title").textContent=kind==="noads"?"광고 없애기":"연꽃 등 준비하기";
-  $("pay-opts").innerHTML=ids.map(id=>{const p=PRODUCTS[id];return '<button class="popt" data-p="'+id+'" aria-pressed="'+(id===payPick)+'">'+(id!=="noads"?'<img src="'+LOTUS+'" alt="">':"")+'<span class="pt"><b>'+p.t+"</b><span>"+p.s+'</span></span><span class="pp">'+(p.o?"<s>"+won(p.o)+"</s>":"")+won(p.p)+"</span></button>"}).join("");
+async function openPay(kind,done){payDone=done||null;await getDGS();payPick=PIDS[0];const m=payMode();
+  $("pay-title").textContent="연꽃 등 준비하기";
+  $("pay-opts").innerHTML=PIDS.map(id=>{const p=PRODUCTS[id];return '<button class="popt" data-p="'+id+'" aria-pressed="'+(id===payPick)+'"><img src="'+LOTUS+'" alt=""><span class="pt"><b>'+p.t+"</b><span>"+p.s+'</span></span><span class="pp">'+priceOf(id)+"</span></button>"}).join("");
   $("pay-opts").querySelectorAll(".popt").forEach(b=>b.addEventListener("click",()=>{payPick=b.dataset.p;$("pay-opts").querySelectorAll(".popt").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));updPayGo()}));
-  $("pay-method").innerHTML=METHODS.map(m=>'<button class="chip" data-m="'+m+'" aria-pressed="'+(m===payMethod)+'">'+m+"</button>").join("");
-  $("pay-method").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{payMethod=b.dataset.m;$("pay-method").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))}));
+  const note=$("pay-note");note.hidden=m==="play";note.textContent=m==="web"?"연꽃 등은 Google Play의 한줄 불경 앱에서 준비할 수 있어요.":"미리보기용 테스트 결제예요. 실제로 돈이 나가지 않아요.";
+  $("pay-mlbl").hidden=$("pay-method").hidden=m!=="demo";
+  if(m==="demo"){$("pay-method").innerHTML=METHODS.map(x=>'<button class="chip" data-m="'+x+'" aria-pressed="'+(x===payMethod)+'">'+x+"</button>").join("");
+    $("pay-method").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{payMethod=b.dataset.m;$("pay-method").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))}))}
   updPayGo();payStep(1);$("pay").hidden=false;$("pay-go").focus()}
-function updPayGo(){$("pay-go").textContent=won(PRODUCTS[payPick].p)+" 결제하기"}
+function updPayGo(){$("pay-go").textContent=payMode()==="web"?"Google Play에서 앱 받기":priceOf(payPick)+" 결제하기"}
 function closePay(){$("pay").hidden=true;payDone=null}
 $("pay-close").addEventListener("click",closePay);
 $("pay").addEventListener("click",e=>{if(e.target===$("pay")&&$("pay-s2").hidden)closePay()});
-$("pay-go").addEventListener("click",()=>{payStep(2);setTimeout(()=>{const p=PRODUCTS[payPick];
-  mem.buys.push({id:payPick,t:p.t,p:p.p,m:payMethod,d:TODAY});if(p.n)mem.credits+=p.n;if(payPick==="noads")mem.noads=true;persist();
-  $("pay-done-t").textContent=payPick==="noads"?"이제 광고 없이 쓸 수 있어요":p.t+"를 준비했어요";payStep(3);updWishBtn();renderAds();renderBuys()},1600)});
+function grantBuy(id,tok,method){const p=PRODUCTS[id];if(!p)return false;if(tok&&mem.buys.some(b=>b.tok===tok))return false;
+  mem.buys.push(Object.assign({id,t:p.t,p:p.p,m:method,d:TODAY},tok?{tok}:{}));mem.credits+=p.n;persist();updWishBtn();renderBuys();return true}
+function payFinished(id){$("pay-done-t").textContent=PRODUCTS[id].t+"를 준비했어요";payStep(3)}
+async function buyPlay(id){payStep(2);
+  try{const req=new PaymentRequest([{supportedMethods:PLAY_BILLING,data:{sku:id}}],{total:{label:"Total",amount:{currency:"KRW",value:"0"}}});
+    const res=await req.show();const tok=res.details&&res.details.purchaseToken;
+    if(!tok){await res.complete("fail");throw new Error("no-token")}
+    grantBuy(id,tok,"Google Play");await res.complete("success");
+    try{await dgs.consume(tok)}catch(e){}
+    payFinished(id)}
+  catch(e){payStep(1);if(!e||e.name!=="AbortError"){const n=$("pay-note");n.hidden=false;n.textContent="결제를 마치지 못했어요. 잠시 후 다시 시도해 주세요."}}}
+$("pay-go").addEventListener("click",()=>{const m=payMode();
+  if(m==="web"){window.open(PLAY_URL,"_blank","noopener");return}
+  if(m==="play"){buyPlay(payPick);return}
+  payStep(2);setTimeout(()=>{grantBuy(payPick,null,payMethod+" (테스트)");payFinished(payPick)},1600)});
 $("pay-ok").addEventListener("click",()=>{const f=payDone;$("pay").hidden=true;payDone=null;if(f)f()});
-function renderAds(){document.querySelectorAll("[data-ad]").forEach(el=>el.hidden=!!mem.noads)}
-document.querySelectorAll("[data-noads]").forEach(b=>b.addEventListener("click",()=>openPay("noads")));
-function renderBuys(){$("buy-sum").textContent="남은 연꽃 등 "+mem.credits+"개"+(mem.noads?" · 광고 없음":"")+(mem.freeUsed?"":" · 첫 등 무료 남음");
+/* 결제 중 앱이 닫혀 소진되지 않은 구매가 있으면 다시 반영 */
+async function reconcilePlay(){const s=await getDGS();if(!s)return;try{for(const p of await s.listPurchases()){if(!PRODUCTS[p.itemId])continue;grantBuy(p.itemId,p.purchaseToken,"Google Play");try{await s.consume(p.purchaseToken)}catch(e){}}}catch(e){}}
+function renderAds(){}
+function renderBuys(){$("buy-sum").textContent="남은 연꽃 등 "+mem.credits+"개"+(mem.freeUsed?"":" · 첫 등 무료 남음");
   $("buy-list").innerHTML=mem.buys.length?mem.buys.slice().reverse().map(b=>'<article class="item"><div class="d"><span>'+(+b.d.slice(5,7))+"월 "+(+b.d.slice(8,10))+"일 · "+esc(b.m)+'</span><span>'+won(b.p)+'</span></div><p class="v">'+esc(b.t)+"</p></article>").join(""):'<p class="emptytxt">아직 구매한 것이 없어요</p>'}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("pay").hidden&&$("pay-s2").hidden)closePay()});
 /* ---------- 발원 연못 ---------- */
@@ -1635,6 +1654,7 @@ chips("fs-chips",FS,"fs");applyFs();
 chips("breath-chips",BRL,"breath");applyBreath();requestAnimationFrame(brFrame);
 chips("bg-chips",BG,"bg");chips("key-chips",KS,"key");
 renderJourney();updWishBtn();renderAds();renderBuys();if(mem.cur&&JOURNEYS[mem.cur])setupToday();else showStart();
+setTimeout(reconcilePlay,1500);
 renderRecord();
 (function(){if(mem.intro||mem.cur||Object.keys(mem.entries).length)return;
   const I=$("intro"),sl=[...I.querySelectorAll(".islide")],dots=[...I.querySelectorAll(".intro-dots i")];let k=0;I.hidden=false;
