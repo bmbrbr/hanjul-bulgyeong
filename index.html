@@ -1413,7 +1413,7 @@ document.addEventListener("focusin",e=>{if(isField(e.target)){document.body.clas
 document.addEventListener("focusout",e=>{if(isField(e.target))setTimeout(()=>{if(!isField(document.activeElement))document.body.classList.remove("kb")},120)});
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const a=document.activeElement;if(isField(a))a.scrollIntoView({block:"center"})});
 /* ---------- 결제 (Google Play) ---------- */
-const PRODUCTS={lotus_1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1500,n:1},lotus_5:{t:"연꽃 등 5개",s:"개당 1,100원 · 가족의 바람까지 함께",p:5500,n:5},lotus_30:{t:"연꽃 등 30개",s:"개당 330원 · 한 달 동안 매일 하나씩",p:9900,n:30}};
+const PRODUCTS={lotus_1:{t:"연꽃 등 1개",s:"바람 하나를 담아 띄워요",p:1500,n:1},lotus_5:{t:"연꽃 등 5개",s:"개당 1,100원 · 가족의 바람까지 함께",p:5500,n:5},lotus_20:{t:"연꽃 등 20개",s:"개당 495원 · 오래 두고 하나씩 띄워요",p:9900,n:20}};
 const PIDS=Object.keys(PRODUCTS),PLAY_BILLING="https://play.google.com/billing",PLAY_URL="https://play.google.com/store/apps/details?id=com.dualtimestudio.sutra";
 const METHODS=["간편결제","카드","휴대폰"];let payPick=PIDS[0],payMethod="간편결제",payDone=null,dgs=null,dgsP=null,playPrice={};
 const won=n=>n.toLocaleString("ko-KR")+"원";

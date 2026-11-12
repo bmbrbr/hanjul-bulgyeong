@@ -1,4 +1,4 @@
-const V="hanjul-v45";
+const V="hanjul-v46";
 const FONTS="hanjul-fonts-1";
 const FONT_CSS="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500&display=swap";
 const CORE=["./","./index.html","./manifest.webmanifest","./img/tree.webp","./img/monk.webp","./img/dbase.webp","./img/dtree.webp","./img/dmonk.webp","./img/lotus.webp","./icons/icon-192.png","./icons/icon-512.png","./icons/apple-touch-icon.png","./icons/favicon.png"];
