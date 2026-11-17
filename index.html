@@ -163,6 +163,7 @@ body.kb .app{padding-bottom:40vh}
 .login-seal{width:56px;height:56px;border-radius:10px;background:var(--seal);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--f-verse);font-size:28px;font-weight:700;transform:rotate(-4deg)}
 .login-p{margin:0;color:var(--ink-2);font-size:14px;line-height:1.7;max-width:320px}
 .login-later{font-size:13px;color:var(--ink-2);padding:6px}
+.pay-fine{margin:10px 2px 0;font-size:12px;line-height:1.55;color:var(--ink-2);text-align:center}.pay-fine a{color:inherit}
 .pay-test{margin:0;font-size:12px;color:var(--seal);background:var(--seal-bg);border-radius:8px;padding:6px 10px}
 .pay-step{display:flex;flex-direction:column;gap:10px}
 .pay-opts{display:flex;flex-direction:column;gap:8px}
@@ -716,6 +717,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
       <p class="lbl" id="pay-mlbl">결제 수단</p>
       <div class="chips" id="pay-method"></div>
       <button class="btn solid pay-go" id="pay-go">결제하기</button>
+      <p class="pay-fine">디지털 상품이라 이미 띄운 연꽃 등은 환불되지 않아요. 아직 쓰지 않은 연꽃 등의 결제 취소·환불은 Google Play 정책을 따라요. <a href="https://sutra.dualtimestudio.com/terms.html" target="_blank" rel="noopener">이용약관</a></p>
     </div>
     <div id="pay-s2" class="pay-step pay-mid" hidden><div class="spin" aria-hidden="true"></div><p>결제하는 중이에요</p></div>
     <div id="pay-s3" class="pay-step pay-mid" hidden><div class="pay-check" aria-hidden="true">✓</div><p id="pay-done-t">결제가 완료됐어요</p><button class="btn solid" id="pay-ok">확인</button></div>
