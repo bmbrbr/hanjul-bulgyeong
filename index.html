@@ -1446,7 +1446,7 @@ async function buyPlay(id){payStep(2);
     grantBuy(id,tok,"Google Play");await res.complete("success");
     try{await dgs.consume(tok)}catch(e){}
     payFinished(id)}
-  catch(e){payStep(1);if(!e||e.name!=="AbortError"){const n=$("pay-note");n.hidden=false;n.textContent="결제를 마치지 못했어요. 잠시 후 다시 시도해 주세요. ("+((e&&e.name)||"")+": "+((e&&e.message)||"").slice(0,120)+" · 상품 "+playN+")"}}}
+  catch(e){payStep(1);if(!e||e.name!=="AbortError"){const n=$("pay-note");n.hidden=false;n.textContent="결제를 마치지 못했어요. 잠시 후 다시 시도해 주세요.";console.warn("billing",e&&e.name,e&&e.message,playN)}}}
 $("pay-go").addEventListener("click",()=>{const m=payMode();
   if(m==="web"){window.open(PLAY_URL,"_blank","noopener");return}
   if(m==="play"){buyPlay(payPick);return}
@@ -1615,7 +1615,7 @@ $("change-j").addEventListener("click",openSheet);
 $("finish-next").addEventListener("click",showStart);
 
 let devTaps=0,devT=null;
-$("brand").addEventListener("click",()=>{devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
+$("brand").addEventListener("click",()=>{if(REAL)return;devTaps++;clearTimeout(devT);devT=setTimeout(()=>{devTaps=0},2500);if(devTaps>=5){devTaps=0;$("dev").hidden=false}});
 $("dev-no").addEventListener("click",()=>{$("dev").hidden=true});
 $("dev-fin").addEventListener("click",()=>{if(!mem.cur)return;delete mem.entries[EK()];mem.prog[mem.cur]=JOURNEYS[mem.cur].items.length-1;persist();$("dev").hidden=true;goToday();setupToday();renderJourney()});
 $("dev-yes").addEventListener("click",()=>{mem.entries={};mem.cur=null;mem.prog={};mem.ded={};mem.active=[];mem.lan=[];mem.credits=0;mem.freeUsed=false;mem.noads=false;mem.buys=[];mem.acct=null;mem.lp=0;mem.intro=false;mem.seen=false;renderAcct();persist();updWishBtn();renderAds();renderBuys();$("dev").hidden=true;renderJourney();renderRecord();showStart();if(window.dev_introReplay)dev_introReplay()});
