@@ -380,6 +380,16 @@ nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(
   padding:16px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .sh-t{font-family:var(--f-verse);font-size:19px;margin:0}
 .jlist{display:flex;flex-direction:column;gap:8px}
+.sh-act{display:flex;align-items:center;gap:6px}
+.jedit{font-size:14px;padding:8px 6px;background:none;border:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:inherit}
+.jhint{margin:-4px 0 0;font-size:12px;color:var(--ink-2)}
+.jwrap{display:flex;align-items:stretch;gap:8px}.jwrap .jrow{flex:1;min-width:0}
+.jdel{display:none;flex:none;padding:0 16px;border:1px solid var(--seal);border-radius:12px;background:var(--seal-bg);color:var(--seal);font:inherit;font-size:14px;cursor:pointer}
+.jlist.editing .jdel{display:block}
+.jask{flex:1;padding:14px;border:1px solid var(--seal);border-radius:12px;background:var(--seal-bg);display:flex;flex-direction:column;gap:10px}
+.jask p{margin:0;font-size:14px;line-height:1.6;color:var(--ink)}.jask p small{display:block;font-size:12px;color:var(--ink-2);margin-top:4px}
+.jask div{display:flex;gap:8px}.jask button{flex:1;padding:11px 0;border-radius:10px;font:inherit;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.jask .yes{background:var(--seal);border-color:var(--seal);color:#fff}
 .jrow{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2);text-align:left;font:inherit;color:var(--ink);cursor:pointer}
 .jrow[aria-current="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .jr{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
@@ -740,7 +750,8 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 
 <div class="sheet" id="sheet" hidden>
   <div class="sheet-in" role="dialog" aria-modal="true" aria-label="나의 여정">
-    <div class="story-top"><h2 class="sh-t">나의 여정</h2><button class="iconbtn" id="sheet-close" aria-label="닫기">✕</button></div>
+    <div class="story-top"><h2 class="sh-t">나의 여정</h2><span class="sh-act"><button class="link jedit" id="j-edit">편집</button><button class="iconbtn" id="sheet-close" aria-label="닫기">✕</button></span></div>
+    <p class="jhint" id="j-hint">누르면 오늘 쓸 여정이 바뀌어요</p>
     <div class="jlist" id="jlist"></div>
     <button class="btn" id="add-j">＋ 새 여정 추가</button>
   </div>
@@ -937,8 +948,8 @@ const JORDER=["dhamma","words","mantra","parents","bowang","yaksa","diamond","he
 
 
 const KEY="hanjul.v1";
-let mem={entries:{},cur:null,prog:{},ded:{},active:[],lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,intro:false,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type",fs:"m"}};
-function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.intro=!!d.intro;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
+let mem={entries:{},cur:null,prog:{},ded:{},active:[],jt:{},lan:[],credits:0,freeUsed:false,noads:false,buys:[],acct:null,lp:0,intro:false,prefs:{bg:"off",key:"brush",breath:"calm",theme:"system",story:"type",fs:"m"}};
+function load(){try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);mem.entries=d.entries||{};mem.cur=d.cur||null;mem.prog=d.prog||{};mem.ded=d.ded||{};mem.seen=!!d.seen;mem.active=d.active||[];mem.jt=d.jt||{};mem.lan=d.lan||[];mem.credits=d.credits||0;mem.freeUsed=!!d.freeUsed;mem.noads=!!d.noads;mem.buys=d.buys||[];mem.acct=d.acct||null;mem.lp=d.lp||0;mem.intro=!!d.intro;mem.prefs=Object.assign(mem.prefs,d.prefs||{})}}catch(e){}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(mem))}catch(e){}if(typeof schedPush==="function")schedPush()}
 
 const pad=n=>String(n).padStart(2,"0");
@@ -1282,7 +1293,7 @@ function playShine(){const ar=document.querySelector(".art"),md=$("monk-done");a
   shineT2=setTimeout(()=>{if($("view-today").hidden)return;const y=$("done").getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:Math.max(0,y),behavior:RM?"auto":"smooth"})},RM?400:4600)}
 /* ---------- 로그인 (테스트) ---------- */
 const API="https://api.dualtimestudio.com",REAL=location.origin==="https://sutra.dualtimestudio.com";
-const SYNC_KEYS=["entries","cur","prog","ded","active","lan","credits","freeUsed","noads","buys","seen","prefs"];
+const SYNC_KEYS=["entries","cur","prog","ded","active","jt","lan","credits","freeUsed","noads","buys","seen","prefs"];
 const KSVG=$("acct-login").querySelector("svg").outerHTML,GSVG=$("acct-glogin").querySelector("svg").outerHTML;
 function renderAcct(){const a=mem.acct;$("acct-login").hidden=!!a;$("acct-glogin").hidden=!!a;if(a){const g=a.via==="google";$("acct-badge").classList.toggle("g",g);$("acct-badge").innerHTML=g?GSVG:KSVG}$("acct-on").hidden=!a;$("acct-desc").hidden=!!a;$("acct-del").hidden=!a;$("acct-out").classList.remove("warn");$("acct-out").textContent="로그아웃";$("acct-del").classList.remove("warn");$("acct-del").textContent="계정 삭제";
   $("acct-test").hidden=REAL;$("login-test").hidden=REAL;if(a)$("acct-name").textContent=(a.name||"도반")+"님의 기록이 보관되고 있어요"}
@@ -1298,8 +1309,9 @@ function mergeData(L,R){if(!R)return L;const o={};
   o.lan=[...lm.values()].sort((a,b)=>((a.at||Date.parse(a.d)||0)-(b.at||Date.parse(b.d)||0)));
   o.prog=Object.assign({},R.prog||{});Object.entries(L.prog||{}).forEach(([k,v])=>{o.prog[k]=Math.max(v||0,o.prog[k]||0)});
   o.ded=Object.assign({},R.ded||{},L.ded||{});
-  o.active=[...new Set([...(L.active||[]),...(R.active||[])])];
-  o.cur=L.cur||R.cur||null;o.credits=Math.max(L.credits||0,R.credits||0);o.freeUsed=!!(L.freeUsed||R.freeUsed);o.noads=!!(L.noads||R.noads);o.seen=!!(L.seen||R.seen);
+  o.jt={};[R.jt||{},L.jt||{}].forEach(t=>Object.entries(t).forEach(([k,v])=>{const c=o.jt[k]||[0,0];o.jt[k]=[Math.max(c[0],v[0]||0),Math.max(c[1],v[1]||0)]}));
+  o.active=[...new Set([...(L.active||[]),...(R.active||[])])].filter(id=>{const t=o.jt[id];return !(t&&t[1]>t[0])});
+  o.cur=L.cur||R.cur||null;if(o.cur&&!o.active.includes(o.cur))o.cur=o.active[0]||null;o.credits=Math.max(L.credits||0,R.credits||0);o.freeUsed=!!(L.freeUsed||R.freeUsed);o.noads=!!(L.noads||R.noads);o.seen=!!(L.seen||R.seen);
   const bs=new Set();o.buys=[...(R.buys||[]),...(L.buys||[])].filter(b=>{const k=b.tok||JSON.stringify(b);if(bs.has(k))return false;bs.add(k);return true});
   o.prefs=Object.assign({},R.prefs||{},L.prefs||{});return o}
 let pushT=null,pulling=false;
@@ -1521,11 +1533,26 @@ const avgChars=id=>{const it=JOURNEYS[id].items;return Math.round(it.reduce((a,x
 function migrate(){Object.keys(mem.entries).forEach(k=>{if(/^\d{4}-\d\d-\d\d$/.test(k)){const e=mem.entries[k];mem.entries[k+"#"+(e.j||"legacy")]=e;delete mem.entries[k]}});
   if(mem.cur&&!mem.active.includes(mem.cur))mem.active.push(mem.cur)}
 function openSheet(){const h=mem.active.filter(id=>JOURNEYS[id]).map(id=>{const j=JOURNEYS[id],n=j.items.length,p=Math.min(mem.prog[id]||0,n),done=!!mem.entries[TODAY+"#"+id];
-    return '<button class="jrow" data-id="'+id+'" aria-current="'+(id===mem.cur)+'"><span class="glyph">'+META[id].g+'</span><span class="jr"><b>'+j.name+'</b><span>'+p+" / "+n+(p>=n?" · 완주":done?" · 오늘 완료":"")+'</span><span class="bar"><i style="width:'+Math.round(p/n*100)+'%"></i></span></span></button>'}).join("");
+    return '<div class="jwrap" data-id="'+id+'"><button class="jrow" data-id="'+id+'" aria-current="'+(id===mem.cur)+'"><span class="glyph">'+META[id].g+'</span><span class="jr"><b>'+j.name+'</b><span>'+p+" / "+n+(p>=n?" · 완주":done?" · 오늘 완료":"")+'</span><span class="bar"><i style="width:'+Math.round(p/n*100)+'%"></i></span></span></button><button class="jdel" data-id="'+id+'">빼기</button></div>'}).join("");
   $("jlist").innerHTML=h||'<p class="emptytxt">진행 중인 여정이 없어요</p>';
-  $("jlist").querySelectorAll(".jrow").forEach(b=>b.addEventListener("click",()=>switchTo(b.dataset.id)));
-  $("sheet").hidden=false;$("sheet-close").focus()}
-function closeSheet(){$("sheet").hidden=true}
+  $("jlist").querySelectorAll(".jrow").forEach(b=>b.addEventListener("click",()=>{if(jEditing)return;switchTo(b.dataset.id)}));
+  $("jlist").querySelectorAll(".jdel").forEach(b=>b.addEventListener("click",()=>askRemove(b.dataset.id)));
+  setJEdit(jEditing&&mem.active.length>0);
+  if($("sheet").hidden){$("sheet").hidden=false;$("sheet-close").focus()}}
+let jEditing=false;
+function setJEdit(on){jEditing=on;$("jlist").classList.toggle("editing",on);$("j-edit").textContent=on?"완료":"편집";$("j-edit").hidden=!mem.active.filter(id=>JOURNEYS[id]).length;
+  $("j-hint").textContent=on?"그만 쓸 여정을 빼 주세요":"누르면 오늘 쓸 여정이 바뀌어요";$("add-j").hidden=on}
+$("j-edit").addEventListener("click",()=>setJEdit(!jEditing));
+function askRemove(id){const w=$("jlist").querySelector('.jwrap[data-id="'+id+'"]');if(!w)return;const j=JOURNEYS[id];
+  w.innerHTML='<div class="jask" role="alertdialog"><p>‘'+j.name+'’ 여정을 뺄까요?<small>지금까지 쓴 기록과 진도는 그대로 남아요. 나중에 다시 추가하면 이어서 쓸 수 있어요.</small></p><div><button class="no">취소</button><button class="yes">빼기</button></div></div>';
+  w.querySelector(".no").addEventListener("click",openSheet);
+  w.querySelector(".yes").addEventListener("click",()=>removeJourney(id));w.querySelector(".no").focus()}
+function removeJourney(id){mem.active=mem.active.filter(x=>x!==id);mem.jt[id]=[(mem.jt[id]||[0,0])[0],Date.now()];
+  const wasCur=mem.cur===id;if(wasCur)mem.cur=mem.active.find(x=>JOURNEYS[x])||null;persist();
+  if(!mem.cur){jEditing=false;closeSheet();showStart();renderJourney();renderRecord();return}
+  if(wasCur){goToday();setupToday();renderJourney();renderRecord()}
+  openSheet()}
+function closeSheet(){$("sheet").hidden=true;if(jEditing)setJEdit(false)}
 function switchTo(id){closeSheet();mem.cur=id;persist();goToday();setupToday();renderJourney();renderRecord()}
 $("verse-no").addEventListener("click",openSheet);
 $("today-prog").addEventListener("click",openSheet);
@@ -1566,7 +1593,7 @@ function renderJourney(){const j=JOURNEYS[mem.cur];if(!j){$("jcard").innerHTML="
   const p=Math.min(mem.prog[mem.cur]||0,j.items.length),d=(mem.ded[mem.cur]||"").trim();
   $("jcard").innerHTML="<b>"+esc(j.name)+" · "+esc(j.part)+"</b><span>"+p+" / "+j.items.length+" 구절"+(p>=j.items.length?" · 완주":"")+"</span>"+(d?"<span>회향 · "+esc(d)+"</span>":"")}
 let basket=[];
-function addJourney(id){mem.ded[id]=$("ded").value.trim();if(!mem.active.includes(id))mem.active.push(id);
+function addJourney(id){mem.ded[id]=$("ded").value.trim();if(!mem.active.includes(id))mem.active.push(id);mem.jt[id]=[Date.now(),(mem.jt[id]||[0,0])[1]];
   if((mem.prog[id]||0)>=JOURNEYS[id].items.length)mem.prog[id]=0;if(!basket.includes(id))basket.push(id);persist()}
 function renderBasket(){$("basket").hidden=!basket.length;$("basket-tx").innerHTML='담은 여정 <b>'+basket.map(id=>esc(JOURNEYS[id].name)).join(", ")+"</b>"}
 let pickId=null;
