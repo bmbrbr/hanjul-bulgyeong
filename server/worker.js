@@ -36,7 +36,7 @@ function cors(req) {
   const ok = o === APP_ORIGIN || /^http:\/\/localhost(:\d+)?$/.test(o);
   return {
     "Access-Control-Allow-Origin": ok ? o : APP_ORIGIN,
-    "Access-Control-Allow-Methods": "GET,PUT,DELETE,OPTIONS",
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
     "Access-Control-Allow-Headers": "Authorization,Content-Type",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -63,13 +63,116 @@ async function logErr(env, step, status, body) {
   await env.KV.put("err:last", JSON.stringify({ at: Date.now(), step, status, body }), { expirationTtl: 86400 * 7 });
 }
 
+
+// ---------- 편지 알림 (Web Push) ----------
+// 비밀값: VAPID_PRIVATE_JWK (JSON 문자열). 크론: */5 * * * *
+const VAPID_PUBLIC = "BFmppyUlh7v6OhpKVP1aQXNmAb-uZ1ZjoNrN3gZJuC9StfJoEQYzIRl1BCt85EYwbrlxrupMBV1Yn7wYHy8xwqc";
+const VAPID_SUB = "mailto:hello@dualtimestudio.com";
+const SLOTS = ["am", "pm", "ev"];
+const unb64u = (s) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((s.length + 3) % 4)), (c) => c.charCodeAt(0));
+const cat = (...a) => { const o = new Uint8Array(a.reduce((n, x) => n + x.length, 0)); let i = 0; for (const x of a) { o.set(x, i); i += x.length; } return o; };
+async function hkdf(salt, ikm, info, len) {
+  const k = await crypto.subtle.importKey("raw", ikm, "HKDF", false, ["deriveBits"]);
+  return new Uint8Array(await crypto.subtle.deriveBits({ name: "HKDF", hash: "SHA-256", salt, info }, k, len * 8));
+}
+async function encryptPush(sub, text) {
+  const ua = unb64u(sub.keys.p256dh), auth = unb64u(sub.keys.auth);
+  const kp = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+  const as = new Uint8Array(await crypto.subtle.exportKey("raw", kp.publicKey));
+  const uaKey = await crypto.subtle.importKey("raw", ua, { name: "ECDH", namedCurve: "P-256" }, false, []);
+  const shared = new Uint8Array(await crypto.subtle.deriveBits({ name: "ECDH", public: uaKey }, kp.privateKey, 256));
+  const ikm = await hkdf(auth, shared, cat(enc.encode("WebPush: info\0"), ua, as), 32);
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const cek = await hkdf(salt, ikm, enc.encode("Content-Encoding: aes128gcm\0"), 16);
+  const nonce = await hkdf(salt, ikm, enc.encode("Content-Encoding: nonce\0"), 12);
+  const key = await crypto.subtle.importKey("raw", cek, "AES-GCM", false, ["encrypt"]);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: nonce }, key, cat(enc.encode(text), new Uint8Array([2]))));
+  const rs = new Uint8Array([0, 0, 16, 0]);
+  return cat(salt, rs, new Uint8Array([as.length]), as, ct);
+}
+let vapidKey = null;
+async function vapidAuth(env, endpoint) {
+  if (!vapidKey) vapidKey = await crypto.subtle.importKey("jwk", JSON.parse(env.VAPID_PRIVATE_JWK), { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
+  const aud = new URL(endpoint).origin;
+  const h = b64u(enc.encode(JSON.stringify({ typ: "JWT", alg: "ES256" })));
+  const p = b64u(enc.encode(JSON.stringify({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: VAPID_SUB })));
+  const sig = await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, vapidKey, enc.encode(h + "." + p));
+  return "vapid t=" + h + "." + p + "." + b64u(sig) + ", k=" + VAPID_PUBLIC;
+}
+async function sendPush(env, sub, data, ttl = 6 * 3600) {
+  const body = await encryptPush(sub, JSON.stringify(data));
+  const r = await fetch(sub.endpoint, {
+    method: "POST",
+    headers: { Authorization: await vapidAuth(env, sub.endpoint), "Content-Encoding": "aes128gcm", "Content-Type": "application/octet-stream", TTL: String(ttl), Urgency: "normal" },
+    body,
+  });
+  return r.status;
+}
+const pushId = async (endpoint) => b64u(await crypto.subtle.digest("SHA-256", enc.encode(endpoint))).slice(0, 22);
+function localNow(tz) {
+  let p;
+  try { p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date()).map((x) => [x.type, x.value])); }
+  catch (e) { return localNow("Asia/Seoul"); }
+  return { d: p.year + "-" + p.month + "-" + p.day, m: +p.hour * 60 + +p.minute };
+}
+const hm = (t) => { const a = String(t || "").split(":"); return +a[0] * 60 + +a[1]; };
+async function pushApi(req, env, path) {
+  let b; try { b = await req.json(); } catch (e) { return json(req, { error: "bad_json" }, 400); }
+  const sub = b && b.sub;
+  if (!sub || typeof sub.endpoint !== "string" || !/^https:\/\//.test(sub.endpoint) || sub.endpoint.length > 1000) return json(req, { error: "bad_sub" }, 400);
+  const id = await pushId(sub.endpoint);
+  const idx = (await env.KV.get("push:index", "json")) || {};
+  if (path === "/push/unsub") { if (idx[id]) { delete idx[id]; await env.KV.put("push:index", JSON.stringify(idx)); } return json(req, { ok: true }); }
+  if (path === "/push/sub") {
+    if (!sub.keys || !sub.keys.p256dh || !sub.keys.auth) return json(req, { error: "bad_keys" }, 400);
+    const slots = {};
+    for (const k of SLOTS) { const t = b.slots && b.slots[k]; slots[k] = typeof t === "string" && /^\d{1,2}:\d{2}$/.test(t) ? t : null; }
+    const tz = typeof b.tz === "string" && b.tz.length < 64 ? b.tz : "Asia/Seoul";
+    const prev = idx[id];
+    const rec = { e: sub.endpoint, k: { p256dh: sub.keys.p256dh, auth: sub.keys.auth }, s: slots, tz, at: Date.now() };
+    if (!prev || JSON.stringify({ ...prev, at: 0 }) !== JSON.stringify({ ...rec, at: 0 })) { idx[id] = rec; await env.KV.put("push:index", JSON.stringify(idx)); }
+    return json(req, { ok: true, id });
+  }
+  if (path === "/push/test") {
+    const r = idx[id]; if (!r) return json(req, { error: "not_subscribed" }, 404);
+    const slot = SLOTS.includes(b.slot) ? b.slot : "am";
+    const st = await sendPush(env, { endpoint: r.e, keys: r.k }, { slot, d: localNow(r.tz).d, test: 1 }, 600);
+    return json(req, { ok: st < 300, status: st });
+  }
+  return json(req, { error: "not_found" }, 404);
+}
+async function runPush(env) {
+  const idx = (await env.KV.get("push:index", "json")) || {};
+  const sent = (await env.KV.get("push:sent", "json")) || {};
+  let dirtyS = false, dirtyI = false, n = 0;
+  const jobs = [];
+  for (const [id, r] of Object.entries(idx)) {
+    const now = localNow(r.tz);
+    for (const k of SLOTS) {
+      const t = r.s && r.s[k]; if (!t) continue;
+      const due = hm(t), key = id + ":" + k;
+      if (now.m >= due && now.m < due + 30 && sent[key] !== now.d) {
+        sent[key] = now.d; dirtyS = true;
+        jobs.push(sendPush(env, { endpoint: r.e, keys: r.k }, { slot: k, d: now.d }).then((st) => { n++; if (st === 404 || st === 410) { delete idx[id]; dirtyI = true; } }).catch(() => {}));
+      }
+    }
+  }
+  await Promise.all(jobs);
+  if (dirtyS) await env.KV.put("push:sent", JSON.stringify(sent));
+  if (dirtyI) await env.KV.put("push:index", JSON.stringify(idx));
+  return n;
+}
+
 export default {
+  async scheduled(event, env, ctx) { ctx.waitUntil(runPush(env)); },
   async fetch(req, env) {
     const url = new URL(req.url);
     const path = url.pathname;
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(req) });
 
     if (path === "/" || path === "/health") return json(req, { ok: true, service: "hanjul-api" });
+    if (path === "/push/key") return json(req, { key: VAPID_PUBLIC });
+    if ((path === "/push/sub" || path === "/push/unsub" || path === "/push/test") && req.method === "POST") return pushApi(req, env, path);
 
     // 1) 카카오 로그인 시작
     if (path === "/kakao/login") {
