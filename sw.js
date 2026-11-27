@@ -1,7 +1,8 @@
-const V="hanjul-v55";
+importScripts("./letters.js");
+const V="hanjul-v56";
 const FONTS="hanjul-fonts-1";
 const FONT_CSS="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500&display=swap";
-const CORE=["./","./index.html","./manifest.webmanifest","./img/tree.webp","./img/monk.webp","./img/dbase.webp","./img/dtree.webp","./img/dmonk.webp","./img/lotus.webp","./icons/icon-192.png","./icons/icon-512.png","./icons/apple-touch-icon.png","./icons/favicon.png"];
+const CORE=["./","./index.html","./manifest.webmanifest","./img/tree.webp","./img/monk.webp","./img/dbase.webp","./img/dtree.webp","./img/dmonk.webp","./img/lotus.webp","./icons/icon-192.png","./icons/icon-512.png","./icons/apple-touch-icon.png","./icons/favicon.png","./letters.js"];
 const isFont=u=>/(^|\.)(gstatic|googleapis)\.com$/.test(u.hostname);
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V&&k!==FONTS).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
@@ -24,3 +25,13 @@ async function warmFonts(){if(warming)return;warming=true;
     if(urls.length)await c.put("warm-done",new Response("1"))}
   catch(e){}finally{warming=false}}
 self.addEventListener("message",e=>{if(e.data==="warm-fonts")e.waitUntil?e.waitUntil(warmFonts()):warmFonts()});
+/* 편지 알림 */
+const LNAME={am:"🌤 오전 편지가 도착했어요",pm:"🍵 오후 쉼표",ev:"🌙 저녁 회향"};
+function letterFor(slot,day){const a=LETTERS[slot],p=String(day).split("-"),n=Math.floor(Date.UTC(+p[0],+p[1]-1,+p[2])/864e5);return a[((n%a.length)+a.length)%a.length]}
+function todayKey(){const d=new Date(),z=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())}
+self.addEventListener("push",e=>{let d={};try{d=e.data?e.data.json():{}}catch(_){}
+  const slot=LNAME[d.slot]?d.slot:"am",day=/^\d{4}-\d{2}-\d{2}$/.test(d.d||"")?d.d:todayKey(),x=letterFor(slot,day);
+  const body=slot==="am"?x.t:slot==="ev"?x.n:(x.v||x.b[0]);
+  e.waitUntil(self.registration.showNotification(LNAME[slot]+(d.test?" (시험)":""),{body,icon:"./icons/icon-192.png",tag:"letter-"+slot,lang:"ko",data:{slot,d:day}}))});
+self.addEventListener("notificationclick",e=>{e.notification.close();const d=e.notification.data||{};const url=new URL("./#letter/"+(d.slot||"am")+"/"+(d.d||todayKey()),self.registration.scope).href;
+  e.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(cs=>{const c=cs.find(x=>x.url.startsWith(self.registration.scope));if(c){c.postMessage({letter:d.slot,d:d.d});return c.focus()}return clients.openWindow(url)}))});
