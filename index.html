@@ -401,6 +401,8 @@ nav .in{max-width:460px;margin:0 auto;display:grid;grid-template-columns:repeat(
 .lt-acts .btn[aria-pressed="true"]{background:var(--seal);border-color:var(--seal);color:#fff}
 .lt-msg{margin:0;text-align:center;font-size:13px;color:var(--ink-2)}
 .lt-cta{align-self:center}
+#letter.pv{z-index:120}
+.lt-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:var(--ink-2)}.lt-nav .btn{padding:7px 14px}
 .lrows{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-bottom:8px}
 .lrow{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
 .lrow .nm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
@@ -795,6 +797,7 @@ body.entering .app,body.entering nav,body.entering .breath{opacity:0}
 <div class="sheet" id="letter" hidden>
   <div class="sheet-in letter-in" role="dialog" aria-modal="true" aria-label="편지">
     <div class="story-top"><span class="lt-slot" id="lt-slot"></span><button class="iconbtn" id="lt-close" aria-label="닫기">✕</button></div>
+    <div class="lt-nav" id="lt-nav" hidden><button class="btn" id="lt-prev">‹ 이전</button><span id="lt-pos"></span><button class="btn" id="lt-next">다음 ›</button></div>
     <article class="lt-paper" id="lt-body"></article>
     <div class="lt-acts"><button class="btn" id="lt-save" aria-pressed="false">간직하기</button><button class="btn" id="lt-share">나누기</button></div>
     <p class="lt-msg" id="lt-msg" role="status" hidden></p>
@@ -1788,7 +1791,7 @@ function renderEnv(){const c=curLetter(),x=letterOf(c.slot,c.d),k=lkey(c.slot,c.
 const dlabel=d=>(d.getMonth()+1)+"월 "+d.getDate()+"일 "+DOW[d.getDay()]+"요일";
 const parseK=k=>{const p=k.split("-");return new Date(+p[0],+p[1]-1,+p[2])};
 let LCUR=null;
-function openLetter(slot,d,x){x=x||letterOf(slot,d);LCUR={slot,d,x};mem.lread[lkey(slot,d)]=1;persist();
+function openLetter(slot,d,x,pv){x=x||letterOf(slot,d);LCUR={slot,d,x};$("lt-nav").hidden=!pv;$("letter").classList.toggle("pv",!!pv);if(!pv){LPV=-1;mem.lread[lkey(slot,d)]=1;persist()}
   $("lt-slot").textContent=LSLOT[slot].ic+" "+LSLOT[slot].name;
   let h='<p class="dt">'+dlabel(d)+'</p>';
   if(x.t)h+='<h3>'+esc(x.t)+'</h3>';
@@ -1797,8 +1800,15 @@ function openLetter(slot,d,x){x=x||letterOf(slot,d);LCUR={slot,d,x};mem.lread[lk
   $("lt-body").innerHTML=h;
   const sv=isSaved(x.id);$("lt-save").setAttribute("aria-pressed",String(sv));$("lt-save").textContent=sv?"간직했어요":"간직하기";
   $("lt-msg").hidden=true;$("lt-cta").hidden=!mem.cur||!!mem.entries[EK()];
-  $("letter").hidden=false;$("letter").querySelector(".sheet-in").scrollTop=0;$("lt-close").focus();renderEnv()}
-function closeLetter(){$("letter").hidden=true}
+  $("letter").hidden=false;$("letter").querySelector(".sheet-in").scrollTop=0;if(!pv)$("lt-close").focus();renderEnv()}
+function closeLetter(){$("letter").hidden=true;if(LPV>=0){LPV=-1;try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}}
+/* 모든 편지 미리보기: 주소 끝에 #letters 또는 #letters/am03 */
+let LPV=-1;const LALL=[].concat(...Object.keys(LSLOT).map(k=>LETTERS[k].map(x=>[k,x])));
+function previewAt(i){LPV=(i+LALL.length)%LALL.length;const[k,x]=LALL[LPV];openLetter(k,new Date(),x,true);
+  $("lt-pos").textContent="미리보기 "+(LPV+1)+" / "+LALL.length+" · "+x.id;try{history.replaceState(null,"","#letters/"+x.id)}catch(e){}}
+function routeLetters(){const m=location.hash.match(/^#letters(?:\/(\w+))?/);if(!m)return;const i=m[1]?LALL.findIndex(([,x])=>x.id===m[1]):0;previewAt(i<0?0:i)}
+$("lt-prev").addEventListener("click",()=>previewAt(LPV-1));$("lt-next").addEventListener("click",()=>previewAt(LPV+1));
+addEventListener("hashchange",routeLetters);
 const isSaved=id=>mem.lsave.some(s=>s.id===id&&!s.off);
 function toggleSave(){if(!LCUR)return;const id=LCUR.x.id,sv=isSaved(id);mem.lsave=mem.lsave.filter(s=>s.id!==id);
   mem.lsave.push(sv?{id,off:1,at:Date.now()}:{id,slot:LCUR.slot,d:keyOf(LCUR.d),at:Date.now()});persist();
@@ -1848,7 +1858,7 @@ $("lt-share").addEventListener("click",shareLetter);
 $("lt-cta").addEventListener("click",()=>{closeLetter();goToday();window.scrollTo({top:0,behavior:"smooth"});setTimeout(()=>{try{typer.focus()}catch(e){}},400)});
 {const __rr=renderRecord;renderRecord=function(){__rr();renderSaved()}}
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)renderEnv()});setInterval(renderEnv,60000);
-renderLRows();renderEnv();renderSaved();
+renderLRows();renderEnv();renderSaved();setTimeout(routeLetters,300);
 (function(){const arm=()=>{try{history.pushState({hj:1},"")}catch(e){}},vis=id=>{const e=$(id);return!!e&&!e.hidden};
   function back(){
     if(vis("story")){storyClose();return true}
