@@ -53,6 +53,8 @@
 .story-why summary p{margin-bottom:4px;color:var(--ink)}
 .sw-more{display:inline-block;font-size:13px;color:var(--ink-2);padding:4px 0}
 .story-why[open] .sw-more{display:none}
+
+.r.nr{opacity:.4;font-size:13px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500&display=swap">
@@ -1221,7 +1223,7 @@ function renderRecord(){const keys=Object.keys(mem.entries).sort().reverse(),DS=
   if(!keys.length){$("list").innerHTML='<p class="emptytxt">아직 남긴 기록이 없어요. 오늘의 한 줄부터 시작해 보세요.</p>';return}
   $("list").innerHTML=keys.map(k=>{const e=mem.entries[k],p=k.slice(0,10).split("-"),dd=new Date(+p[0],+p[1]-1,+p[2]);
     const lab=e.j&&JOURNEYS[e.j]?JOURNEYS[e.j].name+" "+JOURNEYS[e.j].unit(e.i):"법구경 제"+e.n+"게";
-    return '<article class="item"><div class="d"><span>'+(+p[1])+"월 "+(+p[2])+"일 "+DOW[dd.getDay()]+"요일</span><span>"+lab+(e.md==="read"?'<span class="md">독송</span>':"")+'</span></div><p class="v">'+esc(e.t)+'</p><p class="r">'+(e.r?esc(e.r):"느낀 점을 남기지 않았어요")+"</p></article>"}).join("")}
+    return '<article class="item"><div class="d"><span>'+(+p[1])+"월 "+(+p[2])+"일 "+DOW[dd.getDay()]+"요일</span><span>"+lab+(e.md==="read"?'<span class="md">독송</span>':"")+'</span></div><p class="v">'+esc(e.t)+'</p><p class="r'+(e.r?'">'+esc(e.r):' nr">느낀 점을 남기지 않았어요')+"</p></article>"}).join("")}
 $("prev").addEventListener("click",()=>{viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()-1,1);renderRecord()});
 $("next").addEventListener("click",()=>{viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()+1,1);renderRecord()});
 
